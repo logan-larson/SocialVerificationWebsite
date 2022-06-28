@@ -85,8 +85,8 @@ D:\school\capstone\certs> ssh -i .\rover.pem ubuntu@138.49.185.129
 ### Closing remarks
 
 At this point the server should be all set up
-    
-    - If not, run `./deploy-application.sh -h` script for help deploying
+
+- If not, run `./deploy-application.sh -h` script for help deploying
 
 The tomcat manager should show up on at the server ip address with port 8080 
 
