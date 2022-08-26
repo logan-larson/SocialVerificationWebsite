@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SocialVerificationWebsiteApplication<SocialVerificationWebsite>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "edu.hci.SocialVerificationWebsite.SocialVerificationWebsiteApplication",
+            "projectName": "SocialVerificationWebsite",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
