@@ -1,0 +1,13 @@
+<div
+  #canvasContainer
+  class="relative w-full h-full overflow-scroll border-gray-300 bounding-canvas border-5"
+  (scroll)="updateScrollOffset($event)"
+>
+  <div
+    #canvas
+    class="h-[3000px] w-[5000px]"
+    (dragover)="allowDrop($event)"
+    (drop)="addMicro($event)"
+  >
+  </div>
+</div>
