@@ -7,6 +7,7 @@ normal program.
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { ParameterManagerService } from 'src/app/services/parameter-manager.service';
+import { VerificationManagerService } from 'src/app/services/verification-manager.service';
 
 @Component({
   selector: 'app-actions-bar',
@@ -22,7 +23,8 @@ export class ActionsBarComponent implements OnInit {
 
   constructor(
     private interactionManager: InteractionManagerService,
-    private paramManager: ParameterManagerService
+    private paramManager: ParameterManagerService,
+    private verificationManager: VerificationManagerService
   ) {}
 
   ngOnInit(): void {
@@ -30,6 +32,7 @@ export class ActionsBarComponent implements OnInit {
 
   verifyModel() {
     console.log("Verify model");
+    this.verificationManager.verifyModel();
   }
 
   saveToFile() {
