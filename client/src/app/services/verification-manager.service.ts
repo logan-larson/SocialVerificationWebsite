@@ -11,8 +11,15 @@ export class VerificationManagerService {
   ) { }
 
   verifyModel() {
-    this.http.get('/api/verify', {}).subscribe((res) => {
+    this.http
+      .get('/api/verify')
+      .subscribe((res: any) => {
+        console.log(res);
+      });
+    /*
+    this.http.get('http://localhost:5000/api/verify', {}).subscribe((res) => {
       console.log(res.toString());
     });
+    */
   }
 }

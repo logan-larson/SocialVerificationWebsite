@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node target/index.js",
+    "start": "node target/index.js",
+    "start:prod": "node target/index.js &",
     "start:dev": "nodemon",
-    "build": "rimraf ./target && tsc"
+    "build": "rimraf ./target && tsc && cp -r src/public target/"
   },
   "keywords": [],
   "author": "",

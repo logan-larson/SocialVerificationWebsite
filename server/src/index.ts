@@ -6,8 +6,14 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT;
 
-app.get('/verify', (req: Request, res: Response) => {
-  res.send('Hello there');
+app.use(express.static(__dirname + '/public'));
+
+app.get('/api/verify', (req: Request, res: Response) => {
+  res.json('Hello there');
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
 });
 
 app.listen(port, () => {
