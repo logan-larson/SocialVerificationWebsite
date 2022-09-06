@@ -1,5 +1,6 @@
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { InteractionManagerService } from './interaction-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,19 +8,26 @@ import { Injectable } from '@angular/core';
 export class VerificationManagerService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private interactionManager: InteractionManagerService
   ) { }
 
   verifyModel() {
+    console.log("Before: ");
+    console.log(JSON.stringify(this.interactionManager.interaction));
+
+    this.http
+      .post<string>('/api/verification', JSON.stringify(this.interactionManager.interaction))
+      .subscribe((res: any) => {
+        //console.log("After: ");
+        //console.log(res);
+      });
+    /*
     this.http
       .get('/api/verify')
       .subscribe((res: any) => {
         console.log(res);
       });
-    /*
-    this.http.get('http://localhost:5000/api/verify', {}).subscribe((res) => {
-      console.log(res.toString());
-    });
     */
   }
 }
