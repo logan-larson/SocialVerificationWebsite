@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import verification from './routes/verification';
-import dotenv from 'dotenv';
-import * as bodyParser from 'body-parser';
+import dotenv from 'dotenv'; // Used to get port from environment
 
 dotenv.config();
 
@@ -11,8 +10,8 @@ const port = process.env.PORT;
 /* Link static files */
 app.use(express.static(__dirname + '/public'));
 
-/* Middle-ware operations */
-app.use(bodyParser.json());
+/* Middleware */
+app.use(express.json());
 
 /* Routes */
 app.use('/api/verification', verification);

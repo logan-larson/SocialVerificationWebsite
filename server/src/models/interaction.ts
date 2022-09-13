@@ -7,43 +7,20 @@ import { MicroInteraction } from "./microInteraction";
 
 export class Interaction {
 
-    microIdCounter: number = 0;
-    transitionIdCounter: number = 0;
     violations: Violation[] = [];
     micros: MicroInteraction[] = [];
     transitions: Transition[] = [];
 
-    constructor(json: string | null = null) {
-      if (json) {
-        let interactionData = JSON.parse(json);
-
-        this.microIdCounter = interactionData.microIdCounter;
-        this.transitionIdCounter = interactionData.transitionIdCounter;
-
+    constructor(interactionData: Interaction | null = null) {
+      if (interactionData) {
         this.micros = interactionData.micros;
         this.transitions = interactionData.transitions;
       }
     }
 
-    /* Violations */
-
-    addViolation(violation: Violation) {
-        this.violations.push(violation);
-    }
-
-    setViolations(violations: Violation[]) {
-        this.violations = violations;
-    }
-
-    getViolations() {
-        return this.violations;
-    }
-
-    /* Transitions */
-
-
-
     /* Microinteraction types */
+
+    /* Might be useful down the road
 
     getMicroTypeByName(name: string) {
       let trackedMicroTypes: MicroType[] = getTrackedMicroTypes();
@@ -59,5 +36,5 @@ export class Interaction {
         console.trace();
         return null;
     }
-
+    */
 }

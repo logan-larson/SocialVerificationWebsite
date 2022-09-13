@@ -13,21 +13,11 @@ export class VerificationManagerService {
   ) { }
 
   verifyModel() {
-    console.log("Before: ");
-    console.log(JSON.stringify(this.interactionManager.interaction));
-
     this.http
-      .post<string>('/api/verification', JSON.stringify(this.interactionManager.interaction))
-      .subscribe((res: any) => {
-        //console.log("After: ");
-        //console.log(res);
+      .post<JSON>('/api/verification', this.interactionManager.interaction)
+      .subscribe((data: JSON) => {
+        console.log("Violations: ");
+        console.log(data);
       });
-    /*
-    this.http
-      .get('/api/verify')
-      .subscribe((res: any) => {
-        console.log(res);
-      });
-    */
   }
 }
