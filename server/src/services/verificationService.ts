@@ -9,8 +9,14 @@ function verifyModel(interaction: Interaction): Violation[] {
   // Check for more than one starting point (prereq for greeting expectations)
   addStartingPointViolations(interaction, violations);
 
-  // Greeting expectations
+  // Greeting expectations -- TODO tweak to reduce repetitive violations
   addGreeterViolations(interaction, violations);
+
+  // Check that an ending point exists
+  addEndingPointViolations(interaction, violations);
+
+  // Farewell expectations
+  addFarewellViolations(interaction, violations);
   
   return violations;
 }
@@ -66,6 +72,33 @@ function addGreeterViolations(interaction: Interaction, violations: Violation[])
   });
 }
 
+function addEndingPointViolations(interaction: Interaction, violations: Violation[]): void {
 
+  // The interaction should eventually end
+  let endingIds: number[] = [];
+  interaction.micros.forEach(m => {
+    let hasOutgoing: boolean = false;
+
+    interaction.transitions.forEach(t => {
+      if (t.firstMicroId == m.id) {
+        hasOutgoing = true;
+      }
+    });
+
+    if (!hasOutgoing) {
+      endingIds.push(m.id);
+    }
+  });
+
+  if (endingIds.length == 0) {
+    violations.push(new Violation("interaction", "Interaction Flub", "The interaction should eventually end"));
+  }
+}
+
+function addFarewellViolations(interaction: Interaction, violations: Violation[]): void {
+  // Validate farewell expectations
+  // When an interaction ends, it must end with a farewell
+  // Triggered if farewell isn't reachable from all states OR doesn't exist
+}
 
 export default verifyModel;
