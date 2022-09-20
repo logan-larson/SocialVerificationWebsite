@@ -13,6 +13,7 @@ export class VerificationManagerService {
   ) { }
 
   verifyModel() {
+    console.log(this.interactionManager.interaction);
     this.http
       .post<JSON>('/api/verification', this.interactionManager.interaction)
       .subscribe((data: JSON) => {
