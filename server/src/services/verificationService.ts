@@ -178,7 +178,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   let nodes: Node[] = [];
   let root: Node = new Node();
   interaction.micros.forEach(m => {
-    let node: Node = new Node(m.id, null, null);
+    let node: Node = new Node(m.id, -1, -1);
     nodes.push(node);
     if (m.type == 'Greeter') {
       root = node;
@@ -192,7 +192,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
       let n2: Node | undefined = nodes.find(n => n.id == t.secondMicroId);
 
       if(n1 && n2) {
-        n1.onReady = n2;
+        n1.onReady = n2.id;
       }
     }
     if (t.notReady) {
@@ -200,7 +200,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
       let n2: Node | undefined = nodes.find(n => n.id == t.secondMicroId);
 
       if(n1 && n2) {
-        n1.onNotReady = n2;
+        n1.onNotReady = n2.id;
       }
     }
   });
@@ -235,7 +235,7 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
   }
 
   // BASE CASE 1 - At terminal node
-  if (node.onReady == null && node.onNotReady == null) {
+  if (node.onReady == -1 && node.onNotReady == -1) {
     if (!terminalNodes.includes(node.id)) { // If this is a new found terminal node, add it to the list
       terminalNodes.push(node.id);
     }
@@ -258,13 +258,13 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
   let r: string = 'n';
   let n: string = 'n';
 
-  if (node.onReady != null) {
-    currentPath.push(node.onReady.id);
+  if (node.onReady != -1) {
+    currentPath.push(node.onReady);
     r = pathToEnd(nodes, currentPath, terminalNodes, cyclicalNodes);
   }
 
-  if (node.onNotReady != null) {
-    currentPath.push(node.onNotReady.id);
+  if (node.onNotReady != -1) {
+    currentPath.push(node.onNotReady);
     n = pathToEnd(nodes, currentPath, terminalNodes, cyclicalNodes);
   }
 
@@ -293,13 +293,13 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
 
 class Node {
   id: number = -1;
-  onReady: Node | null = null;
-  onNotReady: Node | null = null;
+  onReady: number = -1;
+  onNotReady: number = -1;
 
   constructor(
     id: number = -1,
-    onReady: Node | null = null,
-    onNotReady: Node | null = null
+    onReady: number = -1,
+    onNotReady: number = -1
   ) {
     this.id = id;
     this.onReady = onReady;
