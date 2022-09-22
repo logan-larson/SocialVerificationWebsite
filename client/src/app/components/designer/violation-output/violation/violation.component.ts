@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {Violation} from 'src/app/models/violation';
 
 @Component({
   selector: 'app-violation',
@@ -7,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class ViolationComponent implements OnInit {
+
+  @Input() violation: Violation = new Violation();
 
   constructor() { }
 

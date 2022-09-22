@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Violation} from 'src/app/models/violation';
+import {VerificationManagerService} from 'src/app/services/verification-manager.service';
 
 @Component({
   selector: 'app-violation-output',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViolationOutputComponent implements OnInit {
 
-  constructor() { }
+  violations: Violation[] = [];
+
+  constructor(
+    private verificationManager: VerificationManagerService
+  ) {
+    this.verificationManager.violationEmitter.subscribe((vs: Violation[]) => {
+      console.log(vs);
+      this.violations = vs;
+    });
+  }
 
   ngOnInit(): void {
+    this.violations = this.verificationManager.violations;
   }
 
 }

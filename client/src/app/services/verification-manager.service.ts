@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
+import {Violation} from '../models/violation';
 import { InteractionManagerService } from './interaction-manager.service';
 
 @Injectable({
@@ -7,18 +8,21 @@ import { InteractionManagerService } from './interaction-manager.service';
 })
 export class VerificationManagerService {
 
+  violations: Violation[] = [];
+
+  @Output() violationEmitter: EventEmitter<Violation[]> = new EventEmitter<Violation[]>();
+
   constructor(
     private http: HttpClient,
     private interactionManager: InteractionManagerService
   ) { }
 
   verifyModel() {
-    console.log(this.interactionManager.interaction);
     this.http
-      .post<JSON>('/api/verification', this.interactionManager.interaction)
-      .subscribe((data: JSON) => {
-        console.log("Violations: ");
-        console.log(data);
+      .post<Violation[]>('/api/verification', this.interactionManager.interaction)
+      .subscribe((data: Violation[]) => {
+        this.violations = data;
+        this.violationEmitter.emit(this.violations);
       });
   }
 }
