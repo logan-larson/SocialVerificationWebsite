@@ -179,7 +179,6 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   let root: Node = new Node();
   interaction.micros.forEach(m => {
     let node: Node = new Node(m.id, null, null);
-    console.log("node: " + JSON.stringify(node, null, 2));
     nodes.push(node);
     if (m.type == 'Greeter') {
       root = node;
@@ -195,7 +194,8 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
       if(n1 && n2) {
         n1.onReady = n2;
       }
-    } else if (t.notReady) {
+    }
+    if (t.notReady) {
       let n1: Node | undefined = nodes.find(n => n.id == t.firstMicroId);
       let n2: Node | undefined = nodes.find(n => n.id == t.secondMicroId);
 
@@ -205,7 +205,6 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
     }
   });
 
-  console.log(JSON.stringify(root));
   console.log(JSON.stringify(nodes, null, 2));
 
   // Perform search
@@ -228,7 +227,10 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
 function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[], cyclicalNodes: number[]): string {
   let node: Node | undefined = nodes.find(n => n.id === currentPath[currentPath.length - 1]); // Get node that is last in the current path
 
+  console.log(`\n${JSON.stringify(node)}\n`);
+
   if (node == undefined) { // This should never happen, if so then graph constructed improperly
+    console.log(`Undefined\n`);
     return 'n';
   }
 
@@ -239,6 +241,7 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
     }
 
     currentPath.pop(); // Remove node from currentPath
+    console.log(`\nBase case for ${node.id}: y`);
     return 'y';
   }
 
@@ -246,6 +249,7 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
   let cPath: number[] = currentPath.slice(0, currentPath.length - 1); // Get the current path without the current node being looked at
   if (cPath.includes(node.id)) { // A cycle was found
     currentPath.pop(); // Remove node from currentPath
+    console.log(`\nBase case for ${node.id}: c`);
     return 'c';
   }
 
@@ -263,6 +267,8 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
     currentPath.push(node.onNotReady.id);
     n = pathToEnd(nodes, currentPath, terminalNodes, cyclicalNodes);
   }
+
+  console.log(`\n Post recursion for ${node.id}: r = ${r}, n = ${n}`);
 
   currentPath.pop();
   if (r === 'n' || n === 'n') { // If either paths are non-terminal, then this node is non-terminal because this interaction has a possibility of never finishing
