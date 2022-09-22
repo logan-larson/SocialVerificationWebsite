@@ -21,6 +21,7 @@ import { ContextMenuComponent } from './components/designer/interaction-canvas/c
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MicroComponent } from './components/designer/interaction-canvas/micro/micro.component';
 import { ParameterOptionsComponent } from './components/designer/interaction-options/parameter-options/parameter-options.component';
+import { ViolationComponent } from './components/designer/violation-output/violation/violation.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ParameterOptionsComponent } from './components/designer/interaction-opt
     ContextMenuComponent,
     MicroComponent,
     ParameterOptionsComponent,
+    ViolationComponent,
   ],
   imports: [
     BrowserModule,
