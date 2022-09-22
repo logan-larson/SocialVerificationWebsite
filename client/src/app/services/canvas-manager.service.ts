@@ -13,8 +13,19 @@ export class CanvasManagerService {
 
   @Output() updateBtnState: EventEmitter<any> = new EventEmitter();
 
+  @Output() getViolatingIds: EventEmitter<any> = new EventEmitter<any>();
+
+  violatingMicroIds: number[] = [];
+  violatingTransitionIds: number[] = [];
+
   canvasOffset: Position = new Position(0, 0);
   canvasScrollOffset: Position = new Position(0, 0);
 
   constructor() { }
+
+  setViolatingIds(violatingMicroIds: number[], violatingTransitionIds: number[]) {
+    this.violatingMicroIds = violatingMicroIds;
+    this.violatingTransitionIds = violatingTransitionIds;
+    this.getViolatingIds.emit();
+  }
 }

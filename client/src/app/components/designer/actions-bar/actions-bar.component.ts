@@ -5,6 +5,7 @@ normal program.
 */
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { ParameterManagerService } from 'src/app/services/parameter-manager.service';
 import { VerificationManagerService } from 'src/app/services/verification-manager.service';
@@ -24,7 +25,8 @@ export class ActionsBarComponent implements OnInit {
   constructor(
     private interactionManager: InteractionManagerService,
     private paramManager: ParameterManagerService,
-    private verificationManager: VerificationManagerService
+    private verificationManager: VerificationManagerService,
+    private canvasManager: CanvasManagerService
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +62,9 @@ export class ActionsBarComponent implements OnInit {
   clear() {
     this.interactionManager.clearCanvas();
     this.paramManager.updateCurrentMicro(undefined);
+    this.verificationManager.violations = [];
+    this.verificationManager.violationEmitter.emit([]);
+    this.canvasManager.setViolatingIds([], []);
   }
 
   saveInteractionToLocal() {

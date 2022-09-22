@@ -25,7 +25,6 @@ export class InteractionManagerService {
 
   @Output() getUpdatedInteraction: EventEmitter<Interaction> = new EventEmitter<Interaction>();
 
-
   constructor(
   ) {
     this.currentTransition = new Transition(-1, -1, -1);

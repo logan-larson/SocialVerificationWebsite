@@ -36,7 +36,11 @@ export class MicroComponent implements OnInit {
     private canvasManager: CanvasManagerService,
     private interactionManager: InteractionManagerService,
     private parameterManager: ParameterManagerService
-  ) { }
+  ) {
+    this.canvasManager.getViolatingIds.subscribe(n => {
+      this.setHightlightColor('black');
+    });
+  }
 
   ngOnInit(): void {
   }
@@ -95,6 +99,8 @@ export class MicroComponent implements OnInit {
   setHightlightColor(val: string) {
     if (this.interactionManager.isAddingTransition) {
       this.highlightColor = val;
+    } else if (this.canvasManager.violatingMicroIds.includes(this.micro.id)) {
+      this.highlightColor = 'red';
     } else {
       this.highlightColor = 'black';
     }

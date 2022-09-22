@@ -1,5 +1,5 @@
-<div class="border-2 border-black bg-gray-200 h-[250px]">
-  <div *ngFor="let violation of violations">
+<div class="border-2 border-black bg-gray-200 h-[250px] p-2">
+  <div *ngFor="let violation of violations" class="my-1">
     <app-violation [violation]="violation"></app-violation>
   </div>
 </div>

@@ -8,6 +8,7 @@ import { Position } from 'src/app/models/position';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { ContextMenuService } from 'src/app/services/context-menu.service';
 import {MicroInteraction} from 'src/app/models/microInteraction';
+import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
 
 @Component({
   selector: 'app-transition',
@@ -34,13 +35,20 @@ export class TransitionComponent implements OnInit {
   y2: string = '0px';
   d: string = '';
 
+  highlightColor: string = 'black';
+
   conditionsX: string = '0px';
   conditionsY: string = '0px';
 
   constructor(
     private interactionManager: InteractionManagerService,
     private contextMenu: ContextMenuService,
-  ) { }
+    private canvasManager: CanvasManagerService
+  ) {
+    this.canvasManager.getViolatingIds.subscribe(n => {
+      this.setHightlightColor();
+    })
+  }
 
   ngOnInit(): void {
   }
@@ -153,6 +161,14 @@ export class TransitionComponent implements OnInit {
     this.transition.ready = this.isReady;
     this.transition.notReady = this.isNotReady;
     this.interactionManager.updateTransition(this.transition);
+  }
+
+  setHightlightColor() {
+    if (this.canvasManager.violatingTransitionIds.includes(this.transition.id)) {
+      this.highlightColor = 'red';
+    } else {
+      this.highlightColor = 'black';
+    }
   }
 
 }
