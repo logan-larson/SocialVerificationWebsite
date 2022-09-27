@@ -26,6 +26,7 @@ export class ParameterOptionsComponent implements OnInit {
   paramRes: ParameterResult | null = null;
   @Output() resultEmitter = new EventEmitter<ParameterResult>();
 
+  showToolTip: string = 'hidden';
 
   // array type
   responses: Map<string, string> = new Map();
