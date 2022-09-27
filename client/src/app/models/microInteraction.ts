@@ -1,7 +1,5 @@
 import { Parameter } from "./parameter";
 import { ParameterResult } from "./parameterResult";
-import { MicroType } from "./microType";
-import { getTrackedMicroTypes } from "./trackedMicroTypes";
 
 export class MicroInteraction {
 

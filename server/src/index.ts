@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import verification from './routes/verification';
+import microtypes from './routes/microtype';
 import dotenv from 'dotenv'; // Used to get port from environment
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json());
 
 /* Routes */
 app.use('/api/verification', verification);
+app.use('/api/microtypes', microtypes);
 
 /* Serve front-end */
 app.get('*', (req, res) => {

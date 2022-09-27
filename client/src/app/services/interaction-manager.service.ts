@@ -8,8 +8,9 @@ import { MicroInteraction } from '../models/microInteraction';
 import { Parameter } from '../models/parameter';
 import { MicroType } from '../models/microType';
 import { ParameterResult } from '../models/parameterResult';
-import { getTrackedMicroTypes } from '../models/trackedMicroTypes';
+//import { getTrackedMicroTypes } from '../models/trackedMicroTypes';
 import { Transition } from '../models/transition';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class InteractionManagerService {
   @Output() getUpdatedInteraction: EventEmitter<Interaction> = new EventEmitter<Interaction>();
 
   constructor(
+    private http: HttpClient
   ) {
     this.currentTransition = new Transition(-1, -1, -1);
   }
@@ -48,13 +50,15 @@ export class InteractionManagerService {
     return m;
   }
 
-  addMicro(x: number, y: number): MicroInteraction | null {
+  async addMicro(x: number, y: number): Promise<MicroInteraction | null> {
 
-    let trackedMicroTypes: MicroType[] = getTrackedMicroTypes();
+    let mt: MicroType | undefined = await this.http.get<MicroType>(`/api/microtypes/${this.currentMicroType}`).toPromise();
+
+    //let trackedMicroTypes: MicroType[] = getTrackedMicroTypes();
 
     let params: Parameter[] = [];
 
-    let mt: MicroType | undefined = trackedMicroTypes.find((m: MicroType) => m.type === this.currentMicroType);
+    //let mt: MicroType | undefined = trackedMicroTypes.find((m: MicroType) => m.type === this.currentMicroType);
 
     if (mt) {
       params = mt.parameters;
