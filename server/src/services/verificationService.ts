@@ -23,8 +23,11 @@ function verifyModel(interaction: Interaction): Violation[] {
   if (!transitionFlubs && !startingPointFlubs && !greeterFlubs && !endingPointFlubs) {
     farewellFlubs = addFarewellViolations(interaction, violations);
   }
-
-
+  
+  let turnTakingFlubs: boolean = false;
+  if (!transitionFlubs && !startingPointFlubs && !greeterFlubs && !endingPointFlubs && !farewellFlubs) {
+    turnTakingFlubs = addTurnTakingViolations(interaction, violations);
+  }
 
   return violations;
 }
@@ -305,6 +308,19 @@ class Node {
     this.onReady = onReady;
     this.onNotReady = onNotReady;
   }
+}
+
+function addTurnTakingViolations(interaction: Interaction, violations: Violation[]): boolean {
+
+  interaction.transitions.forEach(t => {
+    if (t.notReady) {
+      // If firstMicroId is Greeter w/ Reponse, Ask, Remark w/ Response
+      // Then don't worry about it
+      // Else secondMicroId must be Answer w/o Intro
+    }
+  });
+
+  return false;
 }
 
 export default verifyModel;

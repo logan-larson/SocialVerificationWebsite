@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { TitleBarComponent } from './components/title-bar/title-bar.component';
 import { DesignerComponent } from './components/designer/designer.component';
 import { AuthComponent } from './components/auth/auth.component';
-import { StatusBarComponent } from './components/designer/status-bar/status-bar.component';
 import { ActionsBarComponent } from './components/designer/actions-bar/actions-bar.component';
 import { MicrointeractionSelectorComponent } from './components/designer/microinteraction-selector/microinteraction-selector.component';
 import { InteractionCanvasComponent } from './components/designer/interaction-canvas/interaction-canvas.component';
@@ -29,7 +28,6 @@ import { ViolationComponent } from './components/designer/violation-output/viola
     TitleBarComponent,
     DesignerComponent,
     AuthComponent,
-    StatusBarComponent,
     ActionsBarComponent,
     MicrointeractionSelectorComponent,
     InteractionCanvasComponent,
