@@ -64,7 +64,6 @@ export class InteractionCanvasComponent implements OnInit {
       this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
 
       // Set canvas offset in canvasManager OnLoad
-      // TODO Update canvas offsets when user changes the window size
       this.canvasManager.canvasOffset = this.position;
       this.canvasManager.canvasScrollOffset = this.scrollPosition;
     });
@@ -83,6 +82,14 @@ export class InteractionCanvasComponent implements OnInit {
 
     this.contextMenu.hideContextMenuEmitter.subscribe(() => {
       this.hideContextMenu();
+    });
+
+    this.render.listen('window', 'resize', () => {
+      this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
+
+      // Set canvas offset in canvasManager OnResize
+      this.canvasManager.canvasOffset = this.position;
+      //this.canvasManager.canvasScrollOffset = this.scrollPosition;
     });
   }
 
@@ -111,6 +118,10 @@ export class InteractionCanvasComponent implements OnInit {
   updateScrollOffset(event: any) {
     this.scrollPosition.x = event.target.scrollLeft;
     this.scrollPosition.y = event.target.scrollTop;
+
+    //console.log(this.scrollPosition);
+
+    //this.canvasManager.canvasScrollOffset = this.scrollPosition;
   }
 
   /* CONTEXT MENU */
@@ -119,7 +130,8 @@ export class InteractionCanvasComponent implements OnInit {
     this.contextMenuHidden = false;
 
     if (this.contextMenuComponent) {
-      this.contextMenuComponent.setMenu(this.contextMenu.type, this.contextMenu.position, this.contextMenu.microId, this.contextMenu.transitionId);
+      let newPos: Position = new Position(this.contextMenu.position.x + this.scrollPosition.x, this.contextMenu.position.y + this.scrollPosition.y);
+      this.contextMenuComponent.setMenu(this.contextMenu.type, newPos, this.contextMenu.microId, this.contextMenu.transitionId);
     } else {
       console.log("context menu comp doesn't exist");
     }
@@ -148,7 +160,10 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   addMicro(event: any) {
-    this.interactionManager.addMicro(event.offsetX - this.scrollPosition.x, event.offsetY - this.scrollPosition.y);
+    console.log(`scroll.x: ${this.scrollPosition.x}, scroll.y: ${this.scrollPosition.y}`);
+    this.interactionManager.addMicro(event.offsetX, event.offsetY);
+    //this.interactionManager.addMicro(event.offsetX + this.scrollPosition.x, event.offsetY + this.scrollPosition.y);
+    //console.log(`x: ${event.offsetX - this.scrollPosition.x}, y: ${event.offsetY - this.scrollPosition.y}`);
   }
 
 }

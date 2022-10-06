@@ -46,6 +46,7 @@ export class MicroComponent implements OnInit {
   }
 
   setMicro(m: MicroInteraction) {
+    console.log(`m.x: ${m.x}, m.y: ${m.y}`);
     this.x = m.x + 'px';
     this.y = m.y + 'px';
     this.micro = m;
