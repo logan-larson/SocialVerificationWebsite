@@ -5,6 +5,7 @@ normal program.
 */
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {Violation} from 'src/app/models/violation';
 import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { ParameterManagerService } from 'src/app/services/parameter-manager.service';
@@ -22,24 +23,38 @@ export class ActionsBarComponent implements OnInit {
   isAddingGroup: boolean = false;
   isAddingTransition: boolean = false;
 
+  verifyTooltip: string = 'hidden';
+  saveTooltip: string = 'hidden';
+  loadTooltip: string = 'hidden';
+  clearTooltip: string = 'hidden';
+
+  status: string = 'notVerified';
+  notVerifiedTooltip: string = 'hidden';
+  verifiedTooltip: string = 'hidden';
+  errorsTooltip: string = 'hidden';
+
+
   constructor(
     private interactionManager: InteractionManagerService,
     private paramManager: ParameterManagerService,
     private verificationManager: VerificationManagerService,
     private canvasManager: CanvasManagerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
   }
 
   verifyModel() {
-    console.log("Verify model");
-    this.verificationManager.verifyModel();
+    this.verificationManager.verifyModel((violations: any) => {
+      if (violations.length > 0) {
+        this.status = 'errors';
+      } else {
+        this.status = 'verified';
+      }
+    });
   }
 
   saveToFile() {
-    console.log("Save to file");
-
     let file = "interaction.json";
     let text = JSON.stringify(this.interactionManager.interaction);
     var element = document.createElement('a');
@@ -51,7 +66,6 @@ export class ActionsBarComponent implements OnInit {
   }
 
   loadFromFile() {
-    console.log("Load from file");
     this.fileUpload.nativeElement.click();
   }
 
@@ -65,6 +79,7 @@ export class ActionsBarComponent implements OnInit {
     this.verificationManager.violations = [];
     this.verificationManager.violationEmitter.emit([]);
     this.canvasManager.setViolatingIds([], []);
+    this.status = 'notVerified';
   }
 
   saveInteractionToLocal() {

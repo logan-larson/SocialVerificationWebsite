@@ -17,12 +17,13 @@ export class VerificationManagerService {
     private interactionManager: InteractionManagerService
   ) { }
 
-  verifyModel() {
+  verifyModel(cb: any) {
     this.http
       .post<Violation[]>('/api/verification', this.interactionManager.interaction)
       .subscribe((data: Violation[]) => {
         this.violations = data;
         this.violationEmitter.emit(this.violations);
+        cb(data);
       });
   }
 }

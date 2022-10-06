@@ -1,35 +1,164 @@
-<button
-	class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
-	(click)="verifyModel()"
->
-	Verify Model
-</button>
-<button
-	class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
-	(click)="saveToFile()"
->
-	Save To File
-</button>
+<div id="header-bar" class="w-full grid grid-cols-3">
+  <!-- Image Versions -->
+  <div id="action-buttons" class="flex">
+    <div id="verify-button" class="relative mx-1">
+      <div
+        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded hover:cursor-pointer"
+        (click)="verifyModel()"
+        (mouseenter)="verifyTooltip = 'visible'"
+        (mouseleave)="verifyTooltip = 'hidden'"
+      >
+        <mat-icon class="hover:cursor-pointer">verified_user</mat-icon>
+      </div>
+      <div 
+        [style.visibility]="verifyTooltip"
+        class="absolute z-1 bg-black text-white text-center rounded py-1 w-[180px] top-[35px] left-0">
+        Verify current model
+      </div>
+    </div>
+    <div id="save-button" class="relative mx-1">
+      <div
+        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded hover:cursor-pointer"
+        (click)="saveToFile()"
+        (mouseenter)="saveTooltip = 'visible'"
+        (mouseleave)="saveTooltip = 'hidden'"
+      >
+        <mat-icon class="hover:cursor-pointer">save</mat-icon>
+      </div>
+      <div 
+        [style.visibility]="saveTooltip"
+        class="absolute z-1 bg-black text-white text-center rounded py-1 w-[160px] top-[35px] left-0">
+        Save model to file
+      </div>
+    </div>
+    <div id="load-button" class="relative mx-1">
+      <div
+        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded hover:cursor-pointer"
+        (click)="loadFromFile()"
+        (mouseenter)="loadTooltip = 'visible'"
+        (mouseleave)="loadTooltip = 'hidden'"
+      >
+        <mat-icon class="hover:cursor-pointer">upload_file</mat-icon>
+      </div>
+      <input type="file" #interactionFileUpload style="display: none" (change)="loadFromUpload($event)" /> 
+      <div 
+        [style.visibility]="loadTooltip"
+        class="absolute z-1 bg-black text-white text-center rounded py-1 w-[180px] top-[35px] left-0">
+        Load model from file
+      </div>
+    </div>
+    <div id="load-button" class="relative mx-1">
+      <div
+        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded hover:cursor-pointer"
+        (click)="clear()"
+        (mouseenter)="clearTooltip = 'visible'"
+        (mouseleave)="clearTooltip = 'hidden'"
+      >
+        <mat-icon class="hover:cursor-pointer">delete</mat-icon>
+      </div>
+      <div 
+        [style.visibility]="clearTooltip"
+        class="absolute z-1 bg-black w-[120px] text-white text-center rounded py-1 top-[35px] left-0">
+        Clear canvas
+      </div>
+    </div>
 
-	<button
-	class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
-	(click)="loadFromFile()"
->
-	Load From File
-</button>
-<input type="file" #interactionFileUpload style="display: none" (change)="loadFromUpload($event)" /> 
-<button
-	class="px-3 py-1.5 rounded-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5"
-	(click)="clear()"
->
-	Clear
-</button>
-<div>
-  <label class="w-full text-2xl text-center">
-    Social Verification Website
-  </label>
-</div>
-<div class="absolute flex items-center right-2">
-	<p class="text-xl font-medium">Verification Status: </p>
-	<label id="verificationStatusText" class="text-xl font-medium">Not Verified</label>
+    <!-- Button Versions
+    <button
+      class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
+      (click)="verifyModel()"
+    >
+      Verify Model
+    </button>
+    <button
+      class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
+      (click)="saveToFile()"
+    >
+      Save To File
+    </button>
+
+      <button
+      class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
+      (click)="loadFromFile()"
+    >
+      Load From File
+    </button>
+    <input type="file" #interactionFileUpload style="display: none" (change)="loadFromUpload($event)" /> 
+    <button
+      class="px-3 py-1.5 rounded-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5"
+      (click)="clear()"
+    >
+      Clear
+    </button>
+    -->
+  </div>
+  <div class="text-center">
+    <label class="w-full text-2xl font-medium text-center">
+      Social Verification Website
+    </label>
+  </div>
+  <div class="absolute flex items-center right-2">
+    <p class="mr-1 text-xl">Verification Status: </p>
+
+    <div
+      id="not-verified-status"
+      class="relative z-2"
+      [style.visibility]="status == 'notVerified' ? 'visible' : 'hidden'"
+      [style.width]="status == 'notVerified' ? '32px' : '0px'"
+    >
+      <div
+        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-400 rounded"
+        (mouseenter)="notVerifiedTooltip = 'visible'"
+        (mouseleave)="notVerifiedTooltip = 'hidden'"
+      >
+        <mat-icon class="hover:cursor-default">block</mat-icon>
+      </div>
+      <div 
+        [style.visibility]="notVerifiedTooltip"
+        class="absolute z-1 bg-black w-[150px] text-white text-center rounded py-1 top-[35px] right-0">
+        Model not verified
+      </div>
+    </div>
+
+    <div
+      id="verified-status"
+      class="relative z-3"
+      [style.visibility]="status == 'verified' ? 'visible' : 'hidden'"
+      [style.width]="status == 'verified' ? '32px' : '0px'"
+    >
+      <div
+        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-400 rounded"
+        (mouseenter)="verifiedTooltip = 'visible'"
+        (mouseleave)="verifiedTooltip = 'hidden'"
+      >
+        <mat-icon class="hover:cursor-default">check_circle_outline</mat-icon>
+      </div>
+      <div 
+        [style.visibility]="verifiedTooltip"
+        class="absolute z-1 bg-black w-[200px] text-white text-center rounded py-1 top-[35px] right-0">
+        No errors found in model
+      </div>
+    </div>
+
+    <div
+      id="errors-status"
+      class="relative z-4"
+      [style.visibility]="status == 'errors' ? 'visible' : 'hidden'"
+      [style.width]="status == 'errors' ? '32px' : '0px'"
+    >
+      <div
+        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-400 rounded"
+        (mouseenter)="errorsTooltip = 'visible'"
+        (mouseleave)="errorsTooltip = 'hidden'"
+      >
+        <mat-icon class="hover:cursor-default">highlight_off</mat-icon>
+      </div>
+      <div 
+        [style.visibility]="errorsTooltip"
+        class="absolute z-1 bg-black w-[180px] text-white text-center rounded py-1 top-[35px] right-0">
+        Errors present in model
+      </div>
+    </div>
+    
+  </div>
 </div>

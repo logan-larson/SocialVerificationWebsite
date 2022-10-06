@@ -15,7 +15,6 @@ export class ViolationOutputComponent implements OnInit {
     private verificationManager: VerificationManagerService
   ) {
     this.verificationManager.violationEmitter.subscribe((vs: Violation[]) => {
-      console.log(vs);
       this.violations = vs;
     });
   }

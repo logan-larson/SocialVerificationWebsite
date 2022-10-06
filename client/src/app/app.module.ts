@@ -3,10 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TitleBarComponent } from './components/title-bar/title-bar.component';
 import { DesignerComponent } from './components/designer/designer.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { ActionsBarComponent } from './components/designer/actions-bar/actions-bar.component';
@@ -25,7 +25,6 @@ import { ViolationComponent } from './components/designer/violation-output/viola
 @NgModule({
   declarations: [
     AppComponent,
-    TitleBarComponent,
     DesignerComponent,
     AuthComponent,
     ActionsBarComponent,
@@ -46,7 +45,8 @@ import { ViolationComponent } from './components/designer/violation-output/viola
     DragDropModule,
     NoopAnimationsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
