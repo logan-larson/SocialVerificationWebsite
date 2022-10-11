@@ -38,13 +38,19 @@ export class InteractionCanvasComponent implements OnInit {
   // Components contained in container
   components: ComponentRef<any>[] = [];
 
-  // Load XML stored in local storage
+  microComponents: ComponentRef<MicroComponent>[] = [];
+
+  mousePos: Position = new Position();
+  
+  onMicro: boolean = false;
+
+  // Load JSON stored in local storage
   @HostListener('window:load', ['$event'])
   onLoadHander() {
     this.interactionManager.loadInteractionFromLocal();
   }
 
-  // Save XML to local storage
+  // Save JSON to local storage
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHander() {
     this.interactionManager.saveInteractionToLocal();
@@ -57,6 +63,14 @@ export class InteractionCanvasComponent implements OnInit {
     private render: Renderer2,
     private el: ElementRef
   ) {
+    this.canvasManager.onMicro.subscribe((onMicro) => {
+      this.onMicro = onMicro;
+    })
+    setInterval(() => {
+      if (this.interactionManager.isAddingTransition && !this.onMicro) {
+        this.canvasManager.getMousePosition.emit(this.mousePos);
+      }
+    }, 20);
   }
 
   ngOnInit(): void {
@@ -66,6 +80,21 @@ export class InteractionCanvasComponent implements OnInit {
       // Set canvas offset in canvasManager OnLoad
       this.canvasManager.canvasOffset = this.position;
       this.canvasManager.canvasScrollOffset = this.scrollPosition;
+    });
+
+    // Listen for microupdates and adjust them as needed
+    // TODO I would like to move to this system as it would reduce the rendering required
+    // Instead of rerendering the whole interaction on every change, just rerender the change
+    this.interactionManager.getUpdatedMicro.subscribe((micro: MicroInteraction) => {
+      let currentMicro = this.microComponents.find(m => m.instance.micro.id == micro.id)?.instance;
+      if (currentMicro) {
+        currentMicro.setMicro(micro);
+      }
+    });
+
+    this.interactionManager.initTransition.subscribe((t: Transition) => {
+      let newTrans = this.container.createComponent(TransitionComponent).instance;
+      newTrans.setTransition(t);
     });
 
     // When interaction changes, re-render the canvas
@@ -80,16 +109,11 @@ export class InteractionCanvasComponent implements OnInit {
       this.showContextMenu();
     });
 
-    this.contextMenu.hideContextMenuEmitter.subscribe(() => {
-      this.hideContextMenu();
-    });
-
     this.render.listen('window', 'resize', () => {
       this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
 
       // Set canvas offset in canvasManager OnResize
       this.canvasManager.canvasOffset = this.position;
-      //this.canvasManager.canvasScrollOffset = this.scrollPosition;
     });
   }
 
@@ -118,10 +142,6 @@ export class InteractionCanvasComponent implements OnInit {
   updateScrollOffset(event: any) {
     this.scrollPosition.x = event.target.scrollLeft;
     this.scrollPosition.y = event.target.scrollTop;
-
-    //console.log(this.scrollPosition);
-
-    //this.canvasManager.canvasScrollOffset = this.scrollPosition;
   }
 
   /* CONTEXT MENU */
@@ -137,33 +157,16 @@ export class InteractionCanvasComponent implements OnInit {
     }
   }
 
-  hideContextMenu(): void {
-    this.contextMenuHidden = true;
-
-    let c = ContextMenuComponent;
-
-    const contextMenu = this.components.find((component: ComponentRef<any>) => component.instance instanceof c);
-    if (contextMenu) {
-      const componentIndex = this.components.indexOf(contextMenu);
-      if (componentIndex !== -1) {
-        // Remove component from both view and array
-        if (this.container.indexOf(contextMenu.hostView) > -1) {
-          this.container.remove(this.container.indexOf(contextMenu.hostView));
-          this.components.splice(componentIndex, 1);
-        }
-      }
-    }
-  }
-
   allowDrop(event: any) {
     event.preventDefault();
   }
 
   addMicro(event: any) {
-    console.log(`scroll.x: ${this.scrollPosition.x}, scroll.y: ${this.scrollPosition.y}`);
     this.interactionManager.addMicro(event.offsetX, event.offsetY);
-    //this.interactionManager.addMicro(event.offsetX + this.scrollPosition.x, event.offsetY + this.scrollPosition.y);
-    //console.log(`x: ${event.offsetX - this.scrollPosition.x}, y: ${event.offsetY - this.scrollPosition.y}`);
+  }
+
+  relayCoords(event: any) {
+    this.mousePos = new Position(event.offsetX, event.offsetY);
   }
 
 }

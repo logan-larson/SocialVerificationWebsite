@@ -8,7 +8,7 @@
         (mouseenter)="verifyTooltip = 'visible'"
         (mouseleave)="verifyTooltip = 'hidden'"
       >
-        <mat-icon class="hover:cursor-pointer">verified_user</mat-icon>
+        <mat-icon class="hover:cursor-pointer">published_with_changes</mat-icon>
       </div>
       <div 
         [style.visibility]="verifyTooltip"
@@ -107,7 +107,7 @@
       [style.width]="status == 'notVerified' ? '32px' : '0px'"
     >
       <div
-        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-400 rounded"
+        class="w-[32px] h-[32px] items-center justify-center flex bg-amber-500 rounded"
         (mouseenter)="notVerifiedTooltip = 'visible'"
         (mouseleave)="notVerifiedTooltip = 'hidden'"
       >
@@ -127,7 +127,7 @@
       [style.width]="status == 'verified' ? '32px' : '0px'"
     >
       <div
-        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-400 rounded"
+        class="w-[32px] h-[32px] items-center justify-center flex bg-green-500 rounded"
         (mouseenter)="verifiedTooltip = 'visible'"
         (mouseleave)="verifiedTooltip = 'hidden'"
       >
@@ -147,7 +147,7 @@
       [style.width]="status == 'errors' ? '32px' : '0px'"
     >
       <div
-        class="w-[32px] h-[32px] items-center justify-center flex bg-gray-400 rounded"
+        class="w-[32px] h-[32px] items-center justify-center flex bg-red-500 rounded"
         (mouseenter)="errorsTooltip = 'visible'"
         (mouseleave)="errorsTooltip = 'hidden'"
       >

@@ -25,9 +25,11 @@ export class MicroComponent implements OnInit {
 
   @ViewChild('microEl') el!: ElementRef;
 
-  addTrans: boolean = false;
   x: string = '';
   y: string = '';
+
+  mousePos: Position = new Position();
+  onMicro: boolean = false;
 
   highlightColor: string = 'black';
 
@@ -40,13 +42,19 @@ export class MicroComponent implements OnInit {
     this.canvasManager.getViolatingIds.subscribe(n => {
       this.setHightlightColor('black');
     });
+
+    setInterval(() => {
+      if (this.interactionManager.isAddingTransition && this.onMicro) {
+        //this.mousePos.addPosition(new Position(this.canvasManager.canvasOffset.x, this.canvasManager.canvasOffset.y));
+        this.canvasManager.getMousePosition.emit(this.mousePos);
+      }
+    }, 20);
   }
 
   ngOnInit(): void {
   }
 
   setMicro(m: MicroInteraction) {
-    console.log(`m.x: ${m.x}, m.y: ${m.y}`);
     this.x = m.x + 'px';
     this.y = m.y + 'px';
     this.micro = m;
@@ -79,22 +87,28 @@ export class MicroComponent implements OnInit {
   }
 
   /* Transition related methods */
-  initAddingTransition(event: any) {
+  initAddingTransition(event: any, isReady: boolean) {
     event.preventDefault();
 
     if (!this.interactionManager.isAddingTransition) {
       event.stopPropagation();
-      this.addTrans = true;
-      this.interactionManager.setFirstMicroId(this.micro.id);
+      this.interactionManager.setFirstAnchor(this.micro.id, isReady);
+      //this.interactionManager.set
     }
 
+  }
+
+  completeAddingTransition(event: any) {
+    event.preventDefault();
+  }
+
+  setSecondAnchor(isLocked: boolean) {
   }
 
   cancelAddingTransition(event: any) {
     event.preventDefault();
     event.stopPropagation();
     this.interactionManager.isAddingTransition = false;
-    this.addTrans = false;
   }
 
   setHightlightColor(val: string) {
@@ -113,6 +127,15 @@ export class MicroComponent implements OnInit {
     this.micro.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
     this.micro.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
     this.interactionManager.updateMicro(this.micro);
+  }
+
+  relayCoords(event: any) {
+    this.mousePos = new Position(event.offsetX, event.offsetY);
+  }
+  
+  emitOnMicro(onMicro: boolean) {
+    this.onMicro = onMicro;
+    this.canvasManager.onMicro.emit(onMicro);
   }
 
 }

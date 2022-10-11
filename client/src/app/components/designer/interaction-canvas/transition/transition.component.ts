@@ -20,6 +20,8 @@ export class TransitionComponent implements OnInit {
 
   transition: Transition = new Transition();
 
+  mousePos: Position = new Position();
+
   isReady: boolean = false;
   isNotReady: boolean = false;
 
@@ -35,7 +37,7 @@ export class TransitionComponent implements OnInit {
   y2: string = '0px';
   d: string = '';
 
-  highlightColor: string = 'black';
+  lineColor: string = '#FF0000';
 
   conditionsX: string = '0px';
   conditionsY: string = '0px';
@@ -45,9 +47,14 @@ export class TransitionComponent implements OnInit {
     private contextMenu: ContextMenuService,
     private canvasManager: CanvasManagerService
   ) {
-    this.canvasManager.getViolatingIds.subscribe(n => {
+    this.canvasManager.getViolatingIds.subscribe(() => {
       this.setHightlightColor();
-    })
+    });
+
+    this.canvasManager.getMousePosition.subscribe((mp: Position) => {
+      this.mousePos = mp;
+      this.setSecondAnchorOnMouse();
+    });
   }
 
   ngOnInit(): void {
@@ -71,78 +78,38 @@ export class TransitionComponent implements OnInit {
 
     if (this.transition) {
       let firstMicro = this.interactionManager.getMicroById(this.transition.firstMicroId);
+
+      if (firstMicro) {
+        this.setFirstOffset(firstMicro, this.transition.isReady);
+      }
+
       let secondMicro = this.interactionManager.getMicroById(this.transition.secondMicroId);
 
-      this.isReady = this.transition.ready;
-      this.isNotReady = this.transition.notReady;
-
-      if (firstMicro && secondMicro) {
-        this.setOffsets(firstMicro, secondMicro);
+      if (secondMicro) {
+        this.setSecondOffset(secondMicro);
+      } else {
+        this.setSecondAnchorOnMouse();
       }
     }
   }
 
-  setOffsets(m1: MicroInteraction, m2: MicroInteraction) {
-
-    if (m1.id === m2.id) {
-      this.isLine = false;
-      this.setSelfOffsets(m1);
-      return;
+  setFirstOffset(m: MicroInteraction, isReady: boolean) {
+    this.x1 = (m.x + 112) + 'px';
+    if (isReady) {
+      this.y1 = (m.y + 49) + 'px';
+    } else {
+      this.y1 = (m.y + 85) + 'px';
     }
+  }
 
-    this.isLine = true;
+  setSecondOffset(m: MicroInteraction) {
+    this.x2 = (m.x - 14) + 'px';
+    this.y2 = (m.y + 49) + 'px';
+  }
 
-    // Calculate in and out anchor positions
-
-    let EOut: {x: number, y: number} = {x: m1.x + this.width, y: m1.y + (this.height * (1/3))};
-    let WOut: {x: number, y: number} = {x: m1.x, y: m1.y + (this.height * (2/3))};
-    let NOut: {x: number, y: number} = {x: m1.x + (this.width * (1/3)), y: m1.y};
-    let SOut: {x: number, y: number} = {x: m1.x + (this.width * (2/3)), y: m1.y + this.height};
-
-    let EIn:  {x: number, y: number} = {x: m2.x + this.width, y: m2.y + (this.height * (2/3))};
-    let WIn:  {x: number, y: number} = {x: m2.x, y: m2.y + (this.height * (1/3))};
-    let NIn:  {x: number, y: number} = {x: m2.x + (this.width * (2/3)), y: m2.y};
-    let SIn:  {x: number, y: number} = {x: m2.x + (this.width * (1/3)), y: m2.y + this.height};
-
-    let outAnchors = [EOut, WOut, NOut, SOut];
-    let inAnchors = [EIn, WIn, NIn, SIn];
-
-    // Get distances between in and out anchors
-    let distances: {p1: {x: number, y: number}, p2: {x: number, y: number}, distance: number}[] = [];
-
-    outAnchors.forEach((outAnchor) => {
-      inAnchors.forEach((inAnchor) => {
-        let d = Math.sqrt(Math.pow(outAnchor.x - inAnchor.x, 2) + Math.pow(outAnchor.y - inAnchor.y, 2));
-        distances.push({ p1: outAnchor, p2: inAnchor, distance: d });
-      });
-    });
-
-    // Get the points with the smallest distance
-    let smallest = distances.pop();
-    distances.forEach((line) => {
-        if (smallest && line.distance < smallest.distance) {
-            smallest = line;
-        }
-    });
-
-    // Set the arrow offset
-    let theta: number = Math.atan2(m1.y - m2.y, m1.x - m2.x);
-
-    let xOff = this.arrowLength * Math.cos(theta);
-    let yOff = this.arrowLength * Math.sin(theta);
-
-    // Set the offsets
-    if (smallest) {
-      this.x1 = smallest.p1.x + "px";
-      this.y1 = smallest.p1.y + "px";
-
-      this.x2 = smallest.p2.x + xOff + "px";
-      this.y2 = smallest.p2.y + yOff + "px";
-
-      this.conditionsX = (((smallest.p1.x + (smallest.p2.x - 176)) / 2)) + "px";
-      this.conditionsY = (((smallest.p1.y + smallest.p2.y) / 2) - 20) + "px";
-
-    }
+  setSecondAnchorOnMouse() {
+    this.x2 = this.mousePos.x + 'px';
+    this.y2 = this.mousePos.y + 'px';
   }
 
   setSelfOffsets(m: MicroInteraction) {
@@ -165,9 +132,9 @@ export class TransitionComponent implements OnInit {
 
   setHightlightColor() {
     if (this.canvasManager.violatingTransitionIds.includes(this.transition.id)) {
-      this.highlightColor = 'red';
+      this.lineColor = '#FF0000';
     } else {
-      this.highlightColor = 'black';
+      this.lineColor = '#000';
     }
   }
 

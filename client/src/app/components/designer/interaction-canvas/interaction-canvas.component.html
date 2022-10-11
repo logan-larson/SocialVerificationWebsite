@@ -6,6 +6,7 @@
   <div
     #canvas
     class="h-[3000px] w-[5000px]"
+    (mousemove)="relayCoords($event)"
     (dragover)="allowDrop($event)"
     (drop)="addMicro($event)"
   >

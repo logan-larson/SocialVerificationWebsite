@@ -8,7 +8,6 @@ import { MicroInteraction } from '../models/microInteraction';
 import { Parameter } from '../models/parameter';
 import { MicroType } from '../models/microType';
 import { ParameterResult } from '../models/parameterResult';
-//import { getTrackedMicroTypes } from '../models/trackedMicroTypes';
 import { Transition } from '../models/transition';
 import {HttpClient} from '@angular/common/http';
 
@@ -25,6 +24,8 @@ export class InteractionManagerService {
   currentMicroType: string = '';
 
   @Output() getUpdatedInteraction: EventEmitter<Interaction> = new EventEmitter<Interaction>();
+  @Output() getUpdatedMicro: EventEmitter<MicroInteraction> = new EventEmitter<MicroInteraction>();
+  @Output() initTransition: EventEmitter<Transition> = new EventEmitter<Transition>();
 
   constructor(
     private http: HttpClient
@@ -123,9 +124,11 @@ export class InteractionManagerService {
     this.getUpdatedInteraction.emit(this.interaction);
   }
 
-  setFirstMicroId(mid: number) {
+  setFirstAnchor(mid: number, isReady: boolean) {
     this.currentTransition = new Transition();
     this.currentTransition.firstMicroId = mid;
+    this.currentTransition.isReady = isReady;
+    this.initTransition.emit(this.currentTransition);
     this.isAddingTransition = true;
   }
 

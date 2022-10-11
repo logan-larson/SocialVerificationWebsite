@@ -15,6 +15,10 @@ export class CanvasManagerService {
 
   @Output() getViolatingIds: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output() getMousePosition: EventEmitter<Position> = new EventEmitter<Position>();
+
+  @Output() onMicro: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   violatingMicroIds: number[] = [];
   violatingTransitionIds: number[] = [];
 

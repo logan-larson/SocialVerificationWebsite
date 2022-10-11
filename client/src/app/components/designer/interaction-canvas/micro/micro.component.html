@@ -8,28 +8,31 @@
   cdkDrag
   (cdkDragEnded)="droppedMicro($event)"
   (click)="clickMicro($event)"
-  (mouseenter)="setHightlightColor('yellow')"
-  (mouseleave)="setHightlightColor('black')"
+  (mouseenter)="setHightlightColor('yellow'); emitOnMicro(true)"
+  (mouseleave)="setHightlightColor('black'); emitOnMicro(false)"
+  (mousemove)="relayCoords($event)"
   (contextmenu)="showContextMenu($event)"
-  class="absolute z-10 w-24 mb-2 text-center align-middle bg-yellow-100 border-2 border-black h-44 rounded-xl"
+  class="absolute z-10 w-24 p-2 mb-2 text-center align-middle bg-gray-300 h-36 rounded-xl"
 >
-{{micro.type}}
+  {{micro.type}}
   <div
-    class="absolute bottom-1"
+    class="absolute left-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-l hover:cursor-pointer"
+    (click)="completeAddingTransition($event)"
+    (mouseenter)="setSecondAnchor(true)"
+    (mouseleave)="setSecondAnchor(false)"
   >
-    <button
-      *ngIf="!addTrans"
-      class="px-3 py-1.5 text-xs rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5 w-[88px] h-[44px]"
-      (click)="initAddingTransition($event)"
-    >
-      Add Transition
-    </button>
-    <button
-      *ngIf="addTrans"
-      class="px-3 py-1.5 rounded-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5 w-[88px] h-[44px]"
-      (click)="cancelAddingTransition($event)"
-    >
-      Cancel
-    </button>
+    <mat-icon>radio_button_unchecked</mat-icon>
+  </div>
+  <div
+    class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
+    (click)="initAddingTransition($event, true)"
+  >
+    <mat-icon>done</mat-icon>
+  </div>
+  <div
+    class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
+    (click)="initAddingTransition($event, false)"
+  >
+    <mat-icon>close</mat-icon>
   </div>
 </div>

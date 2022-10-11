@@ -1,5 +1,6 @@
 import { Parameter } from "./parameter";
 import { ParameterResult } from "./parameterResult";
+import {Position} from "./position";
 
 export class MicroInteraction {
 
@@ -36,5 +37,16 @@ export class MicroInteraction {
 
     updateResults(results: ParameterResult[]) {
         this.parameterResults = results;
+    }
+
+    getReadyAnchor(): Position {
+      return new Position(this.x, this.y);
+    }
+
+    getNotReadyAnchor(): Position {
+      return new Position(this.x, this.y);
+    }
+    getInputAnchor(): Position {
+      return new Position(this.x, this.y);
     }
 }
