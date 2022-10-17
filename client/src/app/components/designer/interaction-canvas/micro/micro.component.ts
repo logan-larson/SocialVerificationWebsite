@@ -11,7 +11,7 @@ import { Position } from 'src/app/models/position';
 import { ParameterManagerService } from 'src/app/services/parameter-manager.service';
 import { CanvasManagerService } from 'src/app/services/canvas-manager.service';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
-import { CdkDragEnd } from '@angular/cdk/drag-drop';
+import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-micro',
@@ -28,8 +28,8 @@ export class MicroComponent implements OnInit {
   x: string = '';
   y: string = '';
 
-  mousePos: Position = new Position();
-  onMicro: boolean = false;
+  isDragging: boolean = false;
+  microPos: Position = new Position();
 
   highlightColor: string = 'black';
 
@@ -43,10 +43,12 @@ export class MicroComponent implements OnInit {
       this.setHightlightColor('black');
     });
 
+    // While user is dragging the micro, update its position so the transitions can follow
     setInterval(() => {
-      if (this.interactionManager.isAddingTransition && this.onMicro) {
-        //this.mousePos.addPosition(new Position(this.canvasManager.canvasOffset.x, this.canvasManager.canvasOffset.y));
-        this.canvasManager.getMousePosition.emit(this.mousePos);
+      if (this.isDragging) {
+        this.micro.x = this.microPos.x;
+        this.micro.y = this.microPos.y;
+        //this.interactionManager.updateMicro(this.micro);
       }
     }, 20);
   }
@@ -55,9 +57,13 @@ export class MicroComponent implements OnInit {
   }
 
   setMicro(m: MicroInteraction) {
-    this.x = m.x + 'px';
-    this.y = m.y + 'px';
-    this.micro = m;
+    //console.log(`isDragging->setMicro: ${this.isDragging}`);
+    if (!this.isDragging) {
+      //console.log("Set micro, drag should have ended");
+      this.x = m.x + 'px';
+      this.y = m.y + 'px';
+      this.micro = m;
+    }
   }
 
   /* Show microinteraction's parameter options in the interaction options pane */
@@ -83,13 +89,15 @@ export class MicroComponent implements OnInit {
   }
 
   /* Transition related methods */
+
   clickReadyAnchor(event: any) {
     event.preventDefault();
     event.stopPropagation();
 
     // If in process of adding transition and this is the original anchor, stop adding transition
+    // Otherwise if in process of adding transition do nothing
     if (this.interactionManager.isAddingTransition && this.interactionManager.currentTransition.firstMicroId == this.micro.id) {
-      // TODO this.interactionManager.cancelAddingTransition();
+      this.interactionManager.cancelAddingTransition();
       return;
     } 
 
@@ -107,32 +115,36 @@ export class MicroComponent implements OnInit {
     }
   }
 
-  initAddingTransition(event: any, isReady: boolean) {
+  clickNotReadyAnchor(event: any) {
     event.preventDefault();
     event.stopPropagation();
 
+    // If in process of adding transition and this is the original anchor, stop adding transition
+    // Otherwise if in process of adding transition do nothing
+    if (this.interactionManager.isAddingTransition && this.interactionManager.currentTransition.firstMicroId == this.micro.id) {
+      this.interactionManager.cancelAddingTransition();
+      return;
+    } 
+
+    // Otherwise if we arent adding a transition, perform transition related functions
     if (!this.interactionManager.isAddingTransition) {
-      if (isReady && this.micro.readyTransition == null) {
-        this.interactionManager.setFirstAnchor(this.micro.id, isReady);
-      } else if (!isReady && this.micro.notReadyTransition == null) {
-        this.interactionManager.setFirstAnchor(this.micro.id, isReady);
+
+      // If there is no existing notReadyTransition, init a new transition
+      if (this.micro.notReadyTransition == null) {
+        this.interactionManager.setFirstAnchor(this.micro.id, false);
+      }
+      // Otherwise remove existing notReadyTransition
+      else {
+        this.interactionManager.removeTransition(this.micro.notReadyTransition.id);
       }
     }
-
   }
 
-  completeAddingTransition(event: any) {
-    event.preventDefault();
-    this.interactionManager.setSecondMicroId(this.micro.id);
-  }
-
-  setSecondAnchor(isLocked: boolean) {
-  }
-
-  cancelAddingTransition(event: any) {
+  clickSecondAnchor(event: any) {
     event.preventDefault();
     event.stopPropagation();
-    this.interactionManager.isAddingTransition = false;
+
+    this.interactionManager.setSecondAnchor(this.micro.id);
   }
 
   setHightlightColor(val: string) {
@@ -146,20 +158,26 @@ export class MicroComponent implements OnInit {
   }
 
   /* Reposition micro in canvas */
+
+  startDrag(event: CdkDragStart<any>) {
+    //console.log("Starting drag");
+    let rect = event.source.getRootElement().getBoundingClientRect();
+    this.microPos.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
+    this.microPos.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
+    this.isDragging = true;
+  }
+
+  dragMicro(event: CdkDragMove) {
+    this.microPos.x += event.distance.x;
+    this.microPos.y += event.distance.y;
+  }
+
   droppedMicro(event: CdkDragEnd) {
+    //console.log("Ending drag");
+    this.isDragging = false;
     let rect = event.source.getRootElement().getBoundingClientRect();
     this.micro.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
     this.micro.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
     this.interactionManager.updateMicro(this.micro);
   }
-
-  relayCoords(event: any) {
-    this.mousePos = new Position(event.offsetX, event.offsetY);
-  }
-  
-  emitOnMicro(onMicro: boolean) {
-    this.onMicro = onMicro;
-    this.canvasManager.onMicro.emit(onMicro);
-  }
-
 }

@@ -12,15 +12,16 @@ import { AuthComponent } from './components/auth/auth.component';
 import { ActionsBarComponent } from './components/designer/actions-bar/actions-bar.component';
 import { MicrointeractionSelectorComponent } from './components/designer/microinteraction-selector/microinteraction-selector.component';
 import { InteractionCanvasComponent } from './components/designer/interaction-canvas/interaction-canvas.component';
-import { InteractionOptionsComponent } from './components/designer/interaction-options/interaction-options.component';
+import { InteractionOptionsComponent } from './components/designer/right-panel/interaction-options/interaction-options.component';
 import { ViolationOutputComponent } from './components/designer/violation-output/violation-output.component';
-import { RobotViewerComponent } from './components/designer/robot-viewer/robot-viewer.component';
+import { RobotViewerComponent } from './components/designer/right-panel/robot-viewer/robot-viewer.component';
 import { TransitionComponent } from './components/designer/interaction-canvas/transition/transition.component';
 import { ContextMenuComponent } from './components/designer/interaction-canvas/context-menu/context-menu.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MicroComponent } from './components/designer/interaction-canvas/micro/micro.component';
-import { ParameterOptionsComponent } from './components/designer/interaction-options/parameter-options/parameter-options.component';
+import { ParameterOptionsComponent } from './components/designer/right-panel/interaction-options/parameter-options/parameter-options.component';
 import { ViolationComponent } from './components/designer/violation-output/violation/violation.component';
+import { RightPanelComponent } from './components/designer/right-panel/right-panel.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ViolationComponent } from './components/designer/violation-output/viola
     MicroComponent,
     ParameterOptionsComponent,
     ViolationComponent,
+    RightPanelComponent,
   ],
   imports: [
     BrowserModule,

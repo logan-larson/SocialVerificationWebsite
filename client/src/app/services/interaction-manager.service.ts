@@ -125,10 +125,11 @@ export class InteractionManagerService {
   }
 
   setFirstAnchor(mid: number, isReady: boolean) {
-    this.currentTransition = new Transition();
-    this.currentTransition.firstMicroId = mid;
-    this.currentTransition.isReady = isReady;
+    this.currentTransition = new Transition(this.interaction.transitionIdCounter, mid, -1, isReady, false);
+    this.interaction.transitionIdCounter++;
+
     this.initTransition.emit(this.currentTransition);
+
     this.isAddingTransition = true;
 
     let m = this.interaction.micros.find(micro => micro.id === mid);
@@ -142,7 +143,7 @@ export class InteractionManagerService {
     }
   }
 
-  setSecondMicroId(mid: number) {
+  setSecondAnchor(mid: number) {
 
     // Check that this is going to be a unique transition
     let dup = this.interaction.transitions.find((t: Transition) => t.firstMicroId == this.currentTransition.firstMicroId && t.secondMicroId == mid);
@@ -152,14 +153,28 @@ export class InteractionManagerService {
     }
 
     this.currentTransition.secondMicroId = mid;
+    this.currentTransition.isSet = true;
     this.isAddingTransition = false;
-
-    this.currentTransition.id = this.interaction.transitionIdCounter;
-    this.interaction.transitionIdCounter++;
 
     this.interaction.transitions.push(this.currentTransition);
 
     this.getUpdatedInteraction.emit(this.interaction);
+  }
+
+  cancelAddingTransition() {
+    this.isAddingTransition = false;
+    this.currentTransition = new Transition();
+
+    let m = this.interaction.micros.find(micro => micro.id === this.currentTransition.firstMicroId);
+    if (m) {
+      if (this.currentTransition.isReady) {
+        m.readyTransition = null;
+      } else {
+        m.notReadyTransition = null;
+      }
+
+      this.updateMicro(m);
+    }
   }
 
   updateTransition(transition: Transition) {

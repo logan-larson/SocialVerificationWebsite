@@ -41,8 +41,6 @@ export class InteractionCanvasComponent implements OnInit {
   microComponents: ComponentRef<MicroComponent>[] = [];
 
   mousePos: Position = new Position();
-  
-  onMicro: boolean = false;
 
   // Load JSON stored in local storage
   @HostListener('window:load', ['$event'])
@@ -63,14 +61,11 @@ export class InteractionCanvasComponent implements OnInit {
     private render: Renderer2,
     private el: ElementRef
   ) {
-    this.canvasManager.onMicro.subscribe((onMicro) => {
-      this.onMicro = onMicro;
-    })
     setInterval(() => {
-      if (this.interactionManager.isAddingTransition && !this.onMicro) {
+      if (this.interactionManager.isAddingTransition) {
         this.canvasManager.getMousePosition.emit(this.mousePos);
       }
-    }, 20);
+    }, 100);
   }
 
   ngOnInit(): void {
@@ -93,6 +88,7 @@ export class InteractionCanvasComponent implements OnInit {
     });
 
     this.interactionManager.initTransition.subscribe((t: Transition) => {
+      console.log(`new trans: ${JSON.stringify(t)}`);
       let newTrans = this.container.createComponent(TransitionComponent).instance;
       newTrans.setTransition(t);
     });
@@ -101,6 +97,7 @@ export class InteractionCanvasComponent implements OnInit {
     this.interactionManager.getUpdatedInteraction.subscribe((interaction) => {
       this.container.clear();
       this.interaction = interaction;
+      console.log(this.interaction);
       this.renderCanvas();
     });
 

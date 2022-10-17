@@ -6,20 +6,19 @@
   cdkScrollable
   cdkDragBoundary=".bounding-canvas"
   cdkDrag
+  (cdkDragStarted)="startDrag($event)"
+  (cdkDragMoved)="dragMicro($event)"
   (cdkDragEnded)="droppedMicro($event)"
   (click)="clickMicro($event)"
-  (mouseenter)="setHightlightColor('yellow'); emitOnMicro(true)"
-  (mouseleave)="setHightlightColor('black'); emitOnMicro(false)"
-  (mousemove)="relayCoords($event)"
+  (mouseenter)="setHightlightColor('yellow')"
+  (mouseleave)="setHightlightColor('black')"
   (contextmenu)="showContextMenu($event)"
   class="absolute z-10 w-24 p-2 mb-2 text-center align-middle bg-gray-300 h-36 rounded-xl"
 >
   {{micro.type}}
   <div
     class="absolute left-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-l hover:cursor-pointer"
-    (click)="completeAddingTransition($event)"
-    (mouseenter)="setSecondAnchor(true)"
-    (mouseleave)="setSecondAnchor(false)"
+    (click)="clickSecondAnchor($event)"
   >
     <mat-icon>radio_button_unchecked</mat-icon>
   </div>
@@ -27,19 +26,28 @@
   <div
     *ngIf="micro.readyTransition == null"
     class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
-    (click)="initAddingTransition($event, true)"
+    (click)="clickReadyAnchor($event)"
   >
     <mat-icon>done</mat-icon>
   </div>
   <div
-    *ngIf="micro.readyTransition == null"
-    class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
-    (click)="initAddingTransition($event, true)"
+    *ngIf="micro.readyTransition != null"
+    class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-green-300 hover:bg-red-400 rounded-r hover:cursor-pointer"
+    (click)="clickReadyAnchor($event)"
   >
+    <mat-icon>done</mat-icon>
   </div>
   <div
+    *ngIf="micro.notReadyTransition == null"
     class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
-    (click)="initAddingTransition($event, false)"
+    (click)="clickNotReadyAnchor($event)"
+  >
+    <mat-icon>block</mat-icon>
+  </div>
+  <div
+    *ngIf="micro.notReadyTransition != null"
+    class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-orange-300 hover:bg-red-400 rounded-r hover:cursor-pointer"
+    (click)="clickNotReadyAnchor($event)"
   >
     <mat-icon>block</mat-icon>
   </div>

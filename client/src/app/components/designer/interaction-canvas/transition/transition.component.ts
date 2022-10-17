@@ -83,12 +83,16 @@ export class TransitionComponent implements OnInit {
         this.setFirstOffset(firstMicro, this.transition.isReady);
       }
 
+      if (this.transition.secondMicroId == -1) {
+        //this.setSecondAnchorOnMouse();
+        return;
+      }
+
+
       let secondMicro = this.interactionManager.getMicroById(this.transition.secondMicroId);
 
       if (secondMicro) {
         this.setSecondOffset(secondMicro);
-      } else {
-        this.setSecondAnchorOnMouse();
       }
     }
   }
@@ -108,26 +112,11 @@ export class TransitionComponent implements OnInit {
   }
 
   setSecondAnchorOnMouse() {
-    this.x2 = this.mousePos.x + 'px';
-    this.y2 = this.mousePos.y + 'px';
-  }
-
-  setSelfOffsets(m: MicroInteraction) {
-    let NOutX = m.x + this.width / 3
-    let EInY = m.y + this.height / 3
-
-    this.conditionsX = (m.x - 100) + "px";
-    this.conditionsY = (m.y - 50) + "px";
-
-    this.d = 'M ' + NOutX + ' ' + m.y +
-      ' C ' + m.x + ' ' + (m.y - 50) + ', ' +
-      (m.x - 60) + ' ' + m.y + ', ' + (m.x - 10) + ' ' + (EInY - 15);
-  }
-
-  updateTransition() {
-    this.transition.ready = this.isReady;
-    this.transition.notReady = this.isNotReady;
-    this.interactionManager.updateTransition(this.transition);
+    if (!this.transition.isSet) {
+      this.x2 = this.mousePos.x + 'px';
+      this.y2 = this.mousePos.y + 'px';
+      console.log(`mouse anchor: (${this.x2}, ${this.y2})`);
+    }
   }
 
   setHightlightColor() {
