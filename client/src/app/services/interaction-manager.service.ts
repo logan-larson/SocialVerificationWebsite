@@ -130,6 +130,16 @@ export class InteractionManagerService {
     this.currentTransition.isReady = isReady;
     this.initTransition.emit(this.currentTransition);
     this.isAddingTransition = true;
+
+    let m = this.interaction.micros.find(micro => micro.id === mid);
+    if (m) {
+      if (isReady) {
+        m.readyTransition = this.currentTransition;
+      } else {
+        m.notReadyTransition = this.currentTransition;
+      }
+      this.getUpdatedInteraction.emit(this.interaction);
+    }
   }
 
   setSecondMicroId(mid: number) {

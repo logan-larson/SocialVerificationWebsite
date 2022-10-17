@@ -37,7 +37,7 @@ export class TransitionComponent implements OnInit {
   y2: string = '0px';
   d: string = '';
 
-  lineColor: string = '#FF0000';
+  lineColor: string = '#000';
 
   conditionsX: string = '0px';
   conditionsY: string = '0px';

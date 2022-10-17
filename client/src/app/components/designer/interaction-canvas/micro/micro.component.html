@@ -23,16 +23,24 @@
   >
     <mat-icon>radio_button_unchecked</mat-icon>
   </div>
+  
   <div
+    *ngIf="micro.readyTransition == null"
     class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
     (click)="initAddingTransition($event, true)"
   >
     <mat-icon>done</mat-icon>
   </div>
   <div
+    *ngIf="micro.readyTransition == null"
+    class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
+    (click)="initAddingTransition($event, true)"
+  >
+  </div>
+  <div
     class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
     (click)="initAddingTransition($event, false)"
   >
-    <mat-icon>close</mat-icon>
+    <mat-icon>block</mat-icon>
   </div>
 </div>

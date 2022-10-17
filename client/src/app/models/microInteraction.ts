@@ -1,6 +1,7 @@
 import { Parameter } from "./parameter";
 import { ParameterResult } from "./parameterResult";
 import {Position} from "./position";
+import {Transition} from "./transition";
 
 export class MicroInteraction {
 
@@ -10,9 +11,20 @@ export class MicroInteraction {
     type: string | null; // i.e. 'Greeter', 'Farewell'
     parameters: Parameter[] = [];
     parameterResults: ParameterResult[] = [];  
+    readyTransition: Transition | null = null;
+    notReadyTransition: Transition | null = null;
     //Note: results are stored as follows: {parameter id: resultString} (or list instead of result string case of type=array) so parameterResults looks like [{0,"yes"},{20,"option1"}] --these will be passed to backend along with the variable name(which is stored in parameter)
 
-    constructor(id: number = -1, x: number = 0, y: number = 0, type: string = '', parameters: Parameter[] = [], parameterResults: ParameterResult[] = []) { //micros are built off a microType defined
+    constructor(
+      id: number = -1,
+        x: number = 0,
+        y: number = 0,
+        type: string = '',
+        parameters: Parameter[] = [],
+        parameterResults: ParameterResult[] = [],
+        readyTransition: Transition | null = null,
+        notReadyTransition: Transition | null = null,
+    ) { 
         this.id = id;
         this.x = x;
         this.y = y;
@@ -33,6 +45,9 @@ export class MicroInteraction {
         } else {
           this.parameterResults = parameterResults;
         }
+
+        this.readyTransition = readyTransition;
+        this.notReadyTransition = notReadyTransition;
     }
 
     updateResults(results: ParameterResult[]) {

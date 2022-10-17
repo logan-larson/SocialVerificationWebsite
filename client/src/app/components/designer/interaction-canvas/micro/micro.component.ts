@@ -64,11 +64,7 @@ export class MicroComponent implements OnInit {
   clickMicro(event: any) {
     event.preventDefault();
 
-    if (this.interactionManager.isAddingTransition) {
-      this.interactionManager.setSecondMicroId(this.micro.id);
-    } else {
-      this.parameterManager.updateCurrentMicro(this.micro);
-    }
+    this.parameterManager.updateCurrentMicro(this.micro);
   }
 
   /* Show options menu when right-clicked */
@@ -87,19 +83,47 @@ export class MicroComponent implements OnInit {
   }
 
   /* Transition related methods */
+  clickReadyAnchor(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // If in process of adding transition and this is the original anchor, stop adding transition
+    if (this.interactionManager.isAddingTransition && this.interactionManager.currentTransition.firstMicroId == this.micro.id) {
+      // TODO this.interactionManager.cancelAddingTransition();
+      return;
+    } 
+
+    // Otherwise if we arent adding a transition, perform transition related functions
+    if (!this.interactionManager.isAddingTransition) {
+
+      // If there is no existing readyTransition, init a new transition
+      if (this.micro.readyTransition == null) {
+        this.interactionManager.setFirstAnchor(this.micro.id, true);
+      }
+      // Otherwise remove existing readyTransition
+      else {
+        this.interactionManager.removeTransition(this.micro.readyTransition.id);
+      }
+    }
+  }
+
   initAddingTransition(event: any, isReady: boolean) {
     event.preventDefault();
+    event.stopPropagation();
 
     if (!this.interactionManager.isAddingTransition) {
-      event.stopPropagation();
-      this.interactionManager.setFirstAnchor(this.micro.id, isReady);
-      //this.interactionManager.set
+      if (isReady && this.micro.readyTransition == null) {
+        this.interactionManager.setFirstAnchor(this.micro.id, isReady);
+      } else if (!isReady && this.micro.notReadyTransition == null) {
+        this.interactionManager.setFirstAnchor(this.micro.id, isReady);
+      }
     }
 
   }
 
   completeAddingTransition(event: any) {
     event.preventDefault();
+    this.interactionManager.setSecondMicroId(this.micro.id);
   }
 
   setSecondAnchor(isLocked: boolean) {
