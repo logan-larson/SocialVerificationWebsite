@@ -51,6 +51,7 @@ export class TransitionComponent implements OnInit {
       this.setHightlightColor();
     });
 
+    // The mouse position should only be emitting changes when the user is adding a transition
     this.canvasManager.getMousePosition.subscribe((mp: Position) => {
       this.mousePos = mp;
       this.setSecondAnchorOnMouse();
@@ -83,12 +84,6 @@ export class TransitionComponent implements OnInit {
         this.setFirstOffset(firstMicro, this.transition.isReady);
       }
 
-      if (this.transition.secondMicroId == -1) {
-        //this.setSecondAnchorOnMouse();
-        return;
-      }
-
-
       let secondMicro = this.interactionManager.getMicroById(this.transition.secondMicroId);
 
       if (secondMicro) {
@@ -98,24 +93,24 @@ export class TransitionComponent implements OnInit {
   }
 
   setFirstOffset(m: MicroInteraction, isReady: boolean) {
-    this.x1 = (m.x + 112) + 'px';
+    this.x1 = (m.anchorPosition.x + 112) + 'px';
     if (isReady) {
-      this.y1 = (m.y + 49) + 'px';
+      this.y1 = (m.anchorPosition.y + 49) + 'px';
     } else {
-      this.y1 = (m.y + 85) + 'px';
+      this.y1 = (m.anchorPosition.y + 85) + 'px';
     }
   }
 
   setSecondOffset(m: MicroInteraction) {
-    this.x2 = (m.x - 14) + 'px';
-    this.y2 = (m.y + 49) + 'px';
+    this.x2 = (m.anchorPosition.x - 14) + 'px';
+    this.y2 = (m.anchorPosition.y + 49) + 'px';
   }
 
   setSecondAnchorOnMouse() {
     if (!this.transition.isSet) {
       this.x2 = this.mousePos.x + 'px';
       this.y2 = this.mousePos.y + 'px';
-      console.log(`mouse anchor: (${this.x2}, ${this.y2})`);
+      //console.log(`mouse anchor: (${this.x2}, ${this.y2})`);
     }
   }
 

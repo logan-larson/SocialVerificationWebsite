@@ -21,7 +21,7 @@ import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 })
 export class MicroComponent implements OnInit {
 
-  micro: MicroInteraction = new MicroInteraction(1, 0, 0, 'Greeter');
+  micro: MicroInteraction = new MicroInteraction(1, new Position(0, 0), 'Greeter');
 
   @ViewChild('microEl') el!: ElementRef;
 
@@ -43,27 +43,29 @@ export class MicroComponent implements OnInit {
       this.setHightlightColor('black');
     });
 
-    // While user is dragging the micro, update its position so the transitions can follow
-    setInterval(() => {
-      if (this.isDragging) {
-        this.micro.x = this.microPos.x;
-        this.micro.y = this.microPos.y;
-        //this.interactionManager.updateMicro(this.micro);
-      }
-    }, 20);
+    // While adding a transition if cursor is on a micro, set
+
   }
 
   ngOnInit(): void {
+    // While user is dragging the micro, update its anchor position so the transitions can follow
+        /*
+    setInterval(() => {
+      if (this.isDragging) {
+        this.micro.anchorPosition.x = this.microPos.x;
+        this.micro.anchorPosition.y = this.microPos.y;
+        this.interactionManager.updateMicro(this.micro);
+        console.log(this.micro);
+      }
+    }, 50);
+        */
   }
 
   setMicro(m: MicroInteraction) {
-    //console.log(`isDragging->setMicro: ${this.isDragging}`);
-    if (!this.isDragging) {
-      //console.log("Set micro, drag should have ended");
-      this.x = m.x + 'px';
-      this.y = m.y + 'px';
-      this.micro = m;
-    }
+    this.x = m.position.x + 'px';
+    this.y = m.position.y + 'px';
+    this.micro = m;
+
   }
 
   /* Show microinteraction's parameter options in the interaction options pane */
@@ -99,18 +101,18 @@ export class MicroComponent implements OnInit {
     if (this.interactionManager.isAddingTransition && this.interactionManager.currentTransition.firstMicroId == this.micro.id) {
       this.interactionManager.cancelAddingTransition();
       return;
-    } 
+    }
 
     // Otherwise if we arent adding a transition, perform transition related functions
     if (!this.interactionManager.isAddingTransition) {
 
       // If there is no existing readyTransition, init a new transition
-      if (this.micro.readyTransition == null) {
+      if (this.micro.readyTransitionId == -1) {
         this.interactionManager.setFirstAnchor(this.micro.id, true);
       }
       // Otherwise remove existing readyTransition
       else {
-        this.interactionManager.removeTransition(this.micro.readyTransition.id);
+        this.interactionManager.removeTransition(this.micro.readyTransitionId);
       }
     }
   }
@@ -124,18 +126,18 @@ export class MicroComponent implements OnInit {
     if (this.interactionManager.isAddingTransition && this.interactionManager.currentTransition.firstMicroId == this.micro.id) {
       this.interactionManager.cancelAddingTransition();
       return;
-    } 
+    }
 
     // Otherwise if we arent adding a transition, perform transition related functions
     if (!this.interactionManager.isAddingTransition) {
 
       // If there is no existing notReadyTransition, init a new transition
-      if (this.micro.notReadyTransition == null) {
+      if (this.micro.notReadyTransitionId == -1) {
         this.interactionManager.setFirstAnchor(this.micro.id, false);
       }
       // Otherwise remove existing notReadyTransition
       else {
-        this.interactionManager.removeTransition(this.micro.notReadyTransition.id);
+        this.interactionManager.removeTransition(this.micro.notReadyTransitionId);
       }
     }
   }
@@ -144,7 +146,21 @@ export class MicroComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-    this.interactionManager.setSecondAnchor(this.micro.id);
+    if (this.interactionManager.isAddingTransition && this.interactionManager.currentTransition.firstMicroId != -1) {
+      this.interactionManager.setSecondAnchor(this.micro.id);
+    }
+  }
+
+  setSecondAnchor(state: boolean) {
+    if (state) {
+      this.canvasManager.onMicro = true;
+      if (this.interactionManager.isAddingTransition) {
+        let pos: Position = new Position((this.micro.position.x - 14), (this.micro.position.y + 49));
+        this.canvasManager.getMousePosition.emit(pos);
+      }
+    } else {
+      this.canvasManager.onMicro = false;
+    }
   }
 
   setHightlightColor(val: string) {
@@ -159,25 +175,34 @@ export class MicroComponent implements OnInit {
 
   /* Reposition micro in canvas */
 
-  startDrag(event: CdkDragStart<any>) {
-    //console.log("Starting drag");
+  startDrag(event: CdkDragStart) {
+    console.log("Starting drag");
     let rect = event.source.getRootElement().getBoundingClientRect();
+
+    // Set the local position on drag start
     this.microPos.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
     this.microPos.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
+
+    //this.interactionManager.updateMicro(this.micro);
     this.isDragging = true;
   }
 
   dragMicro(event: CdkDragMove) {
+    // Update the micro position based on distance traveled
     this.microPos.x += event.distance.x;
     this.microPos.y += event.distance.y;
   }
 
   droppedMicro(event: CdkDragEnd) {
-    //console.log("Ending drag");
+    // Set the anchor position on drag start
+    console.log(`Moved: (${this.microPos.x}, ${this.microPos.y})`);
     this.isDragging = false;
     let rect = event.source.getRootElement().getBoundingClientRect();
-    this.micro.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
-    this.micro.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
+    this.micro.position.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
+    this.micro.position.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
+
+    this.micro.anchorPosition.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
+    this.micro.anchorPosition.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
     this.interactionManager.updateMicro(this.micro);
   }
 }

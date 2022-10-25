@@ -23,6 +23,9 @@ export class CanvasManagerService {
   canvasOffset: Position = new Position(0, 0);
   canvasScrollOffset: Position = new Position(0, 0);
 
+  // Used when adding a transition for locking onto a micros anchor
+  onMicro: boolean = false;
+
   constructor() { }
 
   setViolatingIds(violatingMicroIds: number[], violatingTransitionIds: number[]) {

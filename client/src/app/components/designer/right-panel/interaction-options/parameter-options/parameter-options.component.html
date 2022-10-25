@@ -1,0 +1,50 @@
+<div class="p-2">
+  <div *ngIf="param.type === 'str'" class="flex flex-col" (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">
+    <label>{{ param.title }}</label>
+    <textarea class="border-2" (change)="changeStrVal($event)" [value]="strVal" ></textarea>
+    <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-gray-900 rounded-lg shadow-sm">{{ param.description }}</div>
+  </div>
+  <div *ngIf="param.type === 'bool'" (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">
+    <label>{{ param.title }}</label>
+    <br>
+    <input type="radio" [name]="name" (change)="changeBoolVal(true)" [checked]="boolVal === true" />
+    <label>Yes</label>
+    <br>
+    <input type="radio" [name]="name" (change)="changeBoolVal(false)" [checked]="boolVal === false" />
+    <label>No</label>
+    <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-gray-900 rounded-lg shadow-sm">{{ param.description }}</div>
+  </div>
+  <div *ngIf="param.type === 'array'" (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">
+    <label>Responses the robot can recognize</label>
+    <input type="text" class="w-full border-2" [(ngModel)]="response" />
+    <label class="mt-1 mr-2">Corresponding human state</label>
+    <select class="p-1 mb-2" [(ngModel)]="humanState">
+      <option value="humanReady">Human Ready</option>
+      <option value="humanBusy">Human Busy</option>
+      <option value="humanSuspended">Human Suspended</option>
+    </select>
+    <button
+      class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
+      (click)="addResponse()"
+    >Add Response</button>
+    <br>
+    <label>Current Responses</label>
+    <div class="p-2 border-2">
+      <div *ngFor="let res of responses | keyvalue" class="flex items-center">
+        <button
+          class="px-2 py-1 rounded-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5"
+          (click)="removeResponse(res.key)"
+        >X</button>
+        <label class="ml-2">{{ res.key }}</label>
+        <label class="ml-2">{{ res.value }}</label>
+      </div>
+    </div>
+    <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-gray-900 rounded-lg shadow-sm">{{ param.description }}</div>
+  </div>
+  <div *ngIf="param.type === 'int'" (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">
+    <label>{{ param.title }}</label>
+    <input type="number" class="border-2" [value]="intVal" (change)="changeIntVal($event)" />
+    <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-gray-900 rounded-lg shadow-sm">{{ param.description }}</div>
+  </div>
+</div>
+

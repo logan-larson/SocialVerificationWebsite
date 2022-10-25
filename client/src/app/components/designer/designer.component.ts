@@ -7,8 +7,6 @@ import { Component, OnInit, } from '@angular/core';
 })
 export class DesignerComponent implements OnInit {
 
-  showParams: boolean = false;
-
   constructor() { }
 
   ngOnInit(): void {

@@ -10,8 +10,6 @@
   (cdkDragMoved)="dragMicro($event)"
   (cdkDragEnded)="droppedMicro($event)"
   (click)="clickMicro($event)"
-  (mouseenter)="setHightlightColor('yellow')"
-  (mouseleave)="setHightlightColor('black')"
   (contextmenu)="showContextMenu($event)"
   class="absolute z-10 w-24 p-2 mb-2 text-center align-middle bg-gray-300 h-36 rounded-xl"
 >
@@ -19,33 +17,36 @@
   <div
     class="absolute left-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-l hover:cursor-pointer"
     (click)="clickSecondAnchor($event)"
+    (mouseenter)="setSecondAnchor(true)"
+    (mouseleave)="setSecondAnchor(false)"
   >
     <mat-icon>radio_button_unchecked</mat-icon>
   </div>
   
   <div
-    *ngIf="micro.readyTransition == null"
+    *ngIf="micro.readyTransitionId == -1"
     class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
     (click)="clickReadyAnchor($event)"
   >
     <mat-icon>done</mat-icon>
   </div>
+
   <div
-    *ngIf="micro.readyTransition != null"
+    *ngIf="micro.readyTransitionId != -1"
     class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-green-300 hover:bg-red-400 rounded-r hover:cursor-pointer"
     (click)="clickReadyAnchor($event)"
   >
     <mat-icon>done</mat-icon>
   </div>
   <div
-    *ngIf="micro.notReadyTransition == null"
+    *ngIf="micro.notReadyTransitionId == -1"
     class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
     (click)="clickNotReadyAnchor($event)"
   >
     <mat-icon>block</mat-icon>
   </div>
   <div
-    *ngIf="micro.notReadyTransition != null"
+    *ngIf="micro.notReadyTransitionId != -1"
     class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-orange-300 hover:bg-red-400 rounded-r hover:cursor-pointer"
     (click)="clickNotReadyAnchor($event)"
   >

@@ -62,10 +62,10 @@ export class InteractionCanvasComponent implements OnInit {
     private el: ElementRef
   ) {
     setInterval(() => {
-      if (this.interactionManager.isAddingTransition) {
+      if (this.interactionManager.isAddingTransition && !this.canvasManager.onMicro) {
         this.canvasManager.getMousePosition.emit(this.mousePos);
       }
-    }, 100);
+    }, 20);
   }
 
   ngOnInit(): void {
@@ -88,7 +88,6 @@ export class InteractionCanvasComponent implements OnInit {
     });
 
     this.interactionManager.initTransition.subscribe((t: Transition) => {
-      console.log(`new trans: ${JSON.stringify(t)}`);
       let newTrans = this.container.createComponent(TransitionComponent).instance;
       newTrans.setTransition(t);
     });
@@ -97,7 +96,7 @@ export class InteractionCanvasComponent implements OnInit {
     this.interactionManager.getUpdatedInteraction.subscribe((interaction) => {
       this.container.clear();
       this.interaction = interaction;
-      console.log(this.interaction);
+      //console.log(this.interaction);
       this.renderCanvas();
     });
 
