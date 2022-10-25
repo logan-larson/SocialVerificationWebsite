@@ -27,20 +27,26 @@ export class TransitionComponent implements OnInit {
 
   isLine: boolean = true;
 
-  width: number = 96;
-  height: number = 176;
-  arrowLength: number = 15;
+  firstAnchorPos: Position = new Position();
+  secondAnchorPos: Position = new Position();
+  middleAnchorPos: Position = new Position();
+
+  fX: string = '0px';
+  fY: string = '0px';
+  sX: string = '0px';
+  sY: string = '0px';
+  mX: string = '0px';
+  mY: string = '0px';
 
   x1: string ='0px';
   y1: string ='0px';
   x2: string = '0px';
   y2: string = '0px';
-  d: string = '';
+
+  dFirst: string = '';
+  dSecond: string = '';
 
   lineColor: string = '#000';
-
-  conditionsX: string = '0px';
-  conditionsY: string = '0px';
 
   constructor(
     private interactionManager: InteractionManagerService,
@@ -68,15 +74,33 @@ export class TransitionComponent implements OnInit {
 
     event.preventDefault();
 
-    let xNum: number = parseInt(this.conditionsX.substring(0, this.conditionsX.length - 2));
-    let yNum: number = parseInt(this.conditionsY.substring(0, this.conditionsY.length - 2));
-
-    this.contextMenu.displayContextMenu('transition', new Position(xNum + 50, yNum + 25), -1, this.transition.id);
+    this.contextMenu.displayContextMenu('transition', new Position(this.middleAnchorPos.x, this.middleAnchorPos.y), -1, this.transition.id);
   }
 
   setTransition(t: Transition) {
     this.transition = t;
 
+    if (this.transition) {
+
+      let firstMicro = this.interactionManager.getMicroById(this.transition.firstMicroId);
+
+      if (!firstMicro) return;
+
+      this.setFirstAnchor(firstMicro.position.x, firstMicro.position.y, this.transition.isReady);
+
+      let secondMicro = this.interactionManager.getMicroById(this.transition.secondMicroId);
+
+      if (!secondMicro) return;
+      
+      this.setSecondAnchor(secondMicro.position.x, secondMicro.position.y);
+
+      this.setMiddleAnchor();
+
+      this.updatePositionStrings();
+    }
+
+
+    /*
     if (this.transition) {
       let firstMicro = this.interactionManager.getMicroById(this.transition.firstMicroId);
 
@@ -90,6 +114,7 @@ export class TransitionComponent implements OnInit {
         this.setSecondOffset(secondMicro);
       }
     }
+    */
   }
 
   setFirstOffset(m: MicroInteraction, isReady: boolean) {
@@ -106,14 +131,6 @@ export class TransitionComponent implements OnInit {
     this.y2 = (m.anchorPosition.y + 49) + 'px';
   }
 
-  setSecondAnchorOnMouse() {
-    if (!this.transition.isSet) {
-      this.x2 = this.mousePos.x + 'px';
-      this.y2 = this.mousePos.y + 'px';
-      //console.log(`mouse anchor: (${this.x2}, ${this.y2})`);
-    }
-  }
-
   setHightlightColor() {
     if (this.canvasManager.violatingTransitionIds.includes(this.transition.id)) {
       this.lineColor = '#FF0000';
@@ -122,4 +139,38 @@ export class TransitionComponent implements OnInit {
     }
   }
 
+  /* New System */
+
+  setFirstAnchor(x: number, y: number, isReady: boolean) {
+    let yOffset: number = isReady ? 49 : 85;
+
+    this.firstAnchorPos = new Position(x + 112, y + yOffset);
+  }
+
+  setSecondAnchor(x: number, y: number) {
+    this.secondAnchorPos = new Position(x - 14, y + 49);
+  }
+
+  setSecondAnchorOnMouse() {
+    if (!this.transition.isSet) {
+      this.secondAnchorPos = this.mousePos;
+
+      this.setMiddleAnchor();
+
+      this.updatePositionStrings();
+    }
+  }
+
+  setMiddleAnchor() {
+    this.middleAnchorPos = new Position((this.firstAnchorPos.x + this.secondAnchorPos.x) / 2, (this.firstAnchorPos.y + this.secondAnchorPos.y) / 2);
+  }
+
+  updatePositionStrings() {
+    this.fX = this.firstAnchorPos.x + 'px';
+    this.fY = this.firstAnchorPos.y + 'px';
+    this.sX = this.secondAnchorPos.x + 'px';
+    this.sY = this.secondAnchorPos.y + 'px';
+    this.mX = this.middleAnchorPos.x + 'px';
+    this.mY = this.middleAnchorPos.y + 'px';
+  }
 }

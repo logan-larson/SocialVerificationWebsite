@@ -1,8 +1,21 @@
-<p>hi</p>
 <svg
   *ngIf="transition != undefined"
   class="absolute top-0 left-0 w-[5000px] h-[3000px] pointer-events-none z-10"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <line [attr.x1]="x1" [attr.y1]="y1" [attr.x2]="x2" [attr.y2]="y2" [attr.stroke]="lineColor" stroke-width="2" />
+  <line [attr.x1]="fX" [attr.y1]="fY" [attr.x2]="mX" [attr.y2]="mY" [attr.stroke]="lineColor" stroke-width="2" />
+  <line [attr.x1]="mX" [attr.y1]="mY" [attr.x2]="sX" [attr.y2]="sY" [attr.stroke]="lineColor" stroke-width="2" />
 </svg>
+<div
+  class="translate-x-[-5px] translate-y-[-5px] rounded w-[10px] h-[10px] bg-black absolute"
+  [style.top]="mY"
+  [style.left]="mX"
+  cdkScrollable
+  cdkDragBoundary=".bounding-canvas"
+  cdkDrag
+  (cdkDragStarted)="startDrag($event)"
+  (cdkDragMoved)="dragMicro($event)"
+  (cdkDragEnded)="droppedMicro($event)"
+  (contextmenu)="showContextMenu($event)"
+>
+</div>
