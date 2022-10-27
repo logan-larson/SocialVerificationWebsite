@@ -3,11 +3,15 @@
   class="absolute top-0 left-0 w-[5000px] h-[3000px] pointer-events-none z-10"
   xmlns="http://www.w3.org/2000/svg"
 >
+  <path [attr.d]="dFirst" [attr.stroke]="lineColor" stroke-width="2" fill="transparent" />
+  <path [attr.d]="dSecond" [attr.stroke]="lineColor" stroke-width="2" fill="transparent" />
+<!--
   <line [attr.x1]="fX" [attr.y1]="fY" [attr.x2]="mX" [attr.y2]="mY" [attr.stroke]="lineColor" stroke-width="2" />
   <line [attr.x1]="mX" [attr.y1]="mY" [attr.x2]="sX" [attr.y2]="sY" [attr.stroke]="lineColor" stroke-width="2" />
+-->
 </svg>
 <div
-  class="translate-x-[-5px] translate-y-[-5px] rounded w-[10px] h-[10px] bg-black absolute"
+  class="translate-x-[-7px] translate-y-[-7px] rounded-lg w-[14px] h-[14px] bg-black absolute"
   [style.top]="mY"
   [style.left]="mX"
   cdkScrollable
