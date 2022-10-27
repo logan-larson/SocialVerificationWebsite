@@ -35,8 +35,9 @@ function verifyModel(interaction: Interaction): Violation[] {
 function addTransitionViolations(interaction: Interaction, violations: Violation[]): boolean {
   let violationCount: number = violations.length;
   let transitionIds: number[] = [];
+  /*
   interaction.transitions.forEach(t => {
-    if (!t.ready && !t.notReady) {
+    if (!t.firstMicroId && !t.notReady) {
       transitionIds.push(t.id);
     }
   });
@@ -45,8 +46,14 @@ function addTransitionViolations(interaction: Interaction, violations: Violation
     violations.push(new Violation("transition", "Transition Flub", "Transitions must have at least one state set", [], transitionIds));
     return true;
   }
+  */
 
+  // Check that each micro has both outward transitions in use
+  interaction.micros.forEach(m => {
 
+  });
+
+  /*
   interaction.micros.forEach(m => {
     let outwardTransitions: number = 0;
     let transitionIds: number[] = [];
@@ -62,6 +69,7 @@ function addTransitionViolations(interaction: Interaction, violations: Violation
       violations.push(new Violation("interaction", "Interaction Flub", "A micro may only have two outward transitions", [m.id], transitionIds));
     }
   });
+  */
 
   if (violations.length != violationCount) {
     return true;
@@ -75,7 +83,7 @@ function addStartingPointViolations(interaction: Interaction, violations: Violat
   interaction.micros.forEach(m => {
     let notStarting = false;
     interaction.transitions.forEach(t => {
-      if (m.id === t.secondMicroId) {
+      if (m.id === t.secondMicroId && m.id != t.firstMicroId) {
         notStarting = true;
       }
     });
@@ -163,14 +171,14 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   // Triggered if farewell isn't reachable from all states OR doesn't exist
 
   // Handle doesn't exist trigger
-  let farewellCount: number = 0;
+  let farewellIds: number[] = [];
   interaction.micros.forEach(m => {
     if (m.type === 'Farewell') {
-      farewellCount++;
+      farewellIds.push(m.id);
     }
   });
 
-  if (farewellCount == 0) {
+  if (farewellIds.length == 0) {
     violations.push(new Violation("micro", "Farewell Flub", "The interaction must contain a 'Farewell' micro interaction"));
     return true;
   }
@@ -190,18 +198,15 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   
   interaction.transitions.forEach(t => {
     // Setup each node to point to its respective children based on state (ready vs notReady)
-    if (t.ready) {
-      let n1: Node | undefined = nodes.find(n => n.id == t.firstMicroId);
-      let n2: Node | undefined = nodes.find(n => n.id == t.secondMicroId);
+    let n1: Node | undefined = nodes.find(n => n.id == t.firstMicroId);
+    let n2: Node | undefined = nodes.find(n => n.id == t.secondMicroId);
 
+    // This can be optimized/look cleaner
+    if (t.isReady) {
       if(n1 && n2) {
         n1.onReady = n2.id;
       }
-    }
-    if (t.notReady) {
-      let n1: Node | undefined = nodes.find(n => n.id == t.firstMicroId);
-      let n2: Node | undefined = nodes.find(n => n.id == t.secondMicroId);
-
+    } else {
       if(n1 && n2) {
         n1.onNotReady = n2.id;
       }
@@ -212,22 +217,35 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
 
   // Perform search
   let currentPathIds: number[] = [];
-  let terminalNodeIds: number[] = []; // Terminal meaning the node has a path to a terminal node
+  let endingNodeIds: number[] = []; // Ending meaning the node has a path to a terminal node
   let cyclicalNodeIds: number[] = []; // Cyclical meaning the node does not have a path to a terminal node
+  let terminalNodeIds: number[] = []; // Terminal meaning the node has no exiting transitions
 
   currentPathIds.push(root.id);
 
-  pathToEnd(nodes, currentPathIds, terminalNodeIds, cyclicalNodeIds);
+  pathToEnd(nodes, currentPathIds, endingNodeIds, cyclicalNodeIds, terminalNodeIds);
 
   if (cyclicalNodeIds.length != 0) {
     violations.push(new Violation('interaction', 'Farewell Flub', 'Interaction has the possibility of never ending', cyclicalNodeIds));
+    return true;
+  }
+  
+  let terminalNonFarewellIds: number[] = [];
+  terminalNodeIds.forEach(id => {
+    if (!farewellIds.includes(id)) {
+      terminalNonFarewellIds.push(id);
+    }
+  });
+
+  if (terminalNonFarewellIds.length != 0) {
+    violations.push(new Violation('interaction', 'Farewell Flub', 'This interaction could end without the robot giving a farewell', terminalNonFarewellIds));
     return true;
   }
 
   return false;
 }
 
-function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[], cyclicalNodes: number[]): string {
+function pathToEnd(nodes: Node[], currentPath: number[], endingNodes: number[], cyclicalNodes: number[], terminalNodes: number[]): string {
   let node: Node | undefined = nodes.find(n => n.id === currentPath[currentPath.length - 1]); // Get node that is last in the current path
 
   console.log(`\n${JSON.stringify(node)}\n`);
@@ -239,7 +257,11 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
 
   // BASE CASE 1 - At terminal node
   if (node.onReady == -1 && node.onNotReady == -1) {
-    if (!terminalNodes.includes(node.id)) { // If this is a new found terminal node, add it to the list
+    if (!endingNodes.includes(node.id)) { // If this is a new found terminal node, add it to the ending nodes list
+      endingNodes.push(node.id);
+    }
+
+    if (!terminalNodes.includes(node.id)) { // Also add it to the terminal nodes list
       terminalNodes.push(node.id);
     }
 
@@ -263,12 +285,12 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
 
   if (node.onReady != -1) {
     currentPath.push(node.onReady);
-    r = pathToEnd(nodes, currentPath, terminalNodes, cyclicalNodes);
+    r = pathToEnd(nodes, currentPath, endingNodes, cyclicalNodes, terminalNodes);
   }
 
   if (node.onNotReady != -1) {
     currentPath.push(node.onNotReady);
-    n = pathToEnd(nodes, currentPath, terminalNodes, cyclicalNodes);
+    n = pathToEnd(nodes, currentPath, endingNodes, cyclicalNodes, terminalNodes);
   }
 
   console.log(`\n Post recursion for ${node.id}: r = ${r}, n = ${n}`);
@@ -280,8 +302,8 @@ function pathToEnd(nodes: Node[], currentPath: number[], terminalNodes: number[]
     }
     return 'n';
   } else if ((r === 'y' && n === 'c') || (r === 'c' && n === 'y')) { // If one of the paths is terminal, then the cyclical path will eventually end
-    if (!terminalNodes.includes(node.id)) {
-      terminalNodes.push(node.id);
+    if (!endingNodes.includes(node.id)) {
+      endingNodes.push(node.id);
     }
     return 'y';
   } else if (r === 'c' && n === 'c') { // If both paths lead to a cycle, then this node is non-terminal
@@ -313,11 +335,11 @@ class Node {
 function addTurnTakingViolations(interaction: Interaction, violations: Violation[]): boolean {
 
   interaction.transitions.forEach(t => {
-    if (t.notReady) {
+    //if (t.notReady) {
       // If firstMicroId is Greeter w/ Reponse, Ask, Remark w/ Response
       // Then don't worry about it
       // Else secondMicroId must be Answer w/o Intro
-    }
+    //}
   });
 
   return false;

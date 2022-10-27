@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import verification from './routes/verification';
 import microtypes from './routes/microtype';
 import dotenv from 'dotenv'; // Used to get port from environment
@@ -19,7 +19,8 @@ app.use('/api/verification', verification);
 app.use('/api/microtypes', microtypes);
 
 /* Serve front-end */
-app.get('*', (req, res) => {
+// The _ indicates the first parameter is not being used, same as Haskell
+app.get('*', (_, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 

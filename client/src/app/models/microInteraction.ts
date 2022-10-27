@@ -12,7 +12,6 @@ export class MicroInteraction {
     parameterResults: ParameterResult[] = [];
     readyTransitionId: number = -1;
     notReadyTransitionId: number = -1;
-    //Note: results are stored as follows: {parameter id: resultString} (or list instead of result string case of type=array) so parameterResults looks like [{0,"yes"},{20,"option1"}] --these will be passed to backend along with the variable name(which is stored in parameter)
 
     constructor(
       id: number = -1,
@@ -30,6 +29,8 @@ export class MicroInteraction {
         this.type = type;
         this.parameters = parameters;
         this.anchorPosition = anchorPosition;
+
+        /*
         if (parameterResults == []) {
           this.parameters.forEach(parameter => {
             if (parameter.type == "bool") {
@@ -45,6 +46,9 @@ export class MicroInteraction {
         } else {
           this.parameterResults = parameterResults;
         }
+        */
+        
+        this.parameterResults = parameterResults;
 
         this.readyTransitionId = readyTransitionId;
         this.notReadyTransitionId = notReadyTransitionId;
@@ -53,6 +57,9 @@ export class MicroInteraction {
     updateResults(results: ParameterResult[]) {
         this.parameterResults = results;
     }
+
+    
+    /* Eventually these should hold the positions of the anchors */
 
     getReadyAnchor(): Position {
       return this.position;

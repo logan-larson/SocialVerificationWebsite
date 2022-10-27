@@ -2,22 +2,19 @@
 export class Transition {
     
     id: number;
+    isReady: boolean;
     firstMicroId: number;
     secondMicroId: number;
-    ready: boolean;
-    notReady: boolean;
 
     constructor(
         id: number = -1,
+        isReady: boolean = false,
         firstMicro: number = -1,
         secondMicro: number = -1,
-        ready: boolean = false,
-        notReady: boolean = false
     ) {
         this.id = id;
+        this.isReady = isReady;
         this.firstMicroId = firstMicro;
         this.secondMicroId = secondMicro;
-        this.ready = ready;
-        this.notReady = notReady;
     }
 }

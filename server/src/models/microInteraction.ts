@@ -1,24 +1,34 @@
 import { Parameter } from "./parameter";
 import { ParameterResult } from "./parameterResult";
-import { MicroType } from "./microType";
-import { getTrackedMicroTypes } from "./trackedMicroTypes";
+import {Position} from "./position";
 
 export class MicroInteraction {
 
     id: number;
-    x: number;
-    y: number;
+    position: Position;
     type: string | null; // i.e. 'Greeter', 'Farewell'
     parameters: Parameter[] = [];
     parameterResults: ParameterResult[] = [];  
-    //Note: results are stored as follows: {parameter id: resultString} (or list instead of result string case of type=array) so parameterResults looks like [{0,"yes"},{20,"option1"}] --these will be passed to backend along with the variable name(which is stored in parameter)
+    readyTransitionId: number;
+    notReadyTransitionId: number;
 
-    constructor(id: number = -1, x: number = 0, y: number = 0, type: string = '', parameters: Parameter[] = [], parameterResults: ParameterResult[] = []) { //micros are built off a microType defined
+    constructor(
+      id: number = -1,
+      position: Position = new Position(),
+      type: string = '',
+      parameters: Parameter[] = [],
+      // these are rarely ever included in instantiation
+      parameterResults: ParameterResult[] = [],
+      readyTransitionId: number = -1,
+      notReadyTransitionId: number = -1,
+    ) { //micros are built off a microType defined
         this.id = id;
-        this.x = x;
-        this.y = y;
+        this.position = position;
         this.type = type;
         this.parameters = parameters;
+
+        this.readyTransitionId = readyTransitionId;
+        this.notReadyTransitionId = notReadyTransitionId;
         /*
         if (parameterResults == []) {
           this.parameters.forEach(parameter => {

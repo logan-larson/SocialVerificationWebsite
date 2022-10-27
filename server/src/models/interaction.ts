@@ -2,7 +2,7 @@ import { MicroType } from "./microType";
 import { Transition } from "./transition";
 
 import { Violation } from "./violation";
-import { getTrackedMicroTypes } from "./trackedMicroTypes";
+//import { getTrackedMicroTypes } from "./trackedMicroTypes";
 import { MicroInteraction } from "./microInteraction";
 
 export class Interaction {
