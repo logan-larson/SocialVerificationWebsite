@@ -74,7 +74,12 @@ export class TransitionComponent implements OnInit {
 
     event.preventDefault();
 
-    this.contextMenu.displayContextMenu('transition', new Position(this.middleAnchorPos.x, this.middleAnchorPos.y), -1, this.transition.id);
+    let scrollPos: Position = this.canvasManager.canvasScrollOffset;
+
+    let xOffset = this.middleAnchorPos.x - scrollPos.x;
+    let yOffset = this.middleAnchorPos.y - scrollPos.y;
+
+    this.contextMenu.displayContextMenu('transition', new Position(xOffset, yOffset), -1, this.transition.id);
   }
 
   setTransition(t: Transition) {
@@ -99,7 +104,6 @@ export class TransitionComponent implements OnInit {
       this.updatePositionStrings();
     }
 
-
     /*
     if (this.transition) {
       let firstMicro = this.interactionManager.getMicroById(this.transition.firstMicroId);
@@ -116,6 +120,19 @@ export class TransitionComponent implements OnInit {
     }
     */
   }
+
+
+  /* Dragging the middle anchor */
+  midDragStart(event: any) {
+  }
+
+  midDragMove(event: any) {
+  }
+
+  midDragEnd(event: any) {
+  }
+
+  /* Old system */
 
   setFirstOffset(m: MicroInteraction, isReady: boolean) {
     this.x1 = (m.anchorPosition.x + 112) + 'px';

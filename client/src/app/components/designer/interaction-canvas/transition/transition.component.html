@@ -13,9 +13,9 @@
   cdkScrollable
   cdkDragBoundary=".bounding-canvas"
   cdkDrag
-  (cdkDragStarted)="startDrag($event)"
-  (cdkDragMoved)="dragMicro($event)"
-  (cdkDragEnded)="droppedMicro($event)"
+  (cdkDragStarted)="midDragStart($event)"
+  (cdkDragMoved)="midDragMove($event)"
+  (cdkDragEnded)="midDragEnd($event)"
   (contextmenu)="showContextMenu($event)"
 >
 </div>

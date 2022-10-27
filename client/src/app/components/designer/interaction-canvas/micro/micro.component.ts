@@ -176,7 +176,6 @@ export class MicroComponent implements OnInit {
   /* Reposition micro in canvas */
 
   startDrag(event: CdkDragStart) {
-    console.log("Starting drag");
     let rect = event.source.getRootElement().getBoundingClientRect();
 
     // Set the local position on drag start
@@ -195,7 +194,6 @@ export class MicroComponent implements OnInit {
 
   droppedMicro(event: CdkDragEnd) {
     // Set the anchor position on drag start
-    console.log(`Moved: (${this.microPos.x}, ${this.microPos.y})`);
     this.isDragging = false;
     let rect = event.source.getRootElement().getBoundingClientRect();
     this.micro.position.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
