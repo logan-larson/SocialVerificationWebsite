@@ -33,6 +33,8 @@ export class MicroComponent implements OnInit {
 
   highlightColor: string = 'black';
 
+  bgColor: string = 'rgb(34 197 94)';
+
   constructor(
     private contextMenu: ContextMenuService,
     private canvasManager: CanvasManagerService,
@@ -65,7 +67,8 @@ export class MicroComponent implements OnInit {
     this.x = m.position.x + 'px';
     this.y = m.position.y + 'px';
     this.micro = m;
-
+    
+    this.setBgColor();
   }
 
   /* Show microinteraction's parameter options in the interaction options pane */
@@ -170,6 +173,20 @@ export class MicroComponent implements OnInit {
       this.highlightColor = 'red';
     } else {
       this.highlightColor = 'black';
+    }
+  }
+
+  setBgColor() {
+    switch (this.micro.type) {
+      case 'Greeter':
+        this.bgColor = 'rgb(34 197 94)';
+        break;
+      case 'Ask':
+        this.bgColor = 'rgb(96 165 250)';
+        break;
+      default:
+        this.bgColor = 'rgb(0 0 0)';
+
     }
   }
 

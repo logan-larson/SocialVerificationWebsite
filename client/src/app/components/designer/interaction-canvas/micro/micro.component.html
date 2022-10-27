@@ -3,6 +3,7 @@
   [style.left]='x'
   [style.top]='y'
   [style.border-color]='highlightColor'
+  [style.background-color]='bgColor'
   cdkScrollable
   cdkDragBoundary=".bounding-canvas"
   cdkDrag
@@ -11,7 +12,7 @@
   (cdkDragEnded)="droppedMicro($event)"
   (click)="clickMicro($event)"
   (contextmenu)="showContextMenu($event)"
-  class="absolute z-10 w-24 p-2 mb-2 text-center align-middle bg-gray-300 h-36 rounded-xl"
+  class="absolute z-10 w-24 p-2 mb-2 text-center align-middle h-36 rounded-xl"
 >
   {{micro.type}}
   <div
