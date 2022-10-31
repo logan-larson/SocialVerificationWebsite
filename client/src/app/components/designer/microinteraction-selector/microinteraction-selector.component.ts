@@ -14,6 +14,8 @@ import { InteractionManagerService } from 'src/app/services/interaction-manager.
 })
 export class MicrointeractionSelectorComponent implements OnInit {
 
+  bgColor: string = 'black';
+
   constructor(private interactionManager: InteractionManagerService) { }
 
   ngOnInit(): void {

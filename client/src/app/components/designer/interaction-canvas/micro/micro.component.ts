@@ -33,7 +33,7 @@ export class MicroComponent implements OnInit {
 
   highlightColor: string = 'black';
 
-  bgColor: string = 'rgb(34 197 94)';
+  bgColor: string = 'rgb(209 213 219)';
 
   constructor(
     private contextMenu: ContextMenuService,
@@ -177,6 +177,7 @@ export class MicroComponent implements OnInit {
   }
 
   setBgColor() {
+    /*
     switch (this.micro.type) {
       case 'Greeter':
         this.bgColor = 'rgb(34 197 94)';
@@ -184,10 +185,29 @@ export class MicroComponent implements OnInit {
       case 'Ask':
         this.bgColor = 'rgb(96 165 250)';
         break;
+      case 'Remark':
+        this.bgColor = 'rgb(244 114 182)';
+        break;
+      case 'Instruction':
+        this.bgColor = 'rgb(252 211 77)';
+        break;
+      case 'Handoff':
+        this.bgColor = 'rgb(100 116 139)';
+        break;
+      case 'Answer':
+        this.bgColor = 'rgb(147 51 234)';
+        break;
+      case 'Wait':
+        this.bgColor = 'rgb(251 146 60)';
+        break;
+      case 'Farewell':
+        this.bgColor = 'rgb(248 113 113)';
+        break;
       default:
         this.bgColor = 'rgb(0 0 0)';
 
     }
+    */
   }
 
   /* Reposition micro in canvas */
