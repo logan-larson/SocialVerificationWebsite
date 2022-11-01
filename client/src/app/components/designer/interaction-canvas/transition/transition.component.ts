@@ -9,6 +9,7 @@ import { InteractionManagerService } from 'src/app/services/interaction-manager.
 import { ContextMenuService } from 'src/app/services/context-menu.service';
 import {MicroInteraction} from 'src/app/models/microInteraction';
 import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
+import {CdkDragMove} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-transition',
@@ -30,6 +31,10 @@ export class TransitionComponent implements OnInit {
   firstAnchorPos: Position = new Position();
   secondAnchorPos: Position = new Position();
   middleAnchorPos: Position = new Position();
+
+  midDragging: boolean = false;
+  midDist: Position = new Position();
+  oldMidPos: Position = new Position();
 
   fX: string = '0px';
   fY: string = '0px';
@@ -65,18 +70,27 @@ export class TransitionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    setInterval(() => {
+      if (this.midDragging) {
+        this.setMiddleAnchor(true, this.midDist);
+        this.updatePositionStrings(false);
+      }
+    }, 20);
     
     this.interactionManager.dragDistance.subscribe((dist: Position) => {
       if (this.transition.firstMicroId === this.interactionManager.currentDragMid) { // If the transitions first micro is getting dragged, update its position
         let firstMicro = this.interactionManager.getMicroById(this.transition.firstMicroId);
         if (!firstMicro) return;
         this.setFirstAnchor(firstMicro.position.x + dist.x, firstMicro.position.y + dist.y, this.transition.isReady);
-      } else  if (this.transition.secondMicroId === this.interactionManager.currentDragMid) { // Same thing for second micro
+      }
+      if (this.transition.secondMicroId === this.interactionManager.currentDragMid) { // Same thing for second micro
         let secondMicro = this.interactionManager.getMicroById(this.transition.secondMicroId);
         if (!secondMicro) return;
         this.setSecondAnchor(secondMicro.position.x + dist.x, secondMicro.position.y + dist.y);
       }
-      this.setMiddleAnchor();
+
+      this.setMiddleAnchor(false);
       this.updatePositionStrings();
     });
   }
@@ -113,7 +127,7 @@ export class TransitionComponent implements OnInit {
       
       this.setSecondAnchor(secondMicro.position.x, secondMicro.position.y);
 
-      this.setMiddleAnchor();
+      this.setMiddleAnchor(false);
 
       this.updatePositionStrings();
     }
@@ -138,13 +152,18 @@ export class TransitionComponent implements OnInit {
 
   /* Dragging the middle anchor */
   midDragStart(event: any) {
-    
+    this.midDist = new Position();
+    this.oldMidPos = this.middleAnchorPos;
+    this.midDragging = true;
   }
 
-  midDragMove(event: any) {
+  midDragMove(event: CdkDragMove) {
+    this.midDist = new Position(event.distance.x, event.distance.y);
   }
 
   midDragEnd(event: any) {
+    this.midDist = new Position();
+    this.midDragging = false;
   }
 
   /* Old system */
@@ -187,23 +206,29 @@ export class TransitionComponent implements OnInit {
     if (!this.transition.isSet) {
       this.secondAnchorPos = this.mousePos;
 
-      this.setMiddleAnchor();
+      this.setMiddleAnchor(false);
 
       this.updatePositionStrings();
     }
   }
 
-  setMiddleAnchor() {
-    this.middleAnchorPos = new Position((this.firstAnchorPos.x + this.secondAnchorPos.x) / 2, (this.firstAnchorPos.y + this.secondAnchorPos.y) / 2);
+  setMiddleAnchor(isDragged: boolean, dist: Position = new Position(0, 0)) {
+    if (isDragged) {
+      this.middleAnchorPos = new Position(this.oldMidPos.x + dist.x, this.oldMidPos.y + dist.y);
+    } else {
+      this.middleAnchorPos = new Position(((this.firstAnchorPos.x + this.secondAnchorPos.x) / 2) + dist.x, ((this.firstAnchorPos.y + this.secondAnchorPos.y) / 2) + dist.y);
+    }
   }
 
-  updatePositionStrings() {
+  updatePositionStrings(useMid: boolean = true) {
     this.fX = this.firstAnchorPos.x + 'px';
     this.fY = this.firstAnchorPos.y + 'px';
     this.sX = this.secondAnchorPos.x + 'px';
     this.sY = this.secondAnchorPos.y + 'px';
-    this.mX = this.middleAnchorPos.x + 'px';
-    this.mY = this.middleAnchorPos.y + 'px';
+    if (useMid) {
+      this.mX = this.middleAnchorPos.x - 7 + 'px';
+      this.mY = this.middleAnchorPos.y - 7 + 'px';
+    }
 
     let bezierOffset: number = this.firstAnchorPos.x - this.secondAnchorPos.x;
     bezierOffset = bezierOffset > 61 ? bezierOffset : 60;
