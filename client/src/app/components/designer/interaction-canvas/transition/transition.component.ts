@@ -65,6 +65,20 @@ export class TransitionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+    this.interactionManager.dragDistance.subscribe((dist: Position) => {
+      if (this.transition.firstMicroId === this.interactionManager.currentDragMid) { // If the transitions first micro is getting dragged, update its position
+        let firstMicro = this.interactionManager.getMicroById(this.transition.firstMicroId);
+        if (!firstMicro) return;
+        this.setFirstAnchor(firstMicro.position.x + dist.x, firstMicro.position.y + dist.y, this.transition.isReady);
+      } else  if (this.transition.secondMicroId === this.interactionManager.currentDragMid) { // Same thing for second micro
+        let secondMicro = this.interactionManager.getMicroById(this.transition.secondMicroId);
+        if (!secondMicro) return;
+        this.setSecondAnchor(secondMicro.position.x + dist.x, secondMicro.position.y + dist.y);
+      }
+      this.setMiddleAnchor();
+      this.updatePositionStrings();
+    });
   }
 
   showContextMenu(event: any) {
@@ -124,6 +138,7 @@ export class TransitionComponent implements OnInit {
 
   /* Dragging the middle anchor */
   midDragStart(event: any) {
+    
   }
 
   midDragMove(event: any) {

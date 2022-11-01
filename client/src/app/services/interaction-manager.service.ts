@@ -19,7 +19,12 @@ export class InteractionManagerService {
 
   interaction: Interaction = new Interaction();
 
-  currentTransition: Transition;
+  currentTransition: Transition = new Transition();
+  
+  // Transitions listen to the event emitter and if the currentDragMid matches one of their anchors they move accordingly
+  currentDragMid: number = -1;
+  @Output() dragDistance: EventEmitter<Position> = new EventEmitter<Position>();
+
   isAddingTransition: boolean = false;
 
   currentMicroType: string = '';
@@ -29,11 +34,7 @@ export class InteractionManagerService {
   @Output() initTransition: EventEmitter<Transition> = new EventEmitter<Transition>();
   @Output() cancelTransition: EventEmitter<Transition> = new EventEmitter<Transition>();
 
-  constructor(
-    private http: HttpClient,
-  ) {
-    this.currentTransition = new Transition();
-  }
+  constructor(private http: HttpClient) { }
 
   /* Micro related CRUD functions */
 

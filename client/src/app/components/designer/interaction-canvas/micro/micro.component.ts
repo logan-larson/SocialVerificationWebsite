@@ -29,6 +29,7 @@ export class MicroComponent implements OnInit {
   y: string = '';
 
   isDragging: boolean = false;
+  dragDistance: Position = new Position();
   microPos: Position = new Position();
 
   highlightColor: string = 'black';
@@ -50,17 +51,17 @@ export class MicroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // While user is dragging the micro, update its anchor position so the transitions can follow
-        /*
+    // While user is dragging the micro, update the current drag distance so accompanied transitions can follow 
     setInterval(() => {
       if (this.isDragging) {
+        this.interactionManager.dragDistance.emit(this.dragDistance);
+        /*
         this.micro.anchorPosition.x = this.microPos.x;
         this.micro.anchorPosition.y = this.microPos.y;
         this.interactionManager.updateMicro(this.micro);
-        console.log(this.micro);
-      }
-    }, 50);
         */
+      }
+    }, 20);
   }
 
   setMicro(m: MicroInteraction) {
@@ -220,18 +221,25 @@ export class MicroComponent implements OnInit {
     this.microPos.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
 
     //this.interactionManager.updateMicro(this.micro);
+    this.dragDistance = new Position();
+    this.interactionManager.currentDragMid = this.micro.id;
     this.isDragging = true;
   }
 
   dragMicro(event: CdkDragMove) {
     // Update the micro position based on distance traveled
-    this.microPos.x += event.distance.x;
-    this.microPos.y += event.distance.y;
+    //this.microPos.x += event.distance.x;
+    //this.microPos.y += event.distance.y;
+    this.dragDistance = new Position(event.distance.x, event.distance.y);
   }
 
   droppedMicro(event: CdkDragEnd) {
     // Set the anchor position on drag start
+    this.dragDistance = new Position();
+    this.interactionManager.currentDragMid = -1;
     this.isDragging = false;
+
+
     let rect = event.source.getRootElement().getBoundingClientRect();
     this.micro.position.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
     this.micro.position.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
