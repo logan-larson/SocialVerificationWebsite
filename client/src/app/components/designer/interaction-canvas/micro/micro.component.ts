@@ -165,7 +165,7 @@ export class MicroComponent implements OnInit {
     if (state) {
       this.canvasManager.onMicro = true;
       if (this.interactionManager.isAddingTransition) {
-        let pos: Position = new Position((this.micro.position.x - 14), (this.micro.position.y + 49));
+        let pos: Position = new Position((this.micro.position.x - 32), (this.micro.position.y + 49));
         this.canvasManager.getMousePosition.emit(pos);
       }
     } else {

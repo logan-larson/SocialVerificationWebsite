@@ -104,18 +104,6 @@ export class InteractionManagerService {
     this.getUpdatedInteraction.emit(this.interaction);
   }
 
-  /* Parameter related CRUD functions */
-
-  updateParams(microId: number, paramRes: ParameterResult[]) {
-    let m = this.interaction.micros.find(micro => micro.id === microId);
-
-    if (m) {
-      m.updateResults(paramRes);
-
-      this.getUpdatedInteraction.emit(this.interaction);
-    }
-  }
-
   /* Transition related CRUD functions */
 
   removeTransition(tid: number) {
