@@ -158,7 +158,7 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   addMicro(event: any) {
-    this.interactionManager.addMicro(event.offsetX, event.offsetY);
+    this.interactionManager.addMicro(event.offsetX - 48, event.offsetY - 48);
   }
 
   relayCoords(event: any) {
