@@ -33,6 +33,7 @@ export class MicroComponent implements OnInit {
   microPos: Position = new Position();
 
   highlightColor: string = 'black';
+  isViolating: boolean = false;
 
   bgColor: string = 'rgb(209 213 219)';
 
@@ -44,6 +45,11 @@ export class MicroComponent implements OnInit {
   ) {
     this.canvasManager.getViolatingIds.subscribe(n => {
       this.setHightlightColor('black');
+      if (this.canvasManager.violatingMicroIds.includes(this.micro.id)) {
+        this.isViolating = true;
+      } else {
+        this.isViolating = false;
+      }
     });
 
     // While adding a transition if cursor is on a micro, set

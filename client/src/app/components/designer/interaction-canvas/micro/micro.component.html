@@ -13,6 +13,7 @@
   (click)="clickMicro($event)"
   (contextmenu)="showContextMenu($event)"
   class="absolute z-10 w-24 p-2 mb-2 text-center align-middle h-36 rounded-xl"
+  [ngClass]="{'border-2': isViolating === true }"
 >
   {{micro.type}}
   <div
