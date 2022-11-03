@@ -90,8 +90,20 @@ export class TransitionComponent implements OnInit {
         this.setSecondAnchor(secondMicro.position.x + dist.x, secondMicro.position.y + dist.y);
       }
 
-      this.setMiddleAnchor(false);
+      if (this.transition.midPos.x === 0 && this.transition.midPos.y === 0) {
+        this.setMiddleAnchor(false);
+      }
       this.updatePositionStrings();
+    });
+
+    this.interactionManager.resetMidpoint.subscribe((tid: number) => {
+      if (tid == this.transition.id) {
+        this.transition.midPos = new Position();
+        this.setMiddleAnchor(false);
+        this.updatePositionStrings(true);
+
+        this.contextMenu.hideContextMenu.emit(false);
+      }
     });
   }
 
@@ -127,7 +139,12 @@ export class TransitionComponent implements OnInit {
       
       this.setSecondAnchor(secondMicro.position.x, secondMicro.position.y);
 
-      this.setMiddleAnchor(false);
+      if (this.transition.midPos.x === 0 && this.transition.midPos.y === 0) {
+        this.setMiddleAnchor(false);
+      } else {
+        this.oldMidPos = new Position();
+        this.setMiddleAnchor(true, this.transition.midPos);
+      }
 
       this.updatePositionStrings();
     }
@@ -195,11 +212,11 @@ export class TransitionComponent implements OnInit {
   setFirstAnchor(x: number, y: number, isReady: boolean) {
     let yOffset: number = isReady ? 49 : 85;
 
-    this.firstAnchorPos = new Position(x + 112, y + yOffset);
+    this.firstAnchorPos = new Position(x + 127, y + yOffset);
   }
 
   setSecondAnchor(x: number, y: number) {
-    this.secondAnchorPos = new Position(x - 14, y + 49);
+    this.secondAnchorPos = new Position(x - 32, y + 49);
   }
 
   setSecondAnchorOnMouse() {
@@ -215,8 +232,10 @@ export class TransitionComponent implements OnInit {
   setMiddleAnchor(isDragged: boolean, dist: Position = new Position(0, 0)) {
     if (isDragged) {
       this.middleAnchorPos = new Position(this.oldMidPos.x + dist.x, this.oldMidPos.y + dist.y);
+      this.transition.midPos = this.middleAnchorPos;
     } else {
       this.middleAnchorPos = new Position(((this.firstAnchorPos.x + this.secondAnchorPos.x) / 2) + dist.x, ((this.firstAnchorPos.y + this.secondAnchorPos.y) / 2) + dist.y);
+      this.transition.midPos = new Position();
     }
   }
 

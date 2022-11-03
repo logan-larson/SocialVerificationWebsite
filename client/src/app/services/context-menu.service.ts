@@ -13,7 +13,7 @@ export class ContextMenuService {
   transitionId: number = -1;
 
   @Output() showContextMenu: EventEmitter<any> = new EventEmitter<any>();
-  @Output() hideContextMenuEmitter: EventEmitter<any> = new EventEmitter<any>();
+  @Output() hideContextMenu: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 

@@ -4,11 +4,19 @@
   [style.left]="x"
   [style.top]="y"
 >
-  <button
-    class="absolute px-3 py-1.5 rounded-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5"
+  <div
+    class="absolute"
     [hidden]="type != 'transition'"
-    (click)="removeTransition()"
-  >Remove Transition</button>
+  >
+    <button
+      class="px-3 py-1.5 rounded-t-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5"
+      (click)="resetMidpoint()"
+    >Reset Midpoint</button>
+    <button
+      class="px-3 py-1.5 rounded-b-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5"
+      (click)="removeTransition()"
+    >Remove Transition</button>
+    </div>
   <button
     class="absolute px-3 py-1.5 rounded-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5"
     [hidden]="type != 'micro'"

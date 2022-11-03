@@ -34,6 +34,8 @@ export class InteractionManagerService {
   @Output() initTransition: EventEmitter<Transition> = new EventEmitter<Transition>();
   @Output() cancelTransition: EventEmitter<Transition> = new EventEmitter<Transition>();
 
+  @Output() resetMidpoint: EventEmitter<number> = new EventEmitter<number>();
+
   constructor(private http: HttpClient) { }
 
   /* Micro related CRUD functions */

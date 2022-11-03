@@ -37,7 +37,7 @@ export class ContextMenuComponent implements OnInit {
     if(!this.el.nativeElement.contains(event.target)) {
       this.menuHidden = true;
       this.contextMenu.type = '';
-      this.contextMenu.hideContextMenuEmitter.emit();
+      this.contextMenu.hideContextMenu.emit();
     }
   }
 
@@ -48,6 +48,10 @@ export class ContextMenuComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.contextMenu.hideContextMenu.subscribe((_) => {
+      this.menuHidden = true;
+      this.contextMenu.type = '';
+    });
   }
 
   setMenu(type: string, position: Position, microId: number = -1, transitionId: number = -1): void {
@@ -61,6 +65,10 @@ export class ContextMenuComponent implements OnInit {
 
     this.x = position.x + 'px';
     this.y = position.y + 'px';
+  }
+
+  resetMidpoint() {
+    this.interactionManager.resetMidpoint.emit(this.transitionId);
   }
 
   removeTransition() {

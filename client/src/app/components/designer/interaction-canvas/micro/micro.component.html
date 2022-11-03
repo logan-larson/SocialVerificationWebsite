@@ -16,7 +16,7 @@
 >
   {{micro.type}}
   <div
-    class="absolute left-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-l hover:cursor-pointer"
+    class="absolute left-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-l hover:cursor-pointer z-40"
     (click)="clickSecondAnchor($event)"
     (mouseenter)="setSecondAnchor(true)"
     (mouseleave)="setSecondAnchor(false)"
@@ -26,7 +26,7 @@
   
   <div
     *ngIf="micro.readyTransitionId == -1"
-    class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
+    class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer z-40"
     (click)="clickReadyAnchor($event)"
   >
     <mat-icon>done</mat-icon>
@@ -34,21 +34,21 @@
 
   <div
     *ngIf="micro.readyTransitionId != -1"
-    class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-green-300 hover:bg-red-400 rounded-r hover:cursor-pointer"
+    class="absolute right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-green-300 hover:bg-red-400 rounded-r hover:cursor-pointer z-40"
     (click)="clickReadyAnchor($event)"
   >
     <mat-icon>done</mat-icon>
   </div>
   <div
     *ngIf="micro.notReadyTransitionId == -1"
-    class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer"
+    class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-gray-300 hover:bg-gray-400 rounded-r hover:cursor-pointer z-40"
     (click)="clickNotReadyAnchor($event)"
   >
     <mat-icon>block</mat-icon>
   </div>
   <div
     *ngIf="micro.notReadyTransitionId != -1"
-    class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-orange-300 hover:bg-red-400 rounded-r hover:cursor-pointer"
+    class="absolute top-[70px] right-[-32px] w-[32px] h-[32px] items-center justify-center flex bg-orange-300 hover:bg-red-400 rounded-r hover:cursor-pointer z-40"
     (click)="clickNotReadyAnchor($event)"
   >
     <mat-icon>block</mat-icon>
