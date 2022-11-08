@@ -2,6 +2,8 @@ import { Interaction } from "../models/interaction";
 import { MicroInteraction } from "../models/microInteraction";
 import { Violation } from "../models/violation";
 
+const showDebug: boolean = false;
+
 function verifyModel(interaction: Interaction): Violation[] {
 
   let violations: Violation[] = [];
@@ -23,7 +25,8 @@ function verifyModel(interaction: Interaction): Violation[] {
   if (!transitionFlubs && !startingPointFlubs && !greeterFlubs && !endingPointFlubs) {
     farewellFlubs = addFarewellViolations(interaction, violations);
   }
-  
+
+  // Turn-taking expectations
   let turnTakingFlubs: boolean = false;
   if (!transitionFlubs && !startingPointFlubs && !greeterFlubs && !endingPointFlubs && !farewellFlubs) {
     turnTakingFlubs = addTurnTakingViolations(interaction, violations);
@@ -213,7 +216,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
     }
   });
 
-  console.log(JSON.stringify(nodes, null, 2));
+  if (showDebug) console.log(JSON.stringify(nodes, null, 2));
 
   // Perform search
   let currentPathIds: number[] = [];
@@ -248,10 +251,10 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
 function pathToEnd(nodes: Node[], currentPath: number[], endingNodes: number[], cyclicalNodes: number[], terminalNodes: number[]): string {
   let node: Node | undefined = nodes.find(n => n.id === currentPath[currentPath.length - 1]); // Get node that is last in the current path
 
-  console.log(`\n${JSON.stringify(node)}\n`);
+  if (showDebug) console.log(`\n${JSON.stringify(node)}\n`);
 
   if (node == undefined) { // This should never happen, if so then graph constructed improperly
-    console.log(`Undefined\n`);
+    if (showDebug) console.log(`Undefined\n`);
     return 'n';
   }
 
@@ -266,7 +269,7 @@ function pathToEnd(nodes: Node[], currentPath: number[], endingNodes: number[], 
     }
 
     currentPath.pop(); // Remove node from currentPath
-    console.log(`\nBase case for ${node.id}: y`);
+    if (showDebug) console.log(`\nBase case for ${node.id}: y`);
     return 'y';
   }
 
@@ -274,7 +277,7 @@ function pathToEnd(nodes: Node[], currentPath: number[], endingNodes: number[], 
   let cPath: number[] = currentPath.slice(0, currentPath.length - 1); // Get the current path without the current node being looked at
   if (cPath.includes(node.id)) { // A cycle was found
     currentPath.pop(); // Remove node from currentPath
-    console.log(`\nBase case for ${node.id}: c`);
+    if (showDebug) console.log(`\nBase case for ${node.id}: c`);
     return 'c';
   }
 
@@ -293,7 +296,7 @@ function pathToEnd(nodes: Node[], currentPath: number[], endingNodes: number[], 
     n = pathToEnd(nodes, currentPath, endingNodes, cyclicalNodes, terminalNodes);
   }
 
-  console.log(`\n Post recursion for ${node.id}: r = ${r}, n = ${n}`);
+  if (showDebug) console.log(`\n Post recursion for ${node.id}: r = ${r}, n = ${n}`);
 
   currentPath.pop();
   if (r === 'n' || n === 'n') { // If either paths are non-terminal, then this node is non-terminal because this interaction has a possibility of never finishing
@@ -334,13 +337,39 @@ class Node {
 
 function addTurnTakingViolations(interaction: Interaction, violations: Violation[]): boolean {
 
-  interaction.transitions.forEach(t => {
-    //if (t.notReady) {
-      // If firstMicroId is Greeter w/ Reponse, Ask, Remark w/ Response
-      // Then don't worry about it
-      // Else secondMicroId must be Answer w/o Intro
-    //}
-  });
+  // No instances of robot speaking twice in a row when not ready
+  let violatingMicroIds: number[] = [];
+  let violatingTransitionIds: number[] = [];
+
+  for (let i = 0; i < interaction.transitions.length; i++) {
+
+    let t = interaction.transitions[i];
+
+    // Only look at not ready transitions
+    if (!t.isReady) {
+      // For the first micro
+      let m: MicroInteraction | undefined = interaction.micros.find(m => m.id === t.firstMicroId);
+
+      // Find the ones where the robot doesn't speak last and continue
+      if (m && m.type != 'Ask') { 
+        if (m.type == 'Greeter' && m.parameterResults) {
+          console.log(JSON.stringify(m.parameterResults));
+          continue;
+        } else if (m.type == 'Remark') {
+          console.log(JSON.stringify(m.parameterResults));
+          continue;
+        } else {
+          //
+        }
+      }
+
+      // Otherwise, check if the second micro has the robot speaking first
+
+      violations.push(
+        new Violation('interaction', 'Turn-taking Flub', "The robot could speak twice in a row while the human isn't ready", violatingMicroIds, violatingTransitionIds)
+      );
+    }
+  }
 
   return false;
 }

@@ -11,6 +11,7 @@ import { ParameterResult } from '../models/parameterResult';
 import { Transition } from '../models/transition';
 import { HttpClient } from '@angular/common/http';
 import { Position } from '../models/position';
+import { ParameterManagerService } from '../services/parameter-manager.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class InteractionManagerService {
 
   @Output() resetMidpoint: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private paramManager: ParameterManagerService) { }
 
   /* Micro related CRUD functions */
 
@@ -60,21 +61,28 @@ export class InteractionManagerService {
 
     let mt: MicroType | undefined = await this.http.get<MicroType>(`/api/microtypes/${this.currentMicroType}`).toPromise();
 
+
     //let trackedMicroTypes: MicroType[] = getTrackedMicroTypes();
 
     let params: Parameter[] = [];
 
     //let mt: MicroType | undefined = trackedMicroTypes.find((m: MicroType) => m.type === this.currentMicroType);
+    let dftParamRes: ParameterResult[] | undefined = undefined;
 
     if (mt) {
+      dftParamRes = await this.http.get<ParameterResult[]>(`/api/paramres/${mt.type}`).toPromise();
       params = mt.parameters;
     }
 
-    let m: MicroInteraction = new MicroInteraction(this.interaction.microIdCounter++, new Position(x, y), this.currentMicroType, params, new Position(x, y));
+    dftParamRes = dftParamRes == undefined ? [] : dftParamRes;
+
+    let m: MicroInteraction = new MicroInteraction(this.interaction.microIdCounter++, new Position(x, y), this.currentMicroType, params, new Position(x, y), dftParamRes);
 
     this.interaction.micros.push(m);
 
     this.getUpdatedInteraction.emit(this.interaction);
+
+    this.paramManager.updateCurrentMicro(m);
 
     return m;
   }

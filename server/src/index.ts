@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import verification from './routes/verification';
 import microtypes from './routes/microtype';
+import paramres from './routes/paramRes';
 import dotenv from 'dotenv'; // Used to get port from environment
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(express.json());
 /* Routes */
 app.use('/api/verification', verification);
 app.use('/api/microtypes', microtypes);
+app.use('/api/paramres', paramres);
 
 /* Serve front-end */
 // The _ indicates the first parameter is not being used, same as Haskell

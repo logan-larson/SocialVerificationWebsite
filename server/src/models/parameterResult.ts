@@ -3,6 +3,7 @@
 export class ParameterResult {
 
   id: number;
+  name: string | null = '';
   type: string | null = '';
 
   boolResult: boolean | null = false;
@@ -29,6 +30,7 @@ export class ParameterResult {
       this.arrayResult = ar;
   }
 
+  /*
   setParameterResultFromXML(el: Element, id: number) {
 
     this.id = id;
@@ -120,4 +122,5 @@ export class ParameterResult {
     xmlString += name + '</parameter>';
     return xmlString;
   }
+  */
 }
