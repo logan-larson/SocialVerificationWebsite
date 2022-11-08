@@ -340,6 +340,7 @@ function addTurnTakingViolations(interaction: Interaction, violations: Violation
   // No instances of robot speaking twice in a row when not ready
   let violatingMicroIds: number[] = [];
   let violatingTransitionIds: number[] = [];
+  let violationCount = violations.length;
 
   for (let i = 0; i < interaction.transitions.length; i++) {
 
@@ -372,9 +373,48 @@ function addTurnTakingViolations(interaction: Interaction, violations: Violation
         }
       }
 
-      // Otherwise, check if the second micro has the robot speaking first
-
     }
+  }
+
+  if (violationCount != violations.length) {
+    return true;
+  }
+
+  // No instances where human is prompted to speak twice in a row
+  try {
+
+  for (let i = 0; i < interaction.transitions.length; i++) {
+
+    let t = interaction.transitions[i];
+
+    // For the first micro
+    let m: MicroInteraction | undefined = interaction.micros.find(m => m.id === t.firstMicroId);
+
+    // Find the ones where the robot speaks last and continue
+    if (m) { 
+      // If the first micro prompts the user to speak last ...
+      if ((m.type == 'Greeter' && m.parameterResults[0].boolResult == true) || (m.type == 'Remark' && m.parameterResults[2].boolResult == false) || (m.type == 'Ask')) {
+
+        // We got to make sure micro the second micro doesn't prompt the human to speak first
+        // i.e. Answer without intro
+        let m2: MicroInteraction | undefined = interaction.micros.find(m => m.id === t.secondMicroId);
+        if (m2 && m2.type == 'Answer' && m2.parameterResults[0].boolResult == false) {
+          violatingMicroIds.push(m.id);
+          violatingMicroIds.push(m2.id);
+          violatingTransitionIds.push(t.id);
+          violations.push(
+            new Violation('interaction', 'Turn-taking Flub', "The human should never be prompted to speak twice in a row", violatingMicroIds, violatingTransitionIds)
+          );
+        }
+      }
+    }
+  }
+  } catch (e) {
+    console.log(JSON.stringify(e));
+  }
+
+  if (violationCount != violations.length) {
+    return true;
   }
 
   return false;

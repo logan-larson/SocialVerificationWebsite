@@ -13,6 +13,7 @@ router.post('/', (req, res) => {
 
     res.json(violations);
   } catch (e) {
+    console.log(JSON.stringify(e));
     res.status(500).send(e);
   }
 });
