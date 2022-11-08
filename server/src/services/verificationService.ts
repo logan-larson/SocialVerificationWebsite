@@ -352,22 +352,28 @@ function addTurnTakingViolations(interaction: Interaction, violations: Violation
 
       // Find the ones where the robot doesn't speak last and continue
       if (m && m.type != 'Ask') { 
-        if (m.type == 'Greeter' && m.parameterResults) {
-          console.log(JSON.stringify(m.parameterResults));
+        if (m.type == 'Greeter' && m.parameterResults[0].boolResult == true) {
           continue;
-        } else if (m.type == 'Remark') {
-          console.log(JSON.stringify(m.parameterResults));
+        } else if (m.type == 'Remark' && m.parameterResults[2].boolResult == true) {
           continue;
         } else {
-          //
+          // If you get here the robot speaks last, so now we got to make sure micro is a wait
+          let m2: MicroInteraction | undefined = interaction.micros.find(m => m.id === t.secondMicroId);
+          if (m2 && (m2.type != 'Wait' && m2.type != 'Farewell')) {
+            violatingMicroIds.push(m.id);
+            violatingMicroIds.push(m2.id);
+            violatingTransitionIds.push(t.id);
+            violations.push(
+              new Violation('interaction', 'Turn-taking Flub', "The robot could speak twice in a row while the human isn't ready", violatingMicroIds, violatingTransitionIds)
+            );
+            // I should probably check that the 'Wait' micros not ready transition points to itself
+            // So the wait is being used as intended, to wait for the human to be ready
+          }
         }
       }
 
       // Otherwise, check if the second micro has the robot speaking first
 
-      violations.push(
-        new Violation('interaction', 'Turn-taking Flub', "The robot could speak twice in a row while the human isn't ready", violatingMicroIds, violatingTransitionIds)
-      );
     }
   }
 
