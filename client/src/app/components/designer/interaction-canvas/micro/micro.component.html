@@ -11,22 +11,22 @@
   (cdkDragEnded)="droppedMicro($event)"
   (click)="clickMicro($event)"
   (contextmenu)="showContextMenu($event)"
-  class="absolute z-10 w-24 mb-2 text-center align-middle bg-gray-300 h-36 rounded-xl"
+  class="absolute z-10 w-24 p-1 mb-2 text-center align-middle bg-gray-300 h-36 rounded-xl"
   [ngClass]="{
-    'drop-shadow-greeter': micro.type === 'Greeter' && isSelected === true,
-    'drop-shadow-ask': micro.type === 'Ask' && isSelected === true,
-    'drop-shadow-remark': micro.type === 'Remark' && isSelected === true,
-    'drop-shadow-instruction': micro.type === 'Instruction' && isSelected === true,
-    'drop-shadow-handoff': micro.type === 'Handoff' && isSelected === true,
-    'drop-shadow-answer': micro.type === 'Answer' && isSelected === true,
-    'drop-shadow-wait': micro.type === 'Wait' && isSelected === true,
-    'drop-shadow-farewell': micro.type === 'Farewell' && isSelected === true,
-    'drop-shadow-violating': isViolating === true
+    'shadow-greeter': micro.type === 'Greeter' && isSelected === true,
+    'shadow-ask': micro.type === 'Ask' && isSelected === true,
+    'shadow-remark': micro.type === 'Remark' && isSelected === true,
+    'shadow-instruction': micro.type === 'Instruction' && isSelected === true,
+    'shadow-handoff': micro.type === 'Handoff' && isSelected === true,
+    'shadow-answer': micro.type === 'Answer' && isSelected === true,
+    'shadow-wait': micro.type === 'Wait' && isSelected === true,
+    'shadow-farewell': micro.type === 'Farewell' && isSelected === true,
+    'shadow-violating': isViolating === true
   }"
 >
   <div
     [style.background-color]='bgColor'
-    class="w-full p-1 text-center align-middle rounded-t-xl"
+    class="w-full p-1 text-center align-middle rounded-2xl"
   >
     {{micro.type}}
   </div>
