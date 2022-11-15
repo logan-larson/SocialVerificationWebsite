@@ -88,6 +88,9 @@ export class MicroComponent implements OnInit {
     
     this.setBgColor();
     this.setMicroIcon();
+    if (this.parameterManager.micro) {
+      this.isSelected = this.parameterManager.micro.id == this.micro.id;
+    }
   }
 
   /* Show microinteraction's parameter options in the interaction options pane */
