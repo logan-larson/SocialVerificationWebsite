@@ -2,7 +2,6 @@ import { MicroType } from "./microType";
 import { Parameter } from "./parameter";
 
 
-//TODO access serverlet to get all microinteraction types from server and store them as micro types, for now these are the hard coded versions
 let microTypes: MicroType[] = [];
 
 //greeter
@@ -14,8 +13,10 @@ microTypes.push(microGreeter);
 
 //ask
 let parameter3 = new Parameter(3, "Question", "question", "The Specific question the robot will ask", "str");
-let parameter4 = new Parameter(4, "Responses the robot can recognize", "answers robot can recognize", "input the answers the robot can recognize the user saying, and then set the state that should be executed following the response", "array");
-let microAsk = new MicroType("Ask", [parameter3, parameter4]);
+let parameter4 = new Parameter(4, "Ready Reponse", "responseReady", "The expeceted response of a human in the Ready state", "str");
+let parameter13 = new Parameter(13, "Not Ready Response", "responseNotReady", "The expected response of a human in the Not Ready state", "str");
+//let parameter4 = new Parameter(4, "Responses the robot can recognize", "answers robot can recognize", "input the answers the robot can recognize the user saying, and then set the state that should be executed following the response", "array");
+let microAsk = new MicroType("Ask", [parameter3, parameter4, parameter13]);
 microTypes.push(microAsk);
 
 //remark
