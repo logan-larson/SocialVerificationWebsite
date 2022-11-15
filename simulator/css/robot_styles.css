@@ -1,0 +1,81 @@
+.robot-box {
+  background-color: #D3D3D3;
+  border: 2px solid black;
+  width: 500px;
+  height: 700px;
+  position: relative;
+  z-index : -1;
+  
+}
+.robot-control-panel {
+  background-color: #308138;
+  position:absolute;
+  width: 500px;
+  height: 200px;
+  top: 716px;
+  left: 24px;
+  
+}
+
+
+
+.bubble-panel {
+  display: inline-block;
+  
+  position: relative;
+  margin: 20px;
+}
+
+
+.bubble {
+  position:absolute;
+  background-color:#ffffff;
+  margin: 0;
+  padding:4px;
+  width:200px;
+  bottom: 420px;
+  border-radius: 20px;
+  -webkit-box-shadow: 0px 0 3px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0px 0 3px rgba(0,0,0,0.25);
+  box-shadow: 0px 0 3px rgba(0,0,0,0.25); 
+  
+  margin-bottom:50px;
+  border: #000000 solid 9px;
+  display: none;
+
+}
+
+.bubble p {
+  margin: 5px;
+}
+
+.bubble:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 31px 14px 0;
+  border-color: #fff transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+  margin-left: -14px;
+  bottom: -15px;
+  left: 100%;
+  transform: rotate(-45deg);
+
+}
+
+.bubble:before {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 39px 22px 0;
+  border-color: #000 transparent;
+  display: block;
+  width: 0;
+  z-index: 0;
+  margin-left: -22px;
+  bottom: -27px;
+  left: 104%;
+  transform: rotate(-45deg);
+}

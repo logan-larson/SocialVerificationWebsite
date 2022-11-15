@@ -1,0 +1,51 @@
+<div id="robot-view-container" class="w-full h-full">
+
+  <div id="robot-view" class="robot-box">
+    <img height="700px" [src]="icon">
+  </div>
+    
+  <!-- Speech bubble-->
+  <div class="bubble-panel" id="bubble-panel">
+    <div class="bubble" id="bubble"></div>
+  </div>
+        
+   
+  <!-- this is for buttons to demo and test-->
+  <div id="robot-tester" class="relative bottom-0 flex justify-center w-full">
+    <button
+      id="btn-ready"
+      class="h-[32px] items-center justify-center flex bg-green-300 px-2 mx-0.5 hover:bg-green-400 rounded hover:cursor-pointer"
+      type="button"
+      (click)="ready()"
+    >
+       Ready
+    </button>
+
+    <button
+      id="btn-not-ready"
+      class="h-[32px] items-center justify-center flex bg-red-300 px-2 mx-0.5 hover:bg-red-400 rounded hover:cursor-pointer"
+      type="button"
+      (click)="notReady()"
+    >
+       Not Ready
+    </button>
+    <button
+      id="btn-play-pause"
+      class="h-[32px] items-center px-2 mx-0.5 justify-center flex bg-blue-300 hover:bg-blue-400 rounded hover:cursor-pointer"
+      type="button"
+      (click)="playPause()"
+    >
+       Play
+    </button>
+
+    <button
+      id="btn-reset"
+      class="h-[32px] px-2 mx-0.5 items-center justify-center flex bg-red-300 hover:bg-red-400 rounded hover:cursor-pointer"
+      type="button"
+      (click)="reset()"
+    >
+       Reset
+    </button>
+      
+  </div>   
+</div>
