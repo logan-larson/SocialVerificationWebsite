@@ -8,6 +8,7 @@ import { Component, OnInit, Input, ElementRef, HostListener } from '@angular/cor
 import { Position } from 'src/app/models/position';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { ContextMenuService } from 'src/app/services/context-menu.service';
+import {ParameterManagerService} from 'src/app/services/parameter-manager.service';
 
 @Component({
   selector: 'app-context-menu',
@@ -43,6 +44,7 @@ export class ContextMenuComponent implements OnInit {
 
   constructor(
     private interactionManager: InteractionManagerService,
+    private parameterManager: ParameterManagerService,
     private contextMenu: ContextMenuService,
     private el: ElementRef
   ) { }
@@ -77,6 +79,9 @@ export class ContextMenuComponent implements OnInit {
 
   removeMicro() {
     this.interactionManager.removeMicro(this.microId);
+    if (this.parameterManager.micro && this.parameterManager.micro.id === this.microId) {
+      this.parameterManager.updateCurrentMicro(undefined);
+    }
   }
 
 }

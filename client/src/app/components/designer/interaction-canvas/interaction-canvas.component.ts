@@ -13,6 +13,7 @@ import { TransitionComponent } from './transition/transition.component';
 import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
 import { MicroInteraction } from 'src/app/models/microInteraction';
 import { MicroComponent } from './micro/micro.component';
+import {ParameterManagerService} from 'src/app/services/parameter-manager.service';
 
 @Component({
   selector: 'app-interaction-canvas',
@@ -56,6 +57,7 @@ export class InteractionCanvasComponent implements OnInit {
 
   constructor(
     private interactionManager: InteractionManagerService,
+    private parameterManager: ParameterManagerService,
     private canvasManager: CanvasManagerService,
     private contextMenu: ContextMenuService,
     private render: Renderer2,
@@ -163,6 +165,10 @@ export class InteractionCanvasComponent implements OnInit {
 
   relayCoords(event: any) {
     this.mousePos = new Position(event.offsetX, event.offsetY);
+  }
+
+  clickOff() {
+    this.parameterManager.updateCurrentMicro(undefined);
   }
 
 }

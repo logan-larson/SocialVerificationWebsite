@@ -34,8 +34,11 @@ export class MicroComponent implements OnInit {
 
   highlightColor: string = 'black';
   isViolating: boolean = false;
+  isSelected: boolean = false;
 
   bgColor: string = 'rgb(209 213 219)';
+
+  microIcon: string = '';
 
   constructor(
     private contextMenu: ContextMenuService,
@@ -49,6 +52,14 @@ export class MicroComponent implements OnInit {
         this.isViolating = true;
       } else {
         this.isViolating = false;
+      }
+    });
+
+    this.parameterManager.getUpdatedMicro.subscribe((m: MicroInteraction) => {
+      if (m && this.micro.id === m.id) {
+        this.isSelected = true;
+      } else {
+        this.isSelected = false;
       }
     });
 
@@ -76,6 +87,7 @@ export class MicroComponent implements OnInit {
     this.micro = m;
     
     this.setBgColor();
+    this.setMicroIcon();
   }
 
   /* Show microinteraction's parameter options in the interaction options pane */
@@ -184,7 +196,6 @@ export class MicroComponent implements OnInit {
   }
 
   setBgColor() {
-    /*
     switch (this.micro.type) {
       case 'Greeter':
         this.bgColor = 'rgb(34 197 94)';
@@ -214,7 +225,10 @@ export class MicroComponent implements OnInit {
         this.bgColor = 'rgb(0 0 0)';
 
     }
-    */
+  }
+
+  setMicroIcon() {
+    this.microIcon = `/assets/${this.micro.type}.png`;
   }
 
   /* Reposition micro in canvas */
