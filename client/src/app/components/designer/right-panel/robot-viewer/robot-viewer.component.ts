@@ -64,7 +64,7 @@ export class RobotViewerComponent implements OnInit {
 
   setupInteraction(interaction: Interaction) {
     if (this.verificationManager.status != 'verified') {
-      alert('The interaction must have no errors to be simulated');
+      alert('The interaction must be verified and have no errors to be simulated');
       this.showParams.emit();
       return;
     }
