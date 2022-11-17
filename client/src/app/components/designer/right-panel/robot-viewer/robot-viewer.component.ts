@@ -128,9 +128,20 @@ export class RobotViewerComponent implements OnInit {
 
   setIcon() {
     if (this.currentNode) {
-      this.icon = `/assets/robotImages/${this.currentNode.type}.png`;
+      switch (this.currentNode.type) {
+        case 'Greeter':
+        case 'Farewell':
+          this.icon = `/assets/robotImages/armRaise.png`;
+          break;
+        case 'Handoff':
+          this.icon = `/assets/robotImages/handoff.png`;
+          break;
+        default:
+          this.icon = `/assets/robotImages/neutral.png`;
+          break;
+      }
     } else {
-      this.icon = '/assets/robotImages/neutralRobot.png';
+      this.icon = '/assets/robotImages/neutral.png';
     }
   }
 
@@ -177,16 +188,19 @@ class Node {
   type: string = 'Greeter';
   onReady: number = -1;
   onNotReady: number = -1;
+  text: string = '';
 
   constructor(
     id: number,
     type: string,
     onReady: number,
-    onNotReady: number
+    onNotReady: number,
+    text: string = ''
   ) {
     this.id = id;
     this.type = type;
     this.onReady = onReady;
     this.onNotReady = onNotReady;
+    this.text = text;
   }
 }
