@@ -12,5 +12,5 @@
     Parameters
   </button>
 </div>
-<app-robot-viewer *ngIf="showSim" class="bg-[#557d83] w-full h-[100%] inline-block"></app-robot-viewer>
+<app-robot-viewer *ngIf="showSim" class="bg-[#557d83] w-full h-full inline-block overflow-hidden" (showParams)="showParams()"></app-robot-viewer>
 <app-interaction-options *ngIf="!showSim" class="w-full h-full"></app-interaction-options>

@@ -51,6 +51,7 @@ export class ActionsBarComponent implements OnInit {
       } else {
         this.status = 'verified';
       }
+      this.verificationManager.status = this.status;
     });
   }
 
@@ -80,6 +81,7 @@ export class ActionsBarComponent implements OnInit {
     this.verificationManager.violationEmitter.emit([]);
     this.canvasManager.setViolatingIds([], []);
     this.status = 'notVerified';
+    this.verificationManager.status = this.status;
   }
 
   saveInteractionToLocal() {

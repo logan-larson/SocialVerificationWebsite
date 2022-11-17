@@ -8,6 +8,7 @@ import { InteractionManagerService } from './interaction-manager.service';
 })
 export class VerificationManagerService {
 
+  status: string = 'notVerified';
   violations: Violation[] = [];
 
   @Output() violationEmitter: EventEmitter<Violation[]> = new EventEmitter<Violation[]>();

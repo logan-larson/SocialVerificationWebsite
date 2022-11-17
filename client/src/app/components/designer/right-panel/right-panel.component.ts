@@ -15,4 +15,7 @@ export class RightPanelComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showParams() {
+    setTimeout(() => this.showSim = false, 0);
+  }
 }

@@ -31,11 +31,17 @@ export class InteractionOptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.parameterManager.getUpdatedMicro.subscribe((m: MicroInteraction | undefined) => {
-      this.micro = m;
-      if (this.micro) {
-        this.paramRes = this.micro.parameterResults;
-      }
+      this.updateMicro(m);
     });
+
+    this.updateMicro(this.parameterManager.micro);
+  }
+
+  updateMicro(micro: MicroInteraction | undefined) {
+    this.micro = micro;
+    if (this.micro) {
+      this.paramRes = this.micro.parameterResults;
+    }
   }
 
   /* Updates the current microinteraction in the interaction model */

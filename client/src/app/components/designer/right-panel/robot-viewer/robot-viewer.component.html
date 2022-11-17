@@ -15,6 +15,7 @@
     <button
       id="btn-ready"
       class="h-[32px] items-center justify-center flex bg-green-300 px-2 mx-0.5 hover:bg-green-400 rounded hover:cursor-pointer"
+      [attr.disabled]="!needHumanInput ? true : null"
       type="button"
       (click)="ready()"
     >
@@ -23,7 +24,8 @@
 
     <button
       id="btn-not-ready"
-      class="h-[32px] items-center justify-center flex bg-red-300 px-2 mx-0.5 hover:bg-red-400 rounded hover:cursor-pointer"
+      class="h-[32px] items-center justify-center flex bg-orange-300 px-2 mx-0.5 hover:bg-orange-400 rounded hover:cursor-pointer"
+      [attr.disabled]="!needHumanInput ? true : null"
       type="button"
       (click)="notReady()"
     >
@@ -35,7 +37,8 @@
       type="button"
       (click)="playPause()"
     >
-       Play
+      <div *ngIf="isPlaying">Pause</div>
+      <div *ngIf="!isPlaying">Play</div>
     </button>
 
     <button
