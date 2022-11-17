@@ -1,7 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {Interaction} from 'src/app/models/interaction';
 import {MicroInteraction} from 'src/app/models/microInteraction';
+import {Transition} from 'src/app/models/transition';
 import {InteractionManagerService} from 'src/app/services/interaction-manager.service';
+import {SimulatorService} from 'src/app/services/simulator.service';
 import {VerificationManagerService} from 'src/app/services/verification-manager.service';
 
 @Component({
@@ -23,18 +25,20 @@ export class RobotViewerComponent implements OnInit {
 
   icon: string = '';
 
-
   interval: any;
+  onSim: boolean = false;
 
 
   @Output() showParams: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     private interactionManager: InteractionManagerService,
-    private verificationManager: VerificationManagerService
+    private verificationManager: VerificationManagerService,
+    private simulator: SimulatorService
   ) { }
 
   ngOnInit(): void {
+    this.onSim = true;
     // Listen for 
     this.interactionManager.getUpdatedInteraction.subscribe((interaction: Interaction) => {
       this.isPlaying = false;
@@ -53,47 +57,68 @@ export class RobotViewerComponent implements OnInit {
       } else {
         console.log('need input');
       }
+
+      if (this.currentNode && this.isPlaying) {
+        this.simulator.updateCurrentMicroId(this.currentNode.id);
+      }
     }, 2000);
 
   }
 
   ngOnDestroy(): void {
     console.log("destroy sim");
+    this.onSim = false;
     clearInterval(this.interval);
   }
 
   setupInteraction(interaction: Interaction) {
+
+    if (!this.onSim) return;
+
     if (this.verificationManager.status != 'verified') {
       alert('The interaction must be verified and have no errors to be simulated');
       this.showParams.emit();
       return;
     }
 
+    this.nodes = [];
+
     interaction.micros.forEach((m: MicroInteraction) => {
       if (m.type) {
-        let n: Node = new Node(m.id, m.type, m.readyTransitionId, m.notReadyTransitionId);
-        if (n.type == 'Greeter')
-          this.startingNode = n;
-        this.nodes.push(n);
+        let rt: Transition | undefined = interaction.transitions.find(t => t.id == m.readyTransitionId);
+        let nrt: Transition | undefined = interaction.transitions.find(t => t.id == m.notReadyTransitionId);
+
+        if (rt && nrt) {
+          let n: Node = new Node(m.id, m.type, rt.secondMicroId, nrt.secondMicroId);
+          if (n.type == 'Greeter')
+            this.startingNode = n;
+          this.nodes.push(n);
+        } else {
+          let n: Node = new Node(m.id, m.type, -1, -1);
+          this.nodes.push(n);
+        }
       }
     });
 
     this.reset();
 
-    console.log(`nodes: ${JSON.stringify(this.nodes)}`);
+    console.log(this.nodes);
     console.log(`current node: ${JSON.stringify(this.currentNode)}`);
   }
 
   updateInteraction() {
     if (this.humanReady) {
       this.currentNode = this.nodes.find(n => n.id == this.currentNode?.onReady);
+      this.needInput();
       console.log(`ready node: ${JSON.stringify(this.currentNode)}`);
     } else if (this.humanNotReady) {
       this.currentNode = this.nodes.find(n => n.id == this.currentNode?.onNotReady);
+      this.needInput();
       console.log(`not ready node: ${JSON.stringify(this.currentNode)}`);
     } else {
       // TODO Check this
-      this.needHumanInput = true;
+      //this.needHumanInput = true;
+      this.needInput();
       console.log(`need human input`);
       return;
     }
@@ -107,6 +132,12 @@ export class RobotViewerComponent implements OnInit {
     } else {
       this.icon = '/assets/robotImages/neutralRobot.png';
     }
+  }
+
+  needInput() {
+    this.humanReady = false;
+    this.humanNotReady = false;
+    this.needHumanInput = true;
   }
 
   ready() {

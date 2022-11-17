@@ -12,6 +12,7 @@ import { ParameterManagerService } from 'src/app/services/parameter-manager.serv
 import { CanvasManagerService } from 'src/app/services/canvas-manager.service';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
+import {SimulatorService} from 'src/app/services/simulator.service';
 
 @Component({
   selector: 'app-micro',
@@ -44,7 +45,8 @@ export class MicroComponent implements OnInit {
     private contextMenu: ContextMenuService,
     private canvasManager: CanvasManagerService,
     private interactionManager: InteractionManagerService,
-    private parameterManager: ParameterManagerService
+    private parameterManager: ParameterManagerService,
+    private simulator: SimulatorService
   ) {
     this.canvasManager.getViolatingIds.subscribe(n => {
       this.setHightlightColor('black');
@@ -62,6 +64,14 @@ export class MicroComponent implements OnInit {
         this.isSelected = false;
       }
     });
+
+    this.simulator.getCurrentMicroId.subscribe(id => {
+      if (this.micro.id == id) {
+        this.isSelected = true;
+      } else {
+        this.isSelected = false;
+      }
+    })
 
     // While adding a transition if cursor is on a micro, set
 
