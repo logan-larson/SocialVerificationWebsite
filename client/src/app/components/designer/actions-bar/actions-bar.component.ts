@@ -5,6 +5,7 @@ normal program.
 */
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {Interaction} from 'src/app/models/interaction';
 import {Violation} from 'src/app/models/violation';
 import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
@@ -42,6 +43,10 @@ export class ActionsBarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.interactionManager.getUpdatedInteraction.subscribe((inter: Interaction) => {
+      this.status = 'notVerified';
+      this.verificationManager.status = this.status;
+    });
   }
 
   verifyModel() {

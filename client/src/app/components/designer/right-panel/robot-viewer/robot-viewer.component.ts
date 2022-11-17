@@ -27,6 +27,7 @@ export class RobotViewerComponent implements OnInit {
 
   interval: any;
   onSim: boolean = false;
+  showAlert: boolean = true;
 
 
   @Output() showParams: EventEmitter<void> = new EventEmitter<void>();
@@ -38,14 +39,16 @@ export class RobotViewerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.showAlert = true;
     this.onSim = true;
+
     // Listen for 
     this.interactionManager.getUpdatedInteraction.subscribe((interaction: Interaction) => {
       this.isPlaying = false;
-      this.setupInteraction(interaction);
+      this.setupInteraction(interaction, false);
     });
 
-    this.setupInteraction(this.interactionManager.interaction);
+    this.setupInteraction(this.interactionManager.interaction, true);
 
     this.setIcon();
 
@@ -53,9 +56,9 @@ export class RobotViewerComponent implements OnInit {
       if (this.isPlaying && !this.needHumanInput) {
         this.updateInteraction();
       } else if (!this.isPlaying) {
-        console.log('paused');
+        //console.log('paused');
       } else {
-        console.log('need input');
+        //console.log('need input');
       }
 
       if (this.currentNode && this.isPlaying) {
@@ -71,13 +74,19 @@ export class RobotViewerComponent implements OnInit {
     clearInterval(this.interval);
   }
 
-  setupInteraction(interaction: Interaction) {
+  setupInteraction(interaction: Interaction, isInitialSetup: boolean) {
 
     if (!this.onSim) return;
 
-    if (this.verificationManager.status != 'verified') {
-      alert('The interaction must be verified and have no errors to be simulated');
+    if (this.verificationManager.status != 'verified' && this.showAlert) {
       this.showParams.emit();
+      this.showAlert = false;
+      //setTimeout(() => alert("no errors"), 20);
+      if (isInitialSetup) {
+        alert('The interaction must be verified and have no errors to be simulated');
+      } else {
+        alert('The interaction must be reverified to be simulated');
+      }
       return;
     }
 
