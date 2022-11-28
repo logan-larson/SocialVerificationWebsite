@@ -12,7 +12,7 @@
       </div>
       <div 
         [style.visibility]="verifyTooltip"
-        class="absolute z-1 bg-black text-white text-center rounded py-1 w-[180px] top-[35px] left-0">
+        class="absolute z-1 bg-black text-white text-center rounded py-1 w-[180px] top-[35px] left-0 z-10">
         Verify current model
       </div>
     </div>
@@ -115,7 +115,7 @@
       </div>
       <div 
         [style.visibility]="notVerifiedTooltip"
-        class="absolute z-1 bg-black w-[150px] text-white text-center rounded py-1 top-[35px] right-0">
+        class="absolute z-10 bg-black w-[150px] text-white text-center rounded py-1 top-[35px] right-0">
         Model not verified
       </div>
     </div>
@@ -135,7 +135,7 @@
       </div>
       <div 
         [style.visibility]="verifiedTooltip"
-        class="absolute z-1 bg-black w-[200px] text-white text-center rounded py-1 top-[35px] right-0">
+        class="absolute z-10 bg-black w-[200px] text-white text-center rounded py-1 top-[35px] right-0">
         No errors found in model
       </div>
     </div>
@@ -155,7 +155,7 @@
       </div>
       <div 
         [style.visibility]="errorsTooltip"
-        class="absolute z-1 bg-black w-[180px] text-white text-center rounded py-1 top-[35px] right-0">
+        class="absolute z-10 bg-black w-[180px] text-white text-center rounded py-1 top-[35px] right-0">
         Errors present in model
       </div>
     </div>

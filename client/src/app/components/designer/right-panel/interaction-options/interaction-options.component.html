@@ -18,7 +18,13 @@
   <ng-template #save>
     <div class="flex items-center justify-center w-full">
       <button
-        class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
+        [ngClass]="{
+          'bg-gray-400': saveIsDisabled === true,
+          'hover:bg-gray-400': saveIsDisabled === true,
+          'bg-blue-600': saveIsDisabled === false,
+          'hover:bg-blue-700': saveIsDisabled === false
+        }"
+        class="px-3 py-1.5 rounded-md text-white shadow mx-0.5"
         (click)="saveOptions()"
       >Save</button>
     </div>

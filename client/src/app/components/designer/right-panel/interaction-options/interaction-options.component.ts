@@ -23,11 +23,14 @@ export class InteractionOptionsComponent implements OnInit {
   micro: MicroInteraction | undefined;
   paramRes: ParameterResult[] = [];
 
+  saveIsDisabled: boolean;
 
   constructor(
     private parameterManager: ParameterManagerService,
     private interactionManager: InteractionManagerService
-  ) { }
+  ) {
+    this.saveIsDisabled = true;
+  }
 
   ngOnInit(): void {
     this.parameterManager.getUpdatedMicro.subscribe((m: MicroInteraction | undefined) => {
@@ -35,6 +38,7 @@ export class InteractionOptionsComponent implements OnInit {
     });
 
     this.updateMicro(this.parameterManager.micro);
+
   }
 
   updateMicro(micro: MicroInteraction | undefined) {
@@ -46,9 +50,10 @@ export class InteractionOptionsComponent implements OnInit {
 
   /* Updates the current microinteraction in the interaction model */
   saveOptions() {
-    if (this.micro) {
+    if (this.micro && this.saveIsDisabled === false) {
       this.micro.parameterResults = this.paramRes;
       this.interactionManager.updateMicro(this.micro);
+      this.saveIsDisabled = true;
     }
   }
 
@@ -56,6 +61,7 @@ export class InteractionOptionsComponent implements OnInit {
      Called by the child components
   */
   setResults(idx: number, result: ParameterResult) {
+    this.saveIsDisabled = false;
     this.paramRes[idx] = result;
   }
 }
