@@ -217,7 +217,7 @@ export class MicroComponent implements OnInit {
         this.bgColor = 'rgb(96 165 250)';
         break;
       case 'Remark':
-        this.bgColor = 'rgb(244 114 182)';
+        this.bgColor = 'rgb(45 212 191)';
         break;
       case 'Instruction':
         this.bgColor = 'rgb(252 211 77)';
@@ -226,13 +226,13 @@ export class MicroComponent implements OnInit {
         this.bgColor = 'rgb(100 116 139)';
         break;
       case 'Answer':
-        this.bgColor = 'rgb(147 51 234)';
+        this.bgColor = 'rgb(168 85 247)';
         break;
       case 'Wait':
         this.bgColor = 'rgb(251 146 60)';
         break;
       case 'Farewell':
-        this.bgColor = 'rgb(248 113 113)';
+        this.bgColor = 'rgb(244 114 182)';
         break;
       default:
         this.bgColor = 'rgb(0 0 0)';

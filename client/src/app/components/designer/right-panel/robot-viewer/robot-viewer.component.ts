@@ -85,7 +85,7 @@ export class RobotViewerComponent implements OnInit {
       if (isInitialSetup) {
         alert('The interaction must be verified and have no errors to be simulated');
       } else {
-        alert('The interaction must be reverified to be simulated');
+        //alert('The interaction must be reverified to be simulated');
       }
       return;
     }
