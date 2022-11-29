@@ -26,11 +26,26 @@ export class CanvasManagerService {
   // Used when adding a transition for locking onto a micros anchor
   onMicro: boolean = false;
 
+  isDarkMode: boolean = false;
+  @Output() getIsDarkMode: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   constructor() { }
 
   setViolatingIds(violatingMicroIds: number[], violatingTransitionIds: number[]) {
     this.violatingMicroIds = violatingMicroIds;
     this.violatingTransitionIds = violatingTransitionIds;
     this.getViolatingIds.emit();
+  }
+
+  setTheme(isDarkMode: boolean): void {
+    this.isDarkMode = isDarkMode;
+    localStorage.setItem('isDarkMode', this.isDarkMode ? 'true' : 'false');
+    this.getIsDarkMode.emit(this.isDarkMode);
+  }
+  
+  changeTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    localStorage.setItem('isDarkMode', this.isDarkMode ? 'true' : 'false');
+    this.getIsDarkMode.emit(this.isDarkMode);
   }
 }

@@ -1,21 +1,50 @@
 /** @type {import('tailwindcss').Config} */
+//import { colors } from 'tailwindcss/colors';
+//const colors = require('tailwindcss/colors');
+
 module.exports = {
+  darkMode: 'class',
   content: [
     './src/**/*.{html,ts}'
   ],
   theme: {
+    colors: {
+      // Light theme colors
+      'primary': '#D1D5DB',
+      'primary-hover': '#9CA0A4',
+      'secondary': '#FFF',
+      'light-theme': '#FFF',
+      'light-text': '#000',
+
+
+      // Dark theme colors
+      'dark-primary': '#686A6E',
+      'dark-primary-hover': '#4E4F52',
+      'dark-secondary': '#424242',
+      'dark-theme': '#424242',
+      'dark-text': '#F1F1F1',
+
+      // Universal colors
+      'black': '#000',
+      'white': '#FFF',
+      'amber': '#F59E0B',
+      'green': '#22C55E',
+      'red': '#EF4444',
+        
+      'greeter': '#009E73',
+      'ask': '#60A5FA',
+      'remark': '#2DD4BF',
+      'instruction': '#FCD34D',
+      'handoff': '#64748B',
+      'answer': '#A855F7',
+      'wait': '#FB923C',
+      'farewell': '#F472B6',
+    },
     extend: {
       boxShadow: {
+        'selected': '0 0 5px 5px',
         'violating': '0 0 5px 5px red',
-        'greeter': '0 0 5px 5px rgb(34 197 94)',
-        'ask': '0 0 5px 5px rgb(96 165 250)',
-        'remark': '0 0 5px 5px rgb(45 212 191)',
-        'instruction': '0 0 5px 5px rgb(252 211 77)',
-        'handoff': '0 0 5px 5px rgb(100 116 139)',
-        'answer': '0 0 5px 5px rgb(168 85 247)',
-        'wait': '0 0 5px 5px rgb(251 146 60)',
-        'farewell': '0 0 5px 5px rgb(244 114 182)'
-      }
+      },
     },
   },
   plugins: [],

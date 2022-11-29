@@ -13,20 +13,25 @@
   (contextmenu)="showContextMenu($event)"
   class="absolute z-10 w-24 p-1 mb-2 text-center align-middle bg-gray-300 h-36 rounded-xl"
   [ngClass]="{
-    'shadow-greeter': micro.type === 'Greeter' && isSelected === true,
-    'shadow-ask': micro.type === 'Ask' && isSelected === true,
-    'shadow-remark': micro.type === 'Remark' && isSelected === true,
-    'shadow-instruction': micro.type === 'Instruction' && isSelected === true,
-    'shadow-handoff': micro.type === 'Handoff' && isSelected === true,
-    'shadow-answer': micro.type === 'Answer' && isSelected === true,
-    'shadow-wait': micro.type === 'Wait' && isSelected === true,
-    'shadow-farewell': micro.type === 'Farewell' && isSelected === true,
+    'shadow-selected': isSelected === true,
+    'shadow-greeter': micro.type === 'Greeter',
+    'shadow-ask': micro.type === 'Ask',
+    'shadow-remark': micro.type === 'Remark',
+    'shadow-instruction': micro.type === 'Instruction',
+    'shadow-handoff': micro.type === 'Handoff',
+    'shadow-answer': micro.type === 'Answer',
+    'shadow-wait': micro.type === 'Wait',
+    'shadow-farewell': micro.type === 'Farewell',
     'shadow-violating': isViolating === true
   }"
 >
+<!--[style.background-color]='bgColor'-->
   <div
-    [style.background-color]='bgColor'
+    
     class="w-full p-1 text-center align-middle rounded-xl"
+    [ngClass]="{
+      'bg-blue-cb': true
+    }"
   >
     {{micro.type}}
   </div>

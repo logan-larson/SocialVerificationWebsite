@@ -28,6 +28,7 @@ export class ActionsBarComponent implements OnInit {
   saveTooltip: string = 'hidden';
   loadTooltip: string = 'hidden';
   clearTooltip: string = 'hidden';
+  changeTooltip: string = 'hidden';
 
   status: string = 'notVerified';
   notVerifiedTooltip: string = 'hidden';
@@ -91,5 +92,9 @@ export class ActionsBarComponent implements OnInit {
 
   saveInteractionToLocal() {
     this.interactionManager.saveInteractionToLocal();
+  }
+
+  changeTheme() {
+    this.canvasManager.changeTheme();
   }
 }
