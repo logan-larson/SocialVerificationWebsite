@@ -30,6 +30,10 @@ module.exports = {
       'amber': '#F59E0B',
       'green': '#22C55E',
       'red': '#EF4444',
+      'red-800': '#991b1b',
+      'amber-cb': '#FFB02A',
+      'green-cb': '#46F787',
+      'red-cb': '#F95B5B',
         
       'greeter': '#009E73',
       'ask': '#60A5FA',

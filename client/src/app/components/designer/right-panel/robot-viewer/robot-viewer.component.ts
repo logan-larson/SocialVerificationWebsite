@@ -29,6 +29,7 @@ export class RobotViewerComponent implements OnInit {
   onSim: boolean = false;
   showAlert: boolean = true;
 
+  disableSim: boolean = true;
 
   @Output() showParams: EventEmitter<void> = new EventEmitter<void>();
 
@@ -79,11 +80,15 @@ export class RobotViewerComponent implements OnInit {
     if (!this.onSim) return;
 
     if (this.verificationManager.status != 'verified' && this.showAlert) {
+      // Disable the simulator until user verifies model
+      this.disableSim = true;
+
+
       this.showParams.emit();
       this.showAlert = false;
       //setTimeout(() => alert("no errors"), 20);
       if (isInitialSetup) {
-        alert('The interaction must be verified and have no errors to be simulated');
+        //alert('The interaction must be verified and have no errors to be simulated');
       } else {
         //alert('The interaction must be reverified to be simulated');
       }
