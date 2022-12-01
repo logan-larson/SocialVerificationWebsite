@@ -4,8 +4,8 @@
     Simulator
   </div>
 
-  <div id="robot-view" class="robot-box">
-    <img height="350px" [src]="icon">
+  <div id="robot-view" class="robot-box grid place-items-center">
+    <img width="200px" [src]="icon">
   </div>
     
   <!-- Speech bubble-->
@@ -18,7 +18,7 @@
   <div id="robot-tester" class="relative bottom-0 flex justify-center w-full">
     <button
       id="btn-ready"
-      class="h-[32px] items-center justify-center flex bg-green-300 px-2 mx-0.5 hover:bg-green-400 rounded hover:cursor-pointer"
+      class="h-[32px] items-center justify-center flex bg-green px-2 mx-0.5 hover:bg-green-hover rounded hover:cursor-pointer"
       [attr.disabled]="!needHumanInput ? true : null"
       type="button"
       (click)="ready()"
@@ -28,7 +28,7 @@
 
     <button
       id="btn-not-ready"
-      class="h-[32px] items-center justify-center flex bg-orange-300 px-2 mx-0.5 hover:bg-orange-400 rounded hover:cursor-pointer"
+      class="h-[32px] items-center justify-center flex bg-amber px-2 mx-0.5 hover:bg-amber-hover rounded hover:cursor-pointer"
       [attr.disabled]="!needHumanInput ? true : null"
       type="button"
       (click)="notReady()"
@@ -37,8 +37,13 @@
     </button>
     <button
       id="btn-play-pause"
-      class="h-[32px] items-center px-2 mx-0.5 justify-center flex bg-blue-300 hover:bg-blue-400 rounded hover:cursor-pointer"
+      class="h-[32px] items-center px-2 mx-0.5 justify-center flex rounded hover:cursor-pointer"
       type="button"
+      [ngClass]="{
+                  'bg-primary': canPlay == false,
+                  'bg-blue': canPlay,
+                  'hover:bg-blue-hover': canPlay
+      }"
       (click)="playPause()"
     >
       <div *ngIf="isPlaying">Pause</div>
@@ -47,7 +52,7 @@
 
     <button
       id="btn-reset"
-      class="h-[32px] px-2 mx-0.5 items-center justify-center flex bg-red-300 hover:bg-red-400 rounded hover:cursor-pointer"
+      class="h-[32px] px-2 mx-0.5 items-center justify-center flex bg-red hover:bg-red-hover rounded hover:cursor-pointer"
       type="button"
       (click)="reset()"
     >

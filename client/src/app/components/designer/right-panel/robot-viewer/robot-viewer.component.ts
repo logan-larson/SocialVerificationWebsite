@@ -17,6 +17,7 @@ export class RobotViewerComponent implements OnInit {
   startingNode: Node | undefined = undefined;
 
   isPlaying: boolean = false;
+  canPlay: boolean = false;
   currentNode: Node | undefined = undefined;
 
   needHumanInput: boolean = false;
@@ -26,10 +27,7 @@ export class RobotViewerComponent implements OnInit {
   icon: string = '';
 
   interval: any;
-  onSim: boolean = false;
   showAlert: boolean = true;
-
-  disableSim: boolean = true;
 
   @Output() showParams: EventEmitter<void> = new EventEmitter<void>();
 
@@ -40,16 +38,25 @@ export class RobotViewerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.showAlert = true;
-    this.onSim = true;
+
+    this.verificationManager.violationEmitter.subscribe(v => {
+      if (v.length == 0) {
+        this.setupInteraction(this.interactionManager.interaction);
+        this.canPlay = true;
+      } else {
+        this.canPlay = false;
+      }
+    });
 
     // Listen for 
     this.interactionManager.getUpdatedInteraction.subscribe((interaction: Interaction) => {
       this.isPlaying = false;
-      this.setupInteraction(interaction, false);
+      this.canPlay = false;
+      console.log("init setup, canPlay = false");
+      this.setupInteraction(interaction);
     });
 
-    this.setupInteraction(this.interactionManager.interaction, true);
+    this.setupInteraction(this.interactionManager.interaction);
 
     this.setIcon();
 
@@ -70,30 +77,10 @@ export class RobotViewerComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    console.log("destroy sim");
-    this.onSim = false;
     clearInterval(this.interval);
   }
 
-  setupInteraction(interaction: Interaction, isInitialSetup: boolean) {
-
-    if (!this.onSim) return;
-
-    if (this.verificationManager.status != 'verified' && this.showAlert) {
-      // Disable the simulator until user verifies model
-      this.disableSim = true;
-
-
-      this.showParams.emit();
-      this.showAlert = false;
-      //setTimeout(() => alert("no errors"), 20);
-      if (isInitialSetup) {
-        //alert('The interaction must be verified and have no errors to be simulated');
-      } else {
-        //alert('The interaction must be reverified to be simulated');
-      }
-      return;
-    }
+  setupInteraction(interaction: Interaction) {
 
     this.nodes = [];
 
@@ -184,7 +171,11 @@ export class RobotViewerComponent implements OnInit {
   }
 
   playPause() {
-    this.isPlaying = !this.isPlaying;
+    if (this.canPlay) {
+      this.isPlaying = !this.isPlaying;
+    } else {
+      alert("You must verify the model -- PLACEHOLDER");
+    }
   }
 
   reset() {

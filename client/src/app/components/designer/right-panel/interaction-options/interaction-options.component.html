@@ -24,9 +24,8 @@
         <button
           [ngClass]="{
             'bg-primary dark:bg-dark-primary': saveIsDisabled === true,
-            'hover:bg-primary-hover dark:hover:bg-dark-primary-hover': saveIsDisabled === true,
-            'bg-remark': saveIsDisabled === false,
-            'hover:bg-greeter': saveIsDisabled === false
+            'bg-blue': saveIsDisabled === false,
+            'hover:bg-blue-hover': saveIsDisabled === false
           }"
           class="px-3 py-1.5 rounded-md text-white shadow mx-0.5"
           (click)="saveOptions()"
