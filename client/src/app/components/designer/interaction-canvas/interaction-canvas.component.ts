@@ -32,9 +32,9 @@ export class InteractionCanvasComponent implements OnInit {
   contextMenuComponent: ContextMenuComponent | null = null;
 
   @ViewChild("canvas", { read: ViewContainerRef})
-  container!: ViewContainerRef;
+  container!: ViewContainerRef; // contents in codepen
 
-  @ViewChild("canvasContainer") canvasContainer!: ElementRef;
+  @ViewChild("canvasContainer") canvasContainer!: ElementRef; // grid in codepen
 
   // Components contained in container
   components: ComponentRef<any>[] = [];
@@ -43,10 +43,70 @@ export class InteractionCanvasComponent implements OnInit {
 
   mousePos: Position = new Position();
 
+  /* Zooming and panning */
+  containerRect: any;
+  panningAllowed: boolean = false;
+
+  spaceHeld: boolean = false;
+  zoom: number = 1;
+
+  translate: { scale: number, translateX: number, translateY: number } = { scale: 0, translateX: 0, translateY: 0 };
+  initialContentPos: Position = new Position();
+  initialZoomPos: Position = new Position();
+  pinnedMousePos: Position = new Position();
+  //mousePos: Position = new Position();
+
   // Load JSON stored in local storage
   @HostListener('window:load', ['$event'])
   onLoadHander() {
     this.interactionManager.loadInteractionFromLocal();
+  }
+
+  @HostListener("wheel", ['$event'])
+  onWheel(event: WheelEvent) {
+
+    if (this.zoom + (event.deltaY / 5000) > 2 || this.zoom + (event.deltaY / 5000) < 0.6) {
+      return;
+    }
+
+    const oldZoom: number = this.zoom;
+
+    this.zoom -= (event.deltaY / 5000);
+
+    this.mousePos = new Position(event.offsetX - this.containerRect.x, event.offsetY - this.containerRect.y);
+
+    this.translate.scale = this.zoom;
+
+    const contentMousePos: Position = new Position(this.mousePos.x - this.translate.translateX, this.mousePos.y - this.translate.translateY);
+    const pos: Position = new Position(this.mousePos.x - (contentMousePos.x * (this.zoom / oldZoom)), this.mousePos.y - (contentMousePos.y * (this.zoom / oldZoom)));
+
+    this.translate.translateX = pos.x;
+    this.translate.translateY = pos.y;
+
+    this.updatePanZoom();
+    /*
+    if (event.deltaY > 0) {
+      if (this.zoom > 0.6) {
+        this.canvasContainer.nativeElement.style.transform = `scale(${this.zoom -= 0.1})`;
+      }
+    } else {
+      if (this.zoom < 2) {
+        this.canvasContainer.nativeElement.style.transform = `scale(${this.zoom += 0.1})`;
+      }
+    }
+    */
+  }
+
+  @HostListener('document:keydown.space', ['$event'])
+  onSpaceDown(event: KeyboardEvent) {
+    event.preventDefault();
+    this.spaceHeld = true;
+  }
+
+  @HostListener('document:keyup.space', ['$event'])
+  onSpaceUp(event: KeyboardEvent) {
+    event.preventDefault();
+    this.spaceHeld = false;
   }
 
   // Save JSON to local storage
@@ -71,12 +131,16 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+
     this.render.listen('window', 'load', () => {
       this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
 
       // Set canvas offset in canvasManager OnLoad
       this.canvasManager.canvasOffset = this.position;
       this.canvasManager.canvasScrollOffset = this.scrollPosition;
+
+      this.containerRect = this.canvasContainer.nativeElement.getBoundingClientRect();
     });
 
     // Listen for microupdates and adjust them as needed
@@ -138,9 +202,43 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   updateScrollOffset(event: any) {
-    this.scrollPosition.x = event.target.scrollLeft;
-    this.scrollPosition.y = event.target.scrollTop;
+    if (this.spaceHeld) {
+      //event.stopPropagation();
+      //event.preventDefault();
+      console.log("preventing scroll?");
+    } else {
+      this.scrollPosition.x = event.target.scrollLeft;
+      this.scrollPosition.y = event.target.scrollTop;
+    }
   }
+
+  startPan(event: any) {
+    this.initialContentPos = new Position(this.translate.translateX, this.translate.translateY);
+    this.pinnedMousePos = new Position(event.offsetX, event.offsetY);
+    this.panningAllowed = true;
+  }
+
+  relayCoords(event: any) {
+    //this.mousePos = new Position(event.offsetX, event.offsetY);
+    this.mousePos = new Position(event.offsetX, event.offsetY);
+    if (this.panningAllowed) {
+      const diffX = (this.mousePos.x - this.pinnedMousePos.x);
+      const diffY = (this.mousePos.y - this.pinnedMousePos.y);
+      this.translate.translateX = this.initialContentPos.x + diffX;
+      this.translate.translateY = this.initialContentPos.y + diffY;
+    }
+    this.updatePanZoom();
+  }
+
+  endPan(_: any) {
+    this.panningAllowed = false;
+  }
+
+  updatePanZoom() {
+    const matrix = `matrix(${this.translate.scale}, 0, 0, ${this.translate.scale}, ${this.translate.translateX}, ${this.translate.translateY})`;
+    this.canvasContainer.nativeElement.style.transform = matrix;
+  }
+  
 
   /* CONTEXT MENU */
 
@@ -163,9 +261,6 @@ export class InteractionCanvasComponent implements OnInit {
     this.interactionManager.addMicro(event.offsetX - 48, event.offsetY - 48);
   }
 
-  relayCoords(event: any) {
-    this.mousePos = new Position(event.offsetX, event.offsetY);
-  }
 
   clickOff() {
     this.parameterManager.updateCurrentMicro(undefined);

@@ -1,11 +1,13 @@
 <div
   #canvasContainer
-  class="relative w-full h-full overflow-scroll bounding-canvas"
+  class="relative w-full h-full overflow-hidden bounding-canvas"
   (scroll)="updateScrollOffset($event)"
 >
   <div
     #canvas
     class="h-[3000px] w-[5000px]"
+    (mousedown)="startPan($event)"
+    (mouseup)="endPan($event)"
     (mousemove)="relayCoords($event)"
     (dragover)="allowDrop($event)"
     (drop)="addMicro($event)"
