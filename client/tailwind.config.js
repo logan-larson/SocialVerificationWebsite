@@ -45,6 +45,7 @@ module.exports = {
       'remark': '#2DD4BF',
       'instruction': '#FCD34D',
       'handoff': '#64748B',
+      'handoff-dark': '#FFF',
       'answer': '#A855F7',
       'wait': '#FB923C',
       'farewell': '#F472B6',

@@ -19,6 +19,7 @@
     'shadow-remark': micro.type === 'Remark' && !isViolating,
     'shadow-instruction': micro.type === 'Instruction' && !isViolating,
     'shadow-handoff': micro.type === 'Handoff' && !isViolating,
+    'dark:shadow-handoff-dark': micro.type === 'Handoff' && !isViolating,
     'shadow-answer': micro.type === 'Answer' && !isViolating,
     'shadow-wait': micro.type === 'Wait' && !isViolating,
     'shadow-farewell': micro.type === 'Farewell' && !isViolating,
@@ -35,6 +36,7 @@
       'bg-remark': micro.type === 'Remark',
       'bg-instruction': micro.type === 'Instruction',
       'bg-handoff': micro.type === 'Handoff',
+      'dark:bg-handoff-dark': micro.type === 'Handoff',
       'bg-answer': micro.type === 'Answer',
       'bg-wait': micro.type === 'Wait',
       'bg-farewell': micro.type === 'Farewell'
