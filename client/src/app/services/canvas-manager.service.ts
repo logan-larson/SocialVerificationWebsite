@@ -29,6 +29,8 @@ export class CanvasManagerService {
   isDarkMode: boolean = false;
   @Output() getIsDarkMode: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  zoomLevel: number = 1;
+
   constructor() { }
 
   setViolatingIds(violatingMicroIds: number[], violatingTransitionIds: number[]) {

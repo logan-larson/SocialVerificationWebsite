@@ -52,7 +52,7 @@ export class RobotViewerComponent implements OnInit {
     this.interactionManager.getUpdatedInteraction.subscribe((interaction: Interaction) => {
       this.isPlaying = false;
       this.canPlay = false;
-      console.log("init setup, canPlay = false");
+      //console.log("init setup, canPlay = false");
       this.setupInteraction(interaction);
     });
 
@@ -103,24 +103,24 @@ export class RobotViewerComponent implements OnInit {
 
     this.reset();
 
-    console.log(this.nodes);
-    console.log(`current node: ${JSON.stringify(this.currentNode)}`);
+    //console.log(this.nodes);
+    //console.log(`current node: ${JSON.stringify(this.currentNode)}`);
   }
 
   updateInteraction() {
     if (this.humanReady) {
       this.currentNode = this.nodes.find(n => n.id == this.currentNode?.onReady);
       this.needInput();
-      console.log(`ready node: ${JSON.stringify(this.currentNode)}`);
+      //console.log(`ready node: ${JSON.stringify(this.currentNode)}`);
     } else if (this.humanNotReady) {
       this.currentNode = this.nodes.find(n => n.id == this.currentNode?.onNotReady);
       this.needInput();
-      console.log(`not ready node: ${JSON.stringify(this.currentNode)}`);
+      //console.log(`not ready node: ${JSON.stringify(this.currentNode)}`);
     } else {
       // TODO Check this
       //this.needHumanInput = true;
       this.needInput();
-      console.log(`need human input`);
+      //console.log(`need human input`);
       return;
     }
 
@@ -154,7 +154,7 @@ export class RobotViewerComponent implements OnInit {
 
   ready() {
     if (this.needHumanInput) {
-      console.log('ready click');
+      //console.log('ready click');
       this.humanReady = true;
       this.humanNotReady = false;
       this.needHumanInput = false;
@@ -163,7 +163,7 @@ export class RobotViewerComponent implements OnInit {
 
   notReady() {
     if (this.needHumanInput) {
-      console.log('not ready click');
+      //console.log('not ready click');
       this.humanReady = false;
       this.humanNotReady = true;
       this.needHumanInput = false;

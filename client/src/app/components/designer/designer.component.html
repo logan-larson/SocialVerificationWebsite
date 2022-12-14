@@ -1,19 +1,19 @@
-<app-actions-bar class="flex p-2 border-b-2 border-black bg-primary dark:bg-dark-primary box-border"></app-actions-bar>
+<app-actions-bar class="flex p-2 border-b-2 border-black bg-primary dark:bg-dark-primary box-border relative z-30"></app-actions-bar>
 
 <div id="main-content" class="flex">
 
   <div id="left-side" class="flex flex-col w-[75%]">
 
     <div class="flex">
-      <app-microinteraction-selector class="min-w-[160px] resize-x overflow-hidden h-full border-r-2 border-black col-span-1 bg-secondary dark:bg-dark-secondary"></app-microinteraction-selector>
-      <app-interaction-canvas class="w-[85%] h-[69vh] bg-secondary dark:bg-dark-secondary overflow-hidden"></app-interaction-canvas>
+      <app-microinteraction-selector class="relative min-w-[160px] resize-x overflow-hidden h-full border-r-2 border-black col-span-1 bg-secondary dark:bg-dark-secondary z-20"></app-microinteraction-selector>
+      <app-interaction-canvas class="relative w-full h-[69vh] bg-secondary dark:bg-dark-secondary overflow-hidden"></app-interaction-canvas>
     </div>
 
-    <app-violation-output class="h-full col-span-9 bg-secondary dark:bg-dark-secondary"></app-violation-output>
+    <app-violation-output class="relative z-10 h-full col-span-9 bg-secondary dark:bg-dark-secondary"></app-violation-output>
 
   </div>
 
-  <div id="right-side" class="flex flex-col w-[25%] border-l-2 border-black bg-secondary dark:bg-dark-secondary">
+  <div id="right-side" class="relative z-10 flex flex-col w-[25%] border-l-2 border-black bg-secondary dark:bg-dark-secondary">
 
     <app-interaction-options class="flex-1 w-full border-b-2 border-black grow-1 bg-secondary dark:bg-dark-secondary"></app-interaction-options>
     <app-robot-viewer class="flex-1 w-full overflow-hidden grow-1 bg-secondary dark:bg-dark-secondary"></app-robot-viewer>

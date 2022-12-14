@@ -40,6 +40,7 @@ export class MicroComponent implements OnInit {
   bgColor: string = 'rgb(209 213 219)';
 
   microIcon: string = '';
+  isHovering: boolean = false;
 
   constructor(
     private contextMenu: ContextMenuService,
@@ -250,8 +251,11 @@ export class MicroComponent implements OnInit {
     let rect = event.source.getRootElement().getBoundingClientRect();
 
     // Set the local position on drag start
-    this.microPos.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
-    this.microPos.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
+
+    this.microPos.x = rect.x;// * (1 / this.canvasManager.zoomLevel);
+    this.microPos.y = rect.y;// * (1 / this.canvasManager.zoomLevel);
+
+    console.log(this.microPos);
 
     //this.interactionManager.updateMicro(this.micro);
     this.dragDistance = new Position();
@@ -263,22 +267,28 @@ export class MicroComponent implements OnInit {
     // Update the micro position based on distance traveled
     //this.microPos.x += event.distance.x;
     //this.microPos.y += event.distance.y;
+    //this.dragDistance = new Position((event.distance.x * this.canvasManager.zoomLevel), (event.distance.y * this.canvasManager.zoomLevel));
     this.dragDistance = new Position(event.distance.x, event.distance.y);
   }
 
   droppedMicro(event: CdkDragEnd) {
     // Set the anchor position on drag start
+
+
+    //let rect = event.source.getRootElement().getBoundingClientRect();
+    //console.log(`x: ${rect.x}, y: ${rect.y}\nxMod: ${rect.x * (1 / this.canvasManager.zoomLevel)}, yMod: ${rect.y * (1 / this.canvasManager.zoomLevel)}`);
+    this.micro.position.x = this.microPos.x + (this.dragDistance.x * (1 / this.canvasManager.zoomLevel)) - this.canvasManager.canvasOffset.x;
+    this.micro.position.y = this.microPos.y + (this.dragDistance.y * (1 / this.canvasManager.zoomLevel)) - this.canvasManager.canvasOffset.y;
+    //this.micro.position.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
+    //this.micro.position.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
+
+    //this.micro.anchorPosition.x = rect.x + this.canvasManager.canvasScrollOffset.x;
+    //this.micro.anchorPosition.y = rect.y + this.canvasManager.canvasScrollOffset.y;
+
     this.dragDistance = new Position();
     this.interactionManager.currentDragMid = -1;
     this.isDragging = false;
 
-
-    let rect = event.source.getRootElement().getBoundingClientRect();
-    this.micro.position.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
-    this.micro.position.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
-
-    this.micro.anchorPosition.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
-    this.micro.anchorPosition.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
     this.interactionManager.updateMicro(this.micro);
   }
 }

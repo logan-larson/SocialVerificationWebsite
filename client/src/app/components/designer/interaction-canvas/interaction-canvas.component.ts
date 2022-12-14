@@ -2,7 +2,7 @@
 This component displays the current interaction model on a canvas.
 */
 
-import { Component, ComponentRef, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { Interaction } from 'src/app/models/interaction';
 import { Position } from 'src/app/models/position';
 import { Transition } from 'src/app/models/transition';
@@ -34,8 +34,6 @@ export class InteractionCanvasComponent implements OnInit {
   @ViewChild("canvas", { read: ViewContainerRef})
   container!: ViewContainerRef; // contents in codepen
 
-  @ViewChild("canvasContainer") canvasContainer!: ElementRef; // grid in codepen
-
   // Components contained in container
   components: ComponentRef<any>[] = [];
 
@@ -43,76 +41,33 @@ export class InteractionCanvasComponent implements OnInit {
 
   mousePos: Position = new Position();
 
-  /* Zooming and panning */
-  containerRect: any;
-  panningAllowed: boolean = false;
-
-  spaceHeld: boolean = false;
-  zoom: number = 1;
-
-  translate: { scale: number, translateX: number, translateY: number } = { scale: 0, translateX: 0, translateY: 0 };
-  initialContentPos: Position = new Position();
-  initialZoomPos: Position = new Position();
-  pinnedMousePos: Position = new Position();
-  //mousePos: Position = new Position();
-
   // Load JSON stored in local storage
   @HostListener('window:load', ['$event'])
   onLoadHander() {
     this.interactionManager.loadInteractionFromLocal();
-  }
 
-  @HostListener("wheel", ['$event'])
-  onWheel(event: WheelEvent) {
+    this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
+    console.log(this.position);
 
-    if (this.zoom + (event.deltaY / 5000) > 2 || this.zoom + (event.deltaY / 5000) < 0.6) {
-      return;
-    }
-
-    const oldZoom: number = this.zoom;
-
-    this.zoom -= (event.deltaY / 5000);
-
-    this.mousePos = new Position(event.offsetX - this.containerRect.x, event.offsetY - this.containerRect.y);
-
-    this.translate.scale = this.zoom;
-
-    const contentMousePos: Position = new Position(this.mousePos.x - this.translate.translateX, this.mousePos.y - this.translate.translateY);
-    const pos: Position = new Position(this.mousePos.x - (contentMousePos.x * (this.zoom / oldZoom)), this.mousePos.y - (contentMousePos.y * (this.zoom / oldZoom)));
-
-    this.translate.translateX = pos.x;
-    this.translate.translateY = pos.y;
-
-    this.updatePanZoom();
-    /*
-    if (event.deltaY > 0) {
-      if (this.zoom > 0.6) {
-        this.canvasContainer.nativeElement.style.transform = `scale(${this.zoom -= 0.1})`;
-      }
-    } else {
-      if (this.zoom < 2) {
-        this.canvasContainer.nativeElement.style.transform = `scale(${this.zoom += 0.1})`;
-      }
-    }
-    */
-  }
-
-  @HostListener('document:keydown.space', ['$event'])
-  onSpaceDown(event: KeyboardEvent) {
-    event.preventDefault();
-    this.spaceHeld = true;
-  }
-
-  @HostListener('document:keyup.space', ['$event'])
-  onSpaceUp(event: KeyboardEvent) {
-    event.preventDefault();
-    this.spaceHeld = false;
+    // Set canvas offset in canvasManager OnLoad
+    this.canvasManager.canvasOffset = this.position;
+    this.canvasManager.canvasScrollOffset = this.scrollPosition;
   }
 
   // Save JSON to local storage
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHander() {
     this.interactionManager.saveInteractionToLocal();
+  }
+
+
+  /* Canvas Operations */
+
+  zoomLevel: number = 1;
+
+  @HostListener('wheel', ['$event'])
+  zoom(event: WheelEvent) {
+    event.deltaY < 0 ? this.zoomIn() : this.zoomOut();
   }
 
   constructor(
@@ -134,13 +89,6 @@ export class InteractionCanvasComponent implements OnInit {
 
 
     this.render.listen('window', 'load', () => {
-      this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
-
-      // Set canvas offset in canvasManager OnLoad
-      this.canvasManager.canvasOffset = this.position;
-      this.canvasManager.canvasScrollOffset = this.scrollPosition;
-
-      this.containerRect = this.canvasContainer.nativeElement.getBoundingClientRect();
     });
 
     // Listen for microupdates and adjust them as needed
@@ -201,42 +149,9 @@ export class InteractionCanvasComponent implements OnInit {
     this.contextMenuComponent = this.container.createComponent(ContextMenuComponent).instance;
   }
 
-  updateScrollOffset(event: any) {
-    if (this.spaceHeld) {
-      //event.stopPropagation();
-      //event.preventDefault();
-      console.log("preventing scroll?");
-    } else {
-      this.scrollPosition.x = event.target.scrollLeft;
-      this.scrollPosition.y = event.target.scrollTop;
-    }
-  }
-
-  startPan(event: any) {
-    this.initialContentPos = new Position(this.translate.translateX, this.translate.translateY);
-    this.pinnedMousePos = new Position(event.offsetX, event.offsetY);
-    this.panningAllowed = true;
-  }
-
-  relayCoords(event: any) {
-    //this.mousePos = new Position(event.offsetX, event.offsetY);
+  setMousePos(event: any): void {
+    //this.mousePos = new Position(event.clientX, event.clientY);
     this.mousePos = new Position(event.offsetX, event.offsetY);
-    if (this.panningAllowed) {
-      const diffX = (this.mousePos.x - this.pinnedMousePos.x);
-      const diffY = (this.mousePos.y - this.pinnedMousePos.y);
-      this.translate.translateX = this.initialContentPos.x + diffX;
-      this.translate.translateY = this.initialContentPos.y + diffY;
-    }
-    this.updatePanZoom();
-  }
-
-  endPan(_: any) {
-    this.panningAllowed = false;
-  }
-
-  updatePanZoom() {
-    const matrix = `matrix(${this.translate.scale}, 0, 0, ${this.translate.scale}, ${this.translate.translateX}, ${this.translate.translateY})`;
-    this.canvasContainer.nativeElement.style.transform = matrix;
   }
   
 
@@ -265,5 +180,37 @@ export class InteractionCanvasComponent implements OnInit {
   clickOff() {
     this.parameterManager.updateCurrentMicro(undefined);
   }
+
+
+  /* CANVAS OPERATIONS */
+
+  selectMain() {
+  }
+
+  selectPan() {
+  }
+
+  zoomIn() {
+    if (this.zoomLevel < 3)
+      this.zoomLevel += 0.1;
+    
+    const container = document.getElementById("container");
+    if (container != null) {
+      container.style.transform = `scale(${this.zoomLevel})`;
+      this.canvasManager.zoomLevel = this.zoomLevel;
+    }
+  }
+
+  zoomOut() {
+    if (this.zoomLevel > 0.5)
+      this.zoomLevel -= 0.1;
+
+    const container = document.getElementById("container");
+    if (container != null) {
+      container.style.transform = `scale(${this.zoomLevel})`;
+      this.canvasManager.zoomLevel = this.zoomLevel;
+    }
+  }
+
 
 }
