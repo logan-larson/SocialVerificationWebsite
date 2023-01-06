@@ -47,6 +47,23 @@ export class InteractionCanvasComponent implements OnInit {
   onLoadHander() {
     this.interactionManager.loadInteractionFromLocal();
 
+    // Set the scroll position from local storage
+    let scrollPositionStr = localStorage.getItem('scrollPosition');
+    
+    if (scrollPositionStr) {
+      let scrollPosition = JSON.parse(scrollPositionStr);
+
+      let canvas = document.getElementById('canvas');
+      if (canvas) {
+        console.log(scrollPosition);
+        this.scrollPosition = new Position(scrollPosition.x, scrollPosition.y);
+        canvas.style.transform = `translate(-50%, -50%) translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px)`;
+      }
+
+    }
+
+
+
     this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
 
     // Set canvas offset in canvasManager OnLoad
@@ -58,6 +75,7 @@ export class InteractionCanvasComponent implements OnInit {
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHander() {
     this.interactionManager.saveInteractionToLocal();
+    localStorage.setItem('scrollPosition', JSON.stringify(this.scrollPosition));
   }
 
 
