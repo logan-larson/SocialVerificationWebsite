@@ -42,6 +42,8 @@ export class MicroComponent implements OnInit {
   microIcon: string = '';
   isHovering: boolean = false;
 
+  mode: string = 'select';
+
   constructor(
     private contextMenu: ContextMenuService,
     private canvasManager: CanvasManagerService,
@@ -75,7 +77,6 @@ export class MicroComponent implements OnInit {
     })
 
     // While adding a transition if cursor is on a micro, set
-
   }
 
   ngOnInit(): void {
@@ -90,10 +91,14 @@ export class MicroComponent implements OnInit {
         */
       }
     }, 20);
+
+
+    this.canvasManager.getModeEmitter.subscribe(_ => {
+      this.mode = this.canvasManager.mode;
+    });
   }
 
   setMicro(m: MicroInteraction) {
-    console.log(m.position);
     this.x = m.position.x + 'px';
     this.y = m.position.y + 'px';
     this.micro = m;
@@ -108,6 +113,9 @@ export class MicroComponent implements OnInit {
   /* Show microinteraction's parameter options in the interaction options pane */
   clickMicro(event: any) {
     event.preventDefault();
+    event.stopPropagation();
+
+    if (this.mode != 'select') return;
 
     this.parameterManager.updateCurrentMicro(this.micro);
   }
@@ -116,15 +124,19 @@ export class MicroComponent implements OnInit {
   showContextMenu(event: any) {
     event.preventDefault();
 
-    let xPos = this.el.nativeElement.getBoundingClientRect().x;
-    let yPos = this.el.nativeElement.getBoundingClientRect().y;
+    let pos = new Position(this.micro.position.x, this.micro.position.y);
 
-    let canvasPos: Position = this.canvasManager.canvasOffset;
+    this.contextMenu.displayContextMenu('micro', new Position(pos.x + event.offsetX, pos.y + event.offsetY), this.micro.id);
+  }
 
-    let xOffset = xPos - canvasPos.x;
-    let yOffset = yPos - canvasPos.y;
+  mouseEnter(event: any) {
+    event.stopPropagation();
+    this.canvasManager.onMicroPos = new Position(this.micro.position.x + event.offsetX, this.micro.position.y + event.offsetY);
+  }
 
-    this.contextMenu.displayContextMenu('micro', new Position(xOffset + event.offsetX, yOffset + event.offsetY), this.micro.id);
+  mouseLeave(event: any) {
+    event.stopPropagation();
+    this.canvasManager.onMicroPos = new Position();
   }
 
   /* Transition related methods */
@@ -188,15 +200,15 @@ export class MicroComponent implements OnInit {
     }
   }
 
-  setSecondAnchor(state: boolean) {
-    if (state) {
-      this.canvasManager.onMicro = true;
-      if (this.interactionManager.isAddingTransition) {
-        let pos: Position = new Position((this.micro.position.x - 32), (this.micro.position.y + 49));
-        this.canvasManager.getMousePosition.emit(pos);
-      }
-    } else {
-      this.canvasManager.onMicro = false;
+  setSecondAnchor(event: any, onMicro: boolean) {
+
+    if (!onMicro) return;
+    
+    event.stopPropagation();
+
+    if (this.interactionManager.isAddingTransition) {
+      let pos: Position = new Position((this.micro.position.x - 32), (this.micro.position.y + 49));
+      this.canvasManager.getMousePosition.emit(pos);
     }
   }
 
@@ -249,14 +261,14 @@ export class MicroComponent implements OnInit {
   /* Reposition micro in canvas */
 
   startDrag(event: CdkDragStart) {
+    if (this.mode == 'pan') return;
+
     let rect = event.source.getRootElement().getBoundingClientRect();
 
     // Set the local position on drag start
 
     this.microPos.x = rect.x;// * (1 / this.canvasManager.zoomLevel);
     this.microPos.y = rect.y;// * (1 / this.canvasManager.zoomLevel);
-
-    console.log(this.microPos);
 
     //this.interactionManager.updateMicro(this.micro);
     this.dragDistance = new Position();
@@ -265,6 +277,7 @@ export class MicroComponent implements OnInit {
   }
 
   dragMicro(event: CdkDragMove) {
+    if (this.mode == 'pan') return;
     // Update the micro position based on distance traveled
     //this.microPos.x += event.distance.x;
     //this.microPos.y += event.distance.y;
@@ -273,13 +286,14 @@ export class MicroComponent implements OnInit {
   }
 
   droppedMicro(event: CdkDragEnd) {
+    if (this.mode == 'pan') return;
     // Set the anchor position on drag start
 
 
     //let rect = event.source.getRootElement().getBoundingClientRect();
     //console.log(`x: ${rect.x}, y: ${rect.y}\nxMod: ${rect.x * (1 / this.canvasManager.zoomLevel)}, yMod: ${rect.y * (1 / this.canvasManager.zoomLevel)}`);
-    this.micro.position.x = this.microPos.x + (this.dragDistance.x * (1 / this.canvasManager.zoomLevel)) - this.canvasManager.canvasOffset.x;
-    this.micro.position.y = this.microPos.y + (this.dragDistance.y * (1 / this.canvasManager.zoomLevel)) - this.canvasManager.canvasOffset.y;
+    this.micro.position.x = this.microPos.x + this.dragDistance.x - this.canvasManager.canvasOffset.x - this.canvasManager.canvasScrollOffset.x + 2500;
+    this.micro.position.y = this.microPos.y + this.dragDistance.y - this.canvasManager.canvasOffset.y - this.canvasManager.canvasScrollOffset.y + 1500;
     //this.micro.position.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
     //this.micro.position.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
 

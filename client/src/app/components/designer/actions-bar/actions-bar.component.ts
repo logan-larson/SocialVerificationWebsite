@@ -82,6 +82,7 @@ export class ActionsBarComponent implements OnInit {
 
   clear() {
     this.interactionManager.clearCanvas();
+    this.canvasManager.clearCanvas.emit();
     this.paramManager.updateCurrentMicro(undefined);
     this.verificationManager.violations = [];
     this.verificationManager.violationEmitter.emit([]);

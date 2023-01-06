@@ -17,6 +17,8 @@ export class CanvasManagerService {
 
   @Output() getMousePosition: EventEmitter<Position> = new EventEmitter<Position>();
 
+  @Output() clearCanvas: EventEmitter<any> = new EventEmitter<any>();
+
   violatingMicroIds: number[] = [];
   violatingTransitionIds: number[] = [];
 
@@ -24,7 +26,7 @@ export class CanvasManagerService {
   canvasScrollOffset: Position = new Position(0, 0);
 
   // Used when adding a transition for locking onto a micros anchor
-  onMicro: boolean = false;
+  onMicroPos: Position = new Position();
 
   isDarkMode: boolean = false;
   @Output() getIsDarkMode: EventEmitter<boolean> = new EventEmitter<boolean>();

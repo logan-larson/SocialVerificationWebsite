@@ -1,6 +1,7 @@
 <div
   id="canvas"
   class="absolute h-[3000px] w-[5000px]"
+  style="transform: translate(-50%, -50%);"
   (mousemove)="setMousePos($event)"
   (dragover)="allowDrop($event)"
   (drop)="addMicro($event)"
@@ -23,7 +24,7 @@
   >
   </div>
 </div>
-<div id="canvasOperations" class="flex absolute top-0 right-0 border-b-2 border-l-2 border-black bg-primary dark:bg-dark-primary p-2">
+<div id="canvasOperations" class="absolute top-0 right-0 flex p-2 border-b-2 border-l-2 border-black bg-primary dark:bg-dark-primary">
   <div
     class="w-[32px] h-[32px] mx-1 items-center justify-center flex rounded hover:cursor-pointer
           bg-primary dark:bg-dark-primary hover:bg-primary-hover
@@ -50,6 +51,7 @@
   >
     <mat-icon class="hover:cursor-pointer">pan_tool</mat-icon>
   </div>
+  <!--
   <div
     class="w-[32px] h-[32px] mx-1 items-center justify-center flex rounded hover:cursor-pointer
           bg-primary dark:bg-dark-primary hover:bg-primary-hover
@@ -68,4 +70,5 @@
   >
     <mat-icon class="hover:cursor-pointer">zoom_out</mat-icon>
   </div>
+  -->
 </div>

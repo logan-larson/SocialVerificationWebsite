@@ -77,6 +77,7 @@ export class InteractionManagerService {
     dftParamRes = dftParamRes == undefined ? [] : dftParamRes;
 
     let m: MicroInteraction = new MicroInteraction(this.interaction.microIdCounter++, new Position(x, y), this.currentMicroType, params, new Position(x, y), dftParamRes);
+    console.log(m);
 
     this.interaction.micros.push(m);
 

@@ -114,12 +114,9 @@ export class TransitionComponent implements OnInit {
 
     event.preventDefault();
 
-    let scrollPos: Position = this.canvasManager.canvasScrollOffset;
+    let pos = new Position(this.middleAnchorPos.x, this.middleAnchorPos.y);
 
-    let xOffset = this.middleAnchorPos.x - scrollPos.x;
-    let yOffset = this.middleAnchorPos.y - scrollPos.y;
-
-    this.contextMenu.displayContextMenu('transition', new Position(xOffset, yOffset), -1, this.transition.id);
+    this.contextMenu.displayContextMenu('transition', pos, -1, this.transition.id);
   }
 
   setTransition(t: Transition) {
@@ -221,6 +218,7 @@ export class TransitionComponent implements OnInit {
 
   setSecondAnchorOnMouse() {
     if (!this.transition.isSet) {
+
       this.secondAnchorPos = this.mousePos;
 
       this.setMiddleAnchor(false);

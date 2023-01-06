@@ -48,7 +48,6 @@ export class InteractionCanvasComponent implements OnInit {
     this.interactionManager.loadInteractionFromLocal();
 
     this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
-    console.log(this.position);
 
     // Set canvas offset in canvasManager OnLoad
     this.canvasManager.canvasOffset = this.position;
@@ -116,20 +115,14 @@ export class InteractionCanvasComponent implements OnInit {
   onDragEnd(event: CdkDragEnd) {
 
     if (this.canvasManager.mode == 'pan') {
-      console.log(event);
 
       this.isPanning = false;
 
       const canvas = document.getElementById("canvas");
 
       if (canvas) {
-        //this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
-        //this.scrollPosition = new Position(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top);
         this.scrollPosition.addPosition(new Position(event.distance.x, event.distance.y));
-        console.log(this.scrollPosition);
-
-        // Set canvas offset in canvasManager OnLoad
-        //this.canvasManager.canvasScrollOffset = ;
+        this.canvasManager.canvasScrollOffset = this.scrollPosition;
       }
     }
   }
@@ -143,8 +136,10 @@ export class InteractionCanvasComponent implements OnInit {
     private el: ElementRef
   ) {
     setInterval(() => {
-      if (this.interactionManager.isAddingTransition && !this.canvasManager.onMicro) {
-        this.canvasManager.getMousePosition.emit(this.mousePos);
+      if (this.interactionManager.isAddingTransition) {
+        if (this.canvasManager.onMicroPos.x == 0 && this.canvasManager.onMicroPos.y == 0) {
+          this.canvasManager.getMousePosition.emit(this.mousePos);
+        }
       }
     }, 20);
   }
@@ -191,6 +186,13 @@ export class InteractionCanvasComponent implements OnInit {
     });
 
     this.canvasManager.getModeEmitter.subscribe(_ => this.mode = this.canvasManager.mode);
+
+    this.canvasManager.clearCanvas.subscribe(_ => {
+      let canvas = document.getElementById("canvas");
+      if (canvas) {
+        canvas.style.transform = "translate(-50%, -50%)";
+      }
+    });
   }
 
   /* CANVAS RENDERING */
@@ -227,7 +229,7 @@ export class InteractionCanvasComponent implements OnInit {
     this.contextMenuHidden = false;
 
     if (this.contextMenuComponent) {
-      let newPos: Position = new Position(this.contextMenu.position.x + this.scrollPosition.x, this.contextMenu.position.y + this.scrollPosition.y);
+      let newPos: Position = new Position(this.contextMenu.position.x, this.contextMenu.position.y);
       this.contextMenuComponent.setMenu(this.contextMenu.type, newPos, this.contextMenu.microId, this.contextMenu.transitionId);
     } else {
       console.log("context menu comp doesn't exist");
