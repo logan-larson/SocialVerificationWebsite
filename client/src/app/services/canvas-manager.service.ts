@@ -29,6 +29,12 @@ export class CanvasManagerService {
   isDarkMode: boolean = false;
   @Output() getIsDarkMode: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  // User operation state
+  @Output() getModeEmitter: EventEmitter<any> = new EventEmitter();
+  mode: string = 'select';
+
+  // Canvas State
+  @Output() getZoomLevelEmitter: EventEmitter<any> = new EventEmitter();
   zoomLevel: number = 1;
 
   constructor() { }
@@ -49,5 +55,15 @@ export class CanvasManagerService {
     this.isDarkMode = !this.isDarkMode;
     localStorage.setItem('isDarkMode', this.isDarkMode ? 'true' : 'false');
     this.getIsDarkMode.emit(this.isDarkMode);
+  }
+
+  setCanvasMode(mode: string): void {
+    this.mode = mode;
+    this.getModeEmitter.emit();
+  }
+
+  setZoomLevel(level: number): void {
+    this.zoomLevel = level;
+    this.getZoomLevelEmitter.emit();
   }
 }

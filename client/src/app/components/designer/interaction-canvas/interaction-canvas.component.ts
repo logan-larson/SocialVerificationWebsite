@@ -14,6 +14,7 @@ import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
 import { MicroInteraction } from 'src/app/models/microInteraction';
 import { MicroComponent } from './micro/micro.component';
 import {ParameterManagerService} from 'src/app/services/parameter-manager.service';
+import {CdkDragMove, CdkDragStart, CdkDragEnd} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-interaction-canvas',
@@ -63,11 +64,74 @@ export class InteractionCanvasComponent implements OnInit {
 
   /* Canvas Operations */
 
+  mode: string = 'select';
   zoomLevel: number = 1;
+  zoomFactor: number = 1.01;
+  lastMouseX: number = 0;
+  lastMouseY: number = 0;
+  lastElemX: number = 0;
+  lastElemY: number = 0;
 
+  /*
   @HostListener('wheel', ['$event'])
   zoom(event: WheelEvent) {
-    event.deltaY < 0 ? this.zoomIn() : this.zoomOut();
+    //event.deltaY < 0 ? this.zoomIn() : this.zoomOut();
+
+    const delta = Math.sign(-event.deltaY);
+    this.zoomLevel *= (Math.pow(this.zoomFactor, delta));
+
+    const canvas = document.getElementById("canvas");
+    if (canvas) {
+
+      const newElemX = (event.offsetX - this.lastMouseX) * (this.zoomFactor - 1) + this.lastElemX;
+      const newElemY = (event.offsetY - this.lastMouseY) * (this.zoomFactor - 1) + this.lastElemY;
+
+      canvas.style.transform = `translate(${newElemX}px, ${newElemY}px) scale(${this.zoomLevel})`;
+
+      this.lastMouseX = event.offsetX;
+      this.lastMouseY = event.offsetY;
+      this.lastElemX = newElemX;
+      this.lastElemY = newElemY;
+    }
+  }
+  */
+
+  isPanning: boolean = false;
+  canvasX: number = 0;
+  canvasY: number = 0;
+
+
+  //@HostListener('mousedown', ['$event'])
+  onDragStart(event: CdkDragStart) {
+    if (this.canvasManager.mode == 'pan') {
+      this.isPanning = true;
+    }
+  }
+
+  //@HostListener('mousemove', ['$event'])
+  onDragMove(event: CdkDragMove) {
+  }
+
+  //@HostListener('mouseup', ['$event'])
+  onDragEnd(event: CdkDragEnd) {
+
+    if (this.canvasManager.mode == 'pan') {
+      console.log(event);
+
+      this.isPanning = false;
+
+      const canvas = document.getElementById("canvas");
+
+      if (canvas) {
+        //this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
+        //this.scrollPosition = new Position(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top);
+        this.scrollPosition.addPosition(new Position(event.distance.x, event.distance.y));
+        console.log(this.scrollPosition);
+
+        // Set canvas offset in canvasManager OnLoad
+        //this.canvasManager.canvasScrollOffset = ;
+      }
+    }
   }
 
   constructor(
@@ -125,6 +189,8 @@ export class InteractionCanvasComponent implements OnInit {
       // Set canvas offset in canvasManager OnResize
       this.canvasManager.canvasOffset = this.position;
     });
+
+    this.canvasManager.getModeEmitter.subscribe(_ => this.mode = this.canvasManager.mode);
   }
 
   /* CANVAS RENDERING */
@@ -176,7 +242,6 @@ export class InteractionCanvasComponent implements OnInit {
     this.interactionManager.addMicro(event.offsetX - 48, event.offsetY - 48);
   }
 
-
   clickOff() {
     this.parameterManager.updateCurrentMicro(undefined);
   }
@@ -185,32 +250,34 @@ export class InteractionCanvasComponent implements OnInit {
   /* CANVAS OPERATIONS */
 
   selectMain() {
+    this.canvasManager.setCanvasMode('select');
   }
 
   selectPan() {
+    this.canvasManager.setCanvasMode('pan');
   }
 
   zoomIn() {
     if (this.zoomLevel < 3)
-      this.zoomLevel += 0.1;
+      this.zoomLevel += 0.01;
     
-    const container = document.getElementById("container");
+    const container = document.getElementById("canvas");
     if (container != null) {
-      container.style.transform = `scale(${this.zoomLevel})`;
-      this.canvasManager.zoomLevel = this.zoomLevel;
+      let scale: string = `scale(${this.zoomLevel})`; 
+      let translate: string = `translate(${this.zoomLevel})`;
+      container.style.transform = `${scale} ${translate}`;
+      this.canvasManager.setZoomLevel(this.zoomLevel);
     }
   }
 
   zoomOut() {
     if (this.zoomLevel > 0.5)
-      this.zoomLevel -= 0.1;
+      this.zoomLevel -= 0.01;
 
-    const container = document.getElementById("container");
+    const container = document.getElementById("canvas");
     if (container != null) {
       container.style.transform = `scale(${this.zoomLevel})`;
-      this.canvasManager.zoomLevel = this.zoomLevel;
+      this.canvasManager.setZoomLevel(this.zoomLevel);
     }
   }
-
-
 }

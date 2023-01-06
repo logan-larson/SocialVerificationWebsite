@@ -1,14 +1,25 @@
 <div
-  id="container"
-  class="w-full h-full"
+  id="canvas"
+  class="absolute h-[3000px] w-[5000px]"
+  (mousemove)="setMousePos($event)"
+  (dragover)="allowDrop($event)"
+  (drop)="addMicro($event)"
+  (click)="clickOff()"
+  cdkDrag
+  [cdkDragDisabled]="mode != 'pan'"
+  (cdkDragStarted)="onDragStart($event)"
+  (cdkDragMoved)="onDragMove($event)"
+  (cdkDragEnded)="onDragEnd($event)"
+  [ngClass]="{
+    'cursor-auto': mode == 'select',
+    'cursor-grab': mode == 'pan',
+    'cursor-grabbing': isPanning
+  }"
 >
   <div
     #canvas
-    class="absolute h-[3000px] w-[5000px]"
-    (mousemove)="setMousePos($event)"
-    (dragover)="allowDrop($event)"
-    (drop)="addMicro($event)"
-    (click)="clickOff()"
+    id="container"
+    class="w-full h-full"
   >
   </div>
 </div>
@@ -20,6 +31,8 @@
           text-light-text dark:text-dark-text"
     (click)="selectMain()"
     [ngClass]="{
+      'bg-primary-hover': mode == 'select',
+      'dark:bg-dark-primary-hover': mode == 'select'
     }"
   >
     <mat-icon class="hover:cursor-pointer">pan_tool_alt</mat-icon>
@@ -31,6 +44,8 @@
           text-light-text dark:text-dark-text"
     (click)="selectPan()"
     [ngClass]="{
+      'bg-primary-hover': mode == 'pan',
+      'dark:bg-dark-primary-hover': mode == 'pan'
     }"
   >
     <mat-icon class="hover:cursor-pointer">pan_tool</mat-icon>
