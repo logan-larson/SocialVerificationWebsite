@@ -14,8 +14,11 @@ microTypes.push(microGreeter);
 //ask
 let microAsk = new MicroType("Ask", [
   new Parameter("Question", "question", "The Specific question the robot will ask", "str"),
+  new Parameter("Recognized Responses", "reponses", "The responses expeceted to be said by the human that the robot can recognize", "array")
+  /*
   new Parameter("Ready Reponse", "responseReady", "The expeceted response of a human in the Ready state", "str"),
   new Parameter("Not Ready Response", "responseNotReady", "The expected response of a human in the Not Ready state", "str")
+  */
 ]);
 microTypes.push(microAsk);
 

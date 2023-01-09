@@ -8,7 +8,8 @@ export class ParameterResult {
   boolResult: boolean | null = false;
   intResult: number | null = -1;
   strResult: string | null = '';
-  arrayResult: Map<string, string> | null = null;
+  arrayResult: { type: string, value: string }[] | null = null;
+  //arrayResult: Map<string, string> | null = null;
   //arrayResult: { val: string | null, linkTitle: string | null }[] | null = [];
 
   constructor(
@@ -17,7 +18,8 @@ export class ParameterResult {
     br: boolean | null = null,
     ir: number | null = null,
     sr: string | null = null,
-    ar: Map<string, string> | null = null,
+    ar: { type: string, value: string }[] | null = null,
+    //ar: Map<string, string> | null = null,
     //ar: { val: string | null, linkTitle: string | null }[] | null = null
   ) {
       this.id = id;

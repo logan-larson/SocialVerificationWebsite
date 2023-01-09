@@ -18,26 +18,28 @@
   </div>
   <div *ngIf="param.type === 'array'" class="relative flex flex-col dark:text-white">
     <label (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">Responses the robot can recognize</label>
-    <input type="text" class="w-full border-2" [(ngModel)]="response" />
+    <input type="text" class="w-full p-1 border-2 dark:border-white dark:bg-dark-secondary dark:text-white" [(ngModel)]="response" />
     <label class="mt-1 mr-2">Corresponding human state</label>
-    <select class="p-1 mb-2" [(ngModel)]="humanState">
+    <select class="p-1 mb-2 dark:bg-dark-primary" [(ngModel)]="humanState">
       <option value="humanReady">Human Ready</option>
       <option value="humanNotReady">Human Not Ready</option>
     </select>
     <button
-      class="px-3 py-1.5 rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow mx-0.5"
+      class="px-3 py-1.5 rounded-md text-white bg-blue hover:bg-blue-hover shadow mx-0.5"
       (click)="addResponse()"
     >Add Response</button>
     <br>
     <label>Current Responses</label>
     <div class="p-2 border-2">
-      <div *ngFor="let res of responses | keyvalue" class="flex items-center">
+      <div *ngFor="let res of responses" class="my-1 grid grid-cols-6">
+        <label class="ml-2 col-span-2">{{ res.type === 'humanReady' ? 'Ready' : 'Not ready' }}</label>
+        <label class="ml-2 col-span-3">{{ res.value }}</label>
         <button
-          class="px-2 py-1 rounded-md text-white bg-red-600 hover:bg-red-700 shadow mx-0.5"
-          (click)="removeResponse(res.key)"
-        >X</button>
-        <label class="ml-2">{{ res.key }}</label>
-        <label class="ml-2">{{ res.value }}</label>
+          class="h-[40px] w-[40px] rounded-md text-white bg-red hover:bg-red shadow mx-0.5"
+          (click)="removeResponse(res.value)"
+        >
+          <mat-icon class="hover:cursor-pointer">delete</mat-icon>
+        </button>
       </div>
     </div>
     <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-black rounded-lg top-10 shadow-sm">{{ param.description }}</div>

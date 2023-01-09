@@ -29,7 +29,8 @@ export class ParameterOptionsComponent implements OnInit {
   showToolTip: string = 'hidden';
 
   // array type
-  responses: Map<string, string> = new Map();
+  responses: { type: string, value: string }[] = [];
+  //responses: Map<string, string> = new Map();
 
   humanState: string = '';
   response: string = '';
@@ -74,7 +75,9 @@ export class ParameterOptionsComponent implements OnInit {
   }
 
   addResponse() {
-    this.responses.set(this.humanState, this.response);
+
+    this.responses.push({ type: this.humanState, value: this.response});
+
     this.humanState = '';
     this.response = '';
 
@@ -82,8 +85,9 @@ export class ParameterOptionsComponent implements OnInit {
     this.resultEmitter.emit(this.paramRes);
   }
 
-  removeResponse(key: string) {
-    this.responses.delete(key);
+  removeResponse(value: string) {
+    this.responses = this.responses.filter(r => r.value != value);
+    //this.responses.delete(key);
 
     this.paramRes = new ParameterResult(this.index, 'array', null, null, null, this.responses);
     this.resultEmitter.emit(this.paramRes);

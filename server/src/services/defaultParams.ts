@@ -12,7 +12,7 @@ function getDefaultParams(type: string): ParameterResult[] {
       results.push(new ParameterResult(3, 'str', false, -1, ''));
       //results.push(new ParameterResult(4, 'str', false, -1, ''));
       //results.push(new ParameterResult(13, 'str', false, -1, ''));
-      results.push(new ParameterResult(4, 'array', false, -1, '', new Map<string, string>));
+      results.push(new ParameterResult(4, 'array', false, -1, '', []));
       break;
     case 'Remark':
       results.push(new ParameterResult(5, 'str', false, -1, ''));
