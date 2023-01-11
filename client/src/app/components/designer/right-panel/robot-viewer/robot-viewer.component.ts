@@ -29,6 +29,8 @@ export class RobotViewerComponent implements OnInit {
   interval: any;
   showAlert: boolean = true;
 
+  bubbleContent: string = '';
+
   @Output() showParams: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
@@ -89,13 +91,15 @@ export class RobotViewerComponent implements OnInit {
         let rt: Transition | undefined = interaction.transitions.find(t => t.id == m.readyTransitionId);
         let nrt: Transition | undefined = interaction.transitions.find(t => t.id == m.notReadyTransitionId);
 
+        let text: string = m.robotText != null ? m.robotText : '';
         if (rt && nrt) {
-          let n: Node = new Node(m.id, m.type, rt.secondMicroId, nrt.secondMicroId);
+
+          let n: Node = new Node(m.id, m.type, rt.secondMicroId, nrt.secondMicroId, text);
           if (n.type == 'Greeter')
             this.startingNode = n;
           this.nodes.push(n);
         } else {
-          let n: Node = new Node(m.id, m.type, -1, -1);
+          let n: Node = new Node(m.id, m.type, -1, -1, text);
           this.nodes.push(n);
         }
       }
@@ -125,6 +129,7 @@ export class RobotViewerComponent implements OnInit {
     }
 
     this.setIcon();
+    this.updateBubbleContent();
   }
 
   setIcon() {
@@ -143,6 +148,12 @@ export class RobotViewerComponent implements OnInit {
       }
     } else {
       this.icon = '/assets/robotImages/neutral.png';
+    }
+  }
+
+  updateBubbleContent() {
+    if (this.currentNode) {
+      this.bubbleContent = this.currentNode.text;
     }
   }
 
@@ -184,6 +195,8 @@ export class RobotViewerComponent implements OnInit {
     this.needHumanInput = true;
     this.humanReady = false;
     this.humanNotReady = false;
+
+    this.updateBubbleContent();
   }
 
 }

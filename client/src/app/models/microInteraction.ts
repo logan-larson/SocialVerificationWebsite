@@ -8,6 +8,7 @@ export class MicroInteraction {
     position: Position;
     anchorPosition: Position;
     type: string | null; // i.e. 'Greeter', 'Farewell'
+    robotText: string | null;
     parameters: Parameter[] = [];
     parameterResults: ParameterResult[] = [];
     readyTransitionId: number = -1;
@@ -17,6 +18,7 @@ export class MicroInteraction {
       id: number = -1,
       position: Position = new Position(),
       type: string = '',
+      robotText: string = '',
       parameters: Parameter[] = [],
       anchorPosition: Position = new Position(),
       // these are rarely ever included in instantiation
@@ -27,6 +29,7 @@ export class MicroInteraction {
         this.id = id;
         this.position = position;
         this.type = type;
+        this.robotText = robotText;
         this.parameters = parameters;
         this.anchorPosition = anchorPosition;
 

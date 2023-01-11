@@ -7,6 +7,7 @@ export class MicroInteraction {
     id: number;
     position: Position;
     type: string | null; // i.e. 'Greeter', 'Farewell'
+    robotText: string | null;
     parameters: Parameter[] = [];
     parameterResults: ParameterResult[] = [];  
     readyTransitionId: number;
@@ -16,6 +17,7 @@ export class MicroInteraction {
       id: number = -1,
       position: Position = new Position(),
       type: string = '',
+      robotText: string = '',
       parameters: Parameter[] = [],
       // these are rarely ever included in instantiation
       parameterResults: ParameterResult[] = [],
@@ -25,6 +27,7 @@ export class MicroInteraction {
         this.id = id;
         this.position = position;
         this.type = type;
+        this.robotText = robotText;
         this.parameters = parameters;
 
         this.readyTransitionId = readyTransitionId;

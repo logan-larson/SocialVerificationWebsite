@@ -1,18 +1,22 @@
-<div id="robot-view-container" class="w-full h-full">
+<div id="robot-view-container" class="flex flex-col w-full h-full">
 
   <div class="text-lg text-center border-b-2 border-black text-light-text dark:text-dark-text bg-primary dark:bg-dark-primary">
     Simulator
   </div>
 
-  <div id="robot-view" class="robot-box grid place-items-center">
-    <img width="200px" [src]="icon">
-  </div>
-    
   <!-- Speech bubble-->
-  <div class="bubble-panel" id="bubble-panel">
-    <div class="bubble" id="bubble"></div>
+  <div class="flex flex-col">
+    <div class="relative left-0 right-0 mx-2 mt-2 border-2 p-1 h-[50px] bg-white border-black rounded resize-none dark:border-0 text-center">
+      {{ bubbleContent }}
+    </div>
+    <svg height="20" width="20" class="mt-[-1px] dark:mt-0 self-center">
+      <polygon points="0,0 20,0 10,20" class="dark:stroke-white fill-white stroke-black" />
+    </svg>
   </div>
-        
+
+  <div id="robot-view" class="robot-box grid place-items-center">
+    <img width="200px" [src]="icon" />
+  </div>
    
   <!-- this is for buttons to demo and test-->
   <div id="robot-tester" class="relative bottom-0 flex justify-center w-full">

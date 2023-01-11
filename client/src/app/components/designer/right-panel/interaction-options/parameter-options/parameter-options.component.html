@@ -35,7 +35,7 @@
         <label class="ml-2 col-span-2">{{ res.type === 'humanReady' ? 'Ready' : 'Not ready' }}</label>
         <label class="ml-2 col-span-3">{{ res.value }}</label>
         <button
-          class="h-[40px] w-[40px] rounded-md text-white bg-red hover:bg-red shadow mx-0.5"
+          class="h-[40px] w-[40px] rounded-md text-white bg-red hover:bg-red-hover shadow mx-0.5"
           (click)="removeResponse(res.value)"
         >
           <mat-icon class="hover:cursor-pointer">delete</mat-icon>

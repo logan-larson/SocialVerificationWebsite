@@ -51,6 +51,14 @@ export class InteractionOptionsComponent implements OnInit {
   /* Updates the current microinteraction in the interaction model */
   saveOptions() {
     if (this.micro && this.saveIsDisabled === false) {
+      this.paramRes.forEach(p => {
+        if (p.type == "str") {
+          if (this.micro) {
+            this.micro.robotText = p.strResult;
+          }
+        }
+      });
+
       this.micro.parameterResults = this.paramRes;
       this.interactionManager.updateMicro(this.micro);
       this.saveIsDisabled = true;
