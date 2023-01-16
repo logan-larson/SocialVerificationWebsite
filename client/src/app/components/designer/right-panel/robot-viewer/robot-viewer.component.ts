@@ -15,10 +15,12 @@ export class RobotViewerComponent implements OnInit {
 
   nodes: Node[] = [];
   startingNode: Node | undefined = undefined;
+  defaultNode: Node | undefined = undefined;
 
   isPlaying: boolean = false;
   canPlay: boolean = false;
   currentNode: Node | undefined = undefined;
+  firstPlay: boolean = false;
 
   needHumanInput: boolean = false;
   humanReady: boolean = false;
@@ -112,6 +114,14 @@ export class RobotViewerComponent implements OnInit {
   }
 
   updateInteraction() {
+    if (this.firstPlay) {
+      this.currentNode = this.startingNode;
+      this.setIcon();
+      this.updateBubbleContent();
+      this.firstPlay = false;
+      return;
+    }
+
     if (this.humanReady) {
       this.currentNode = this.nodes.find(n => n.id == this.currentNode?.onReady);
       this.needInput();
@@ -154,6 +164,8 @@ export class RobotViewerComponent implements OnInit {
   updateBubbleContent() {
     if (this.currentNode) {
       this.bubbleContent = this.currentNode.text;
+    } else {
+      this.bubbleContent = '';
     }
   }
 
@@ -187,14 +199,22 @@ export class RobotViewerComponent implements OnInit {
     } else {
       alert("You must verify the model -- PLACEHOLDER");
     }
+
+    if (this.firstPlay) {
+      this.updateInteraction();
+    }
   }
 
   reset() {
-    this.currentNode = this.startingNode;
+    this.currentNode = undefined;
+      //this.startingNode;
     this.isPlaying = false;
     this.needHumanInput = true;
     this.humanReady = false;
     this.humanNotReady = false;
+    this.firstPlay = true;
+
+    this.icon = '/assets/robotImages/neutral.png';
 
     this.updateBubbleContent();
   }
