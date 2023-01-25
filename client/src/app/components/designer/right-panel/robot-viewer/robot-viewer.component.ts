@@ -24,6 +24,9 @@ export class RobotViewerComponent implements OnInit {
   humanReady: boolean = false;
   humanNotReady: boolean = false;
 
+  humanInput: string = '';
+  isRobotAsking: boolean = false;
+
   icon: string = '';
 
   interval: any;
@@ -128,6 +131,12 @@ export class RobotViewerComponent implements OnInit {
       return;
     }
 
+    if (this.currentNode != undefined && this.currentNode.type == 'Ask') {
+      this.isRobotAsking = true;
+    } else {
+      this.isRobotAsking = false;
+    }
+
     this.setIcon();
     this.updateBubbleContent();
   }
@@ -155,6 +164,10 @@ export class RobotViewerComponent implements OnInit {
     if (this.currentNode) {
       this.bubbleContent = this.currentNode.text;
     }
+  }
+
+  respond() {
+    console.log(this.humanInput);
   }
 
   needInput() {
@@ -185,7 +198,7 @@ export class RobotViewerComponent implements OnInit {
     if (this.canPlay) {
       this.isPlaying = !this.isPlaying;
     } else {
-      alert("You must verify the model -- PLACEHOLDER");
+      alert("You must first verify the model");
     }
   }
 
@@ -195,6 +208,7 @@ export class RobotViewerComponent implements OnInit {
     this.needHumanInput = true;
     this.humanReady = false;
     this.humanNotReady = false;
+    this.isRobotAsking = false;
 
     this.updateBubbleContent();
   }
