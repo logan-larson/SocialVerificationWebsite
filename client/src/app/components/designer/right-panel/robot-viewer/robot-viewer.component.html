@@ -21,6 +21,7 @@
   <!-- this is for buttons to demo and test-->
   <div id="robot-tester" class="relative bottom-0 flex justify-center w-full">
     <button
+      *ngIf="!isRobotAsking"
       id="btn-ready"
       class="h-[32px] items-center justify-center flex bg-green px-2 mx-0.5 hover:bg-green-hover rounded hover:cursor-pointer"
       [attr.disabled]="!needHumanInput ? true : null"
@@ -31,6 +32,7 @@
     </button>
 
     <button
+      *ngIf="!isRobotAsking"
       id="btn-not-ready"
       class="h-[32px] items-center justify-center flex bg-amber px-2 mx-0.5 hover:bg-amber-hover rounded hover:cursor-pointer"
       [attr.disabled]="!needHumanInput ? true : null"
@@ -62,6 +64,11 @@
     >
        Reset
     </button>
-      
   </div>   
+  <div *ngIf="currentNode != undefined && currentNode.type == 'Ask'" class="relative bottom-0 w-[80%] flex items-center justify-center w-full m-auto">
+    <input class="w-full p-1 border-2 dark:border-white dark:bg-dark-secondary dark:text-white" type="text" [(ngModel)]="humanInput" />
+    <button 
+      class="h-[32px] items-center px-2 mx-0.5 bg-blue hover:bg-blue-hover justify-center flex rounded hover:cursor-pointer"
+      (click)="respond()">Respond</button>
+  </div>
 </div>
