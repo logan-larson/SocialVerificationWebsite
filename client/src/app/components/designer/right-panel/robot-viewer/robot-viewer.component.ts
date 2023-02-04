@@ -100,8 +100,20 @@ export class RobotViewerComponent implements OnInit {
         if (rt && nrt) {
 
           let n: Node = new Node(m.id, m.type, rt.secondMicroId, nrt.secondMicroId, text);
-          if (n.type == 'Greeter')
+          if (n.type == 'Greeter') {
             this.startingNode = n;
+          }
+          if (n.type == 'Ask') {
+            let paramRes = m.parameterResults;
+
+            if (paramRes) {
+              paramRes.forEach((p: any) => {
+                if (p.type == 'array') {
+                  n.actions = p.arrayResult;
+                }
+              });
+            }
+          }
           this.nodes.push(n);
         } else {
           let n: Node = new Node(m.id, m.type, -1, -1, text);
@@ -180,6 +192,22 @@ export class RobotViewerComponent implements OnInit {
 
   respond() {
     console.log(this.humanInput);
+    if (this.isRobotAsking && this.needHumanInput) {
+      if (this.currentNode) {
+        let action = this.currentNode.actions.find(a => a.value == this.humanInput);
+        if (action) {
+          if (action.type == 'humanReady') {
+            this.humanReady = true;
+            this.needHumanInput = false;
+          } else if (action.type == 'humanNotReady') {
+            this.humanNotReady = true;
+            this.needHumanInput = false;
+          }
+        } else {
+          alert('Hmm ... I don\'t recognize that.')
+        }
+      }
+    }
   }
 
   needInput() {
@@ -241,18 +269,21 @@ class Node {
   onReady: number = -1;
   onNotReady: number = -1;
   text: string = '';
+  actions: {type: string, value: string}[] = [];
 
   constructor(
     id: number,
     type: string,
     onReady: number,
     onNotReady: number,
-    text: string = ''
+    text: string = '',
+    actions: {type: string, value: string}[] = []
   ) {
     this.id = id;
     this.type = type;
     this.onReady = onReady;
     this.onNotReady = onNotReady;
     this.text = text;
+    this.actions = actions;
   }
 }
