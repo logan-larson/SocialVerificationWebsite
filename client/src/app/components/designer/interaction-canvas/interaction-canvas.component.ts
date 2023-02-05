@@ -42,6 +42,9 @@ export class InteractionCanvasComponent implements OnInit {
 
   mousePos: Position = new Position();
 
+  tutorialImage: string = 'assets/tutorialDark.png';
+  tutorialHidden: boolean = false;
+
   // Load JSON stored in local storage
   @HostListener('window:load', ['$event'])
   onLoadHander() {
@@ -49,6 +52,10 @@ export class InteractionCanvasComponent implements OnInit {
 
     // Set the scroll position from local storage
     let scrollPositionStr = localStorage.getItem('scrollPosition');
+
+    this.tutorialHidden = localStorage.getItem('tutorialHidden') === 'true';
+
+    this.canvasManager.setTutorialHidden(this.tutorialHidden);
     
     if (scrollPositionStr) {
       let scrollPosition = JSON.parse(scrollPositionStr);
@@ -82,6 +89,7 @@ export class InteractionCanvasComponent implements OnInit {
   /* Canvas Operations */
 
   mode: string = 'select';
+  isDarkMode: boolean = false;
   zoomLevel: number = 1;
   zoomFactor: number = 1.01;
   lastMouseX: number = 0;
@@ -208,8 +216,19 @@ export class InteractionCanvasComponent implements OnInit {
     this.canvasManager.clearCanvas.subscribe(_ => {
       let canvas = document.getElementById("canvas");
       if (canvas) {
-        canvas.style.transform = "translate(-50%, -50%)";
+        //canvas.style.transform = "translate(-50%, -50%)";
       }
+    });
+
+    this.tutorialImage = this.canvasManager.isDarkMode ? "assets/tutorialDark.png" : "assets/tutorialLight.png";
+
+    this.canvasManager.getIsDarkMode.subscribe(d => {
+      this.isDarkMode = d;
+      this.tutorialImage = this.isDarkMode ? "assets/tutorialDark.png" : "assets/tutorialLight.png";
+    });
+
+    this.canvasManager.getTutorialHiddenEmitter.subscribe(t => {
+      this.tutorialHidden = t;
     });
   }
 

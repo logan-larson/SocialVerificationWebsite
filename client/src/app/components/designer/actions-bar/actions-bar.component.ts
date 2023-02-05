@@ -29,6 +29,7 @@ export class ActionsBarComponent implements OnInit {
   loadTooltip: string = 'hidden';
   clearTooltip: string = 'hidden';
   changeTooltip: string = 'hidden';
+  tutorialTooltip: string = 'hidden';
 
   status: string = 'notVerified';
   notVerifiedTooltip: string = 'hidden';
@@ -97,5 +98,9 @@ export class ActionsBarComponent implements OnInit {
 
   changeTheme() {
     this.canvasManager.changeTheme();
+  }
+
+  toggleTutorial() {
+    this.canvasManager.toggleTutorial();
   }
 }

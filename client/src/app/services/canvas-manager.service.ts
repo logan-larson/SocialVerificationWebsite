@@ -39,6 +39,10 @@ export class CanvasManagerService {
   @Output() getZoomLevelEmitter: EventEmitter<any> = new EventEmitter();
   zoomLevel: number = 1;
 
+  // Tutorial
+  @Output() getTutorialHiddenEmitter: EventEmitter<boolean> = new EventEmitter();
+  tutorialHidden: boolean = false;
+
   constructor() { }
 
   setViolatingIds(violatingMicroIds: number[], violatingTransitionIds: number[]) {
@@ -67,5 +71,17 @@ export class CanvasManagerService {
   setZoomLevel(level: number): void {
     this.zoomLevel = level;
     this.getZoomLevelEmitter.emit();
+  }
+
+  toggleTutorial(): void {
+    this.tutorialHidden = !this.tutorialHidden;
+    localStorage.setItem('tutorialHidden', this.tutorialHidden ? 'true' : 'false');
+    this.getTutorialHiddenEmitter.emit(this.tutorialHidden);
+  }
+
+  setTutorialHidden(hidden: boolean): void {
+    this.tutorialHidden = hidden;
+    localStorage.setItem('tutorialHidden', this.tutorialHidden ? 'true' : 'false');
+    this.getTutorialHiddenEmitter.emit(this.tutorialHidden);
   }
 }
