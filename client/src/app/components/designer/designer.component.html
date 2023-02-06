@@ -1,16 +1,16 @@
 <app-actions-bar class="relative z-30 flex p-2 border-b-2 border-black bg-primary dark:bg-dark-primary box-border"></app-actions-bar>
 
-<div id="main-content" class="flex">
+<div id="main-content" class="flex h-full">
 
   <div id="left-side" class="flex flex-col w-[75%]">
 
-    <div class="flex">
+    <div class="flex flex-[2]">
       <!-- this used to be resizable, but I haven't found a way to update the canvas offset when resizing (resize-x) -->
       <app-microinteraction-selector class="relative min-w-[160px] overflow-hidden h-full border-r-2 border-black col-span-1 bg-secondary dark:bg-dark-secondary z-20"></app-microinteraction-selector>
-      <app-interaction-canvas class="relative w-full h-[69vh] bg-secondary dark:bg-dark-secondary overflow-hidden"></app-interaction-canvas>
+      <app-interaction-canvas class="relative w-full bg-secondary dark:bg-dark-secondary overflow-hidden"></app-interaction-canvas>
     </div>
 
-    <app-violation-output class="relative z-10 h-full col-span-9 bg-secondary dark:bg-dark-secondary"></app-violation-output>
+    <app-violation-output class="relative z-10 col-span-9 bg-secondary dark:bg-dark-secondary"></app-violation-output>
 
   </div>
 

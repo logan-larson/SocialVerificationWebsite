@@ -4,7 +4,7 @@ import {CanvasManagerService} from './services/canvas-manager.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class AppComponent {
   title = 'client';
