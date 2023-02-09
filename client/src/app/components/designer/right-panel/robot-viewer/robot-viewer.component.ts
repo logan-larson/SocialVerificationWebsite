@@ -250,12 +250,12 @@ export class RobotViewerComponent implements OnInit {
   playPause() {
     if (this.canPlay) {
       this.isPlaying = !this.isPlaying;
+
+      if (this.firstPlay) {
+        this.updateInteraction();
+      }
     } else {
       alert('You must first verify the model');
-    }
-
-    if (this.firstPlay) {
-      this.updateInteraction();
     }
   }
 
