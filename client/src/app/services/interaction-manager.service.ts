@@ -12,16 +12,16 @@ import { Transition } from '../models/transition';
 import { HttpClient } from '@angular/common/http';
 import { Position } from '../models/position';
 import { ParameterManagerService } from '../services/parameter-manager.service';
+import { CanvasManagerService } from '../services/canvas-manager.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InteractionManagerService {
-
   interaction: Interaction = new Interaction();
 
   currentTransition: Transition = new Transition();
-  
+
   // Transitions listen to the event emitter and if the currentDragMid matches one of their anchors they move accordingly
   currentDragMid: number = -1;
   @Output() dragDistance: EventEmitter<Position> = new EventEmitter<Position>();
@@ -30,19 +30,29 @@ export class InteractionManagerService {
 
   currentMicroType: string = '';
 
-  @Output() getUpdatedInteraction: EventEmitter<Interaction> = new EventEmitter<Interaction>();
-  @Output() getUpdatedMicro: EventEmitter<MicroInteraction> = new EventEmitter<MicroInteraction>();
-  @Output() initTransition: EventEmitter<Transition> = new EventEmitter<Transition>();
-  @Output() cancelTransition: EventEmitter<Transition> = new EventEmitter<Transition>();
+  @Output() getUpdatedInteraction: EventEmitter<Interaction> =
+    new EventEmitter<Interaction>();
+  @Output() getUpdatedMicro: EventEmitter<MicroInteraction> =
+    new EventEmitter<MicroInteraction>();
+  @Output() initTransition: EventEmitter<Transition> =
+    new EventEmitter<Transition>();
+  @Output() cancelTransition: EventEmitter<Transition> =
+    new EventEmitter<Transition>();
 
   @Output() resetMidpoint: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor(private http: HttpClient, private paramManager: ParameterManagerService) { }
+  constructor(
+    private http: HttpClient,
+    private paramManager: ParameterManagerService,
+    private canvasManager: CanvasManagerService
+  ) {}
 
   /* Micro related CRUD functions */
 
   updateMicro(micro: MicroInteraction) {
-    let ms: MicroInteraction[] = this.interaction.micros.filter((x: MicroInteraction) => x.id != micro.id);
+    let ms: MicroInteraction[] = this.interaction.micros.filter(
+      (x: MicroInteraction) => x.id != micro.id
+    );
 
     ms.push(micro);
 
@@ -52,15 +62,17 @@ export class InteractionManagerService {
   }
 
   getMicroById(mid: number) {
-    let m: MicroInteraction | undefined = this.interaction.micros.find((x: MicroInteraction) => x.id === mid);
+    let m: MicroInteraction | undefined = this.interaction.micros.find(
+      (x: MicroInteraction) => x.id === mid
+    );
 
     return m;
   }
 
   async addMicro(x: number, y: number): Promise<MicroInteraction | null> {
-
-    let mt: MicroType | undefined = await this.http.get<MicroType>(`/api/microtypes/${this.currentMicroType}`).toPromise();
-
+    let mt: MicroType | undefined = await this.http
+      .get<MicroType>(`/api/microtypes/${this.currentMicroType}`)
+      .toPromise();
 
     //let trackedMicroTypes: MicroType[] = getTrackedMicroTypes();
 
@@ -71,15 +83,27 @@ export class InteractionManagerService {
     let robotText: string | undefined = undefined;
 
     if (mt) {
-      dftParamRes = await this.http.get<ParameterResult[]>(`/api/paramres/${mt.type}`).toPromise();
+      dftParamRes = await this.http
+        .get<ParameterResult[]>(`/api/paramres/${mt.type}`)
+        .toPromise();
       params = mt.parameters;
-      robotText = await this.http.get<string>(`/api/robotText/${mt.type}`).toPromise();
+      robotText = await this.http
+        .get<string>(`/api/robotText/${mt.type}`)
+        .toPromise();
     }
 
     dftParamRes = dftParamRes == undefined ? [] : dftParamRes;
     robotText = robotText == undefined ? '' : robotText;
 
-    let m: MicroInteraction = new MicroInteraction(this.interaction.microIdCounter++, new Position(x, y), this.currentMicroType, robotText, params, new Position(x, y), dftParamRes);
+    let m: MicroInteraction = new MicroInteraction(
+      this.interaction.microIdCounter++,
+      new Position(x, y),
+      this.currentMicroType,
+      robotText,
+      params,
+      new Position(x, y),
+      dftParamRes
+    );
 
     this.interaction.micros.push(m);
 
@@ -87,24 +111,29 @@ export class InteractionManagerService {
 
     this.paramManager.updateCurrentMicro(m);
 
+    this.canvasManager.setCanvasMode('select');
+
     return m;
   }
 
-  removeMicro(microId: number):void {
-
+  removeMicro(microId: number): void {
     let m = this.getMicroById(microId);
     if (m == undefined) {
-      console.log("no such micro");
+      console.log('no such micro');
     }
 
     // Remove transitions associated with the microId
-    let ts: Transition[] = this.interaction.transitions.filter((x: Transition) => x.firstMicroId == microId || x.secondMicroId == microId);
+    let ts: Transition[] = this.interaction.transitions.filter(
+      (x: Transition) => x.firstMicroId == microId || x.secondMicroId == microId
+    );
 
     //this.interaction.transitions = ts;
-    ts.forEach(t => this.removeTransition(t.id));
+    ts.forEach((t) => this.removeTransition(t.id));
 
     // Remove the micro from the micros list
-    let ms: MicroInteraction[] = this.interaction.micros.filter((x: MicroInteraction) => x.id != microId);
+    let ms: MicroInteraction[] = this.interaction.micros.filter(
+      (x: MicroInteraction) => x.id != microId
+    );
 
     this.interaction.micros = ms;
 
@@ -118,12 +147,15 @@ export class InteractionManagerService {
   /* Transition related CRUD functions */
 
   removeTransition(tid: number) {
-
     // Get the trans in question for later use
-    let t: Transition | undefined = this.interaction.transitions.find((x: Transition) => x.id == tid);
+    let t: Transition | undefined = this.interaction.transitions.find(
+      (x: Transition) => x.id == tid
+    );
 
     // Filter out the specified trans
-    let ts: Transition[] = this.interaction.transitions.filter((x: Transition) => x.id != tid);
+    let ts: Transition[] = this.interaction.transitions.filter(
+      (x: Transition) => x.id != tid
+    );
 
     // Set the new transitions
     this.interaction.transitions = ts;
@@ -134,9 +166,10 @@ export class InteractionManagerService {
     }
 
     // Then find the micro in which it originates
-    let m = this.interaction.micros.find(micro => t != undefined && micro.id === t.firstMicroId);
+    let m = this.interaction.micros.find(
+      (micro) => t != undefined && micro.id === t.firstMicroId
+    );
     if (m) {
-
       // Reset anchor based on transition state
       if (t && t.isReady) {
         m.readyTransitionId = -1;
@@ -151,7 +184,13 @@ export class InteractionManagerService {
   }
 
   setFirstAnchor(mid: number, isReady: boolean) {
-    this.currentTransition = new Transition(this.interaction.transitionIdCounter, isReady, mid, -1, false);
+    this.currentTransition = new Transition(
+      this.interaction.transitionIdCounter,
+      isReady,
+      mid,
+      -1,
+      false
+    );
 
     this.interaction.transitions.push(this.currentTransition);
     this.interaction.transitionIdCounter++;
@@ -160,7 +199,7 @@ export class InteractionManagerService {
 
     this.isAddingTransition = true;
 
-    let m = this.interaction.micros.find(micro => micro.id === mid);
+    let m = this.interaction.micros.find((micro) => micro.id === mid);
     if (m) {
       if (isReady) {
         m.readyTransitionId = this.currentTransition.id;
@@ -172,7 +211,6 @@ export class InteractionManagerService {
   }
 
   setSecondAnchor(mid: number) {
-
     // Check that this is going to be a unique transition
     // This is unnecessary now because its impossible for a user to add duplicate transitions
     /*
@@ -195,7 +233,9 @@ export class InteractionManagerService {
   cancelAddingTransition() {
     this.isAddingTransition = false;
 
-    let m = this.interaction.micros.find(micro => micro.id === this.currentTransition.firstMicroId);
+    let m = this.interaction.micros.find(
+      (micro) => micro.id === this.currentTransition.firstMicroId
+    );
     if (m) {
       if (this.currentTransition.isReady) {
         m.readyTransitionId = -1;
@@ -212,7 +252,9 @@ export class InteractionManagerService {
   }
 
   updateTransition(transition: Transition) {
-    let ts: Transition[] = this.interaction.transitions.filter((x: Transition) => x.id != transition.id);
+    let ts: Transition[] = this.interaction.transitions.filter(
+      (x: Transition) => x.id != transition.id
+    );
 
     ts.push(transition);
 
@@ -258,5 +300,4 @@ export class InteractionManagerService {
 
     this.saveInteractionToLocal();
   }
-
 }
