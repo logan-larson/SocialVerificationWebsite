@@ -2,7 +2,17 @@
 This component displays the current interaction model on a canvas.
 */
 
-import { Component, ComponentRef, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
+import {
+  Component,
+  ComponentRef,
+  ElementRef,
+  HostListener,
+  OnInit,
+  Renderer2,
+  ViewChild,
+  ViewContainerRef,
+  ViewRef,
+} from '@angular/core';
 import { Interaction } from 'src/app/models/interaction';
 import { Position } from 'src/app/models/position';
 import { Transition } from 'src/app/models/transition';
@@ -10,19 +20,18 @@ import { InteractionManagerService } from 'src/app/services/interaction-manager.
 import { ContextMenuService } from 'src/app/services/context-menu.service';
 import { ContextMenuComponent } from './context-menu/context-menu.component';
 import { TransitionComponent } from './transition/transition.component';
-import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
+import { CanvasManagerService } from 'src/app/services/canvas-manager.service';
 import { MicroInteraction } from 'src/app/models/microInteraction';
 import { MicroComponent } from './micro/micro.component';
-import {ParameterManagerService} from 'src/app/services/parameter-manager.service';
-import {CdkDragMove, CdkDragStart, CdkDragEnd} from '@angular/cdk/drag-drop';
+import { ParameterManagerService } from 'src/app/services/parameter-manager.service';
+import { CdkDragMove, CdkDragStart, CdkDragEnd } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-interaction-canvas',
   templateUrl: './interaction-canvas.component.html',
-  styles: []
+  styles: [],
 })
 export class InteractionCanvasComponent implements OnInit {
-
   position: Position = new Position();
   scrollPosition: Position = new Position();
 
@@ -32,7 +41,7 @@ export class InteractionCanvasComponent implements OnInit {
 
   contextMenuComponent: ContextMenuComponent | null = null;
 
-  @ViewChild("canvas", { read: ViewContainerRef})
+  @ViewChild('canvas', { read: ViewContainerRef })
   container!: ViewContainerRef; // contents in codepen
 
   // Components contained in container
@@ -45,6 +54,9 @@ export class InteractionCanvasComponent implements OnInit {
   tutorialImage: string = 'assets/tutorialDark.png';
   tutorialHidden: boolean = false;
 
+  selectTooltip: string = 'hidden';
+  dragTooltip: string = 'hidden';
+
   // Load JSON stored in local storage
   @HostListener('window:load', ['$event'])
   onLoadHander() {
@@ -56,7 +68,7 @@ export class InteractionCanvasComponent implements OnInit {
     this.tutorialHidden = localStorage.getItem('tutorialHidden') === 'true';
 
     this.canvasManager.setTutorialHidden(this.tutorialHidden);
-    
+
     if (scrollPositionStr) {
       let scrollPosition = JSON.parse(scrollPositionStr);
 
@@ -66,12 +78,12 @@ export class InteractionCanvasComponent implements OnInit {
         this.scrollPosition = new Position(scrollPosition.x, scrollPosition.y);
         canvas.style.transform = `translate(-50%, -50%) translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px)`;
       }
-
     }
 
-
-
-    this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
+    this.position = new Position(
+      this.el.nativeElement.getBoundingClientRect().left,
+      this.el.nativeElement.getBoundingClientRect().top
+    );
 
     // Set canvas offset in canvasManager OnLoad
     this.canvasManager.canvasOffset = this.position;
@@ -84,7 +96,6 @@ export class InteractionCanvasComponent implements OnInit {
     this.interactionManager.saveInteractionToLocal();
     localStorage.setItem('scrollPosition', JSON.stringify(this.scrollPosition));
   }
-
 
   /* Canvas Operations */
 
@@ -125,7 +136,6 @@ export class InteractionCanvasComponent implements OnInit {
   canvasX: number = 0;
   canvasY: number = 0;
 
-
   //@HostListener('mousedown', ['$event'])
   onDragStart(event: CdkDragStart) {
     if (this.canvasManager.mode == 'pan') {
@@ -134,20 +144,19 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   //@HostListener('mousemove', ['$event'])
-  onDragMove(event: CdkDragMove) {
-  }
+  onDragMove(event: CdkDragMove) {}
 
   //@HostListener('mouseup', ['$event'])
   onDragEnd(event: CdkDragEnd) {
-
     if (this.canvasManager.mode == 'pan') {
-
       this.isPanning = false;
 
-      const canvas = document.getElementById("canvas");
+      const canvas = document.getElementById('canvas');
 
       if (canvas) {
-        this.scrollPosition.addPosition(new Position(event.distance.x, event.distance.y));
+        this.scrollPosition.addPosition(
+          new Position(event.distance.x, event.distance.y)
+        );
         this.canvasManager.canvasScrollOffset = this.scrollPosition;
       }
     }
@@ -163,7 +172,10 @@ export class InteractionCanvasComponent implements OnInit {
   ) {
     setInterval(() => {
       if (this.interactionManager.isAddingTransition) {
-        if (this.canvasManager.onMicroPos.x == 0 && this.canvasManager.onMicroPos.y == 0) {
+        if (
+          this.canvasManager.onMicroPos.x == 0 &&
+          this.canvasManager.onMicroPos.y == 0
+        ) {
           this.canvasManager.getMousePosition.emit(this.mousePos);
         }
       }
@@ -171,23 +183,25 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-
-    this.render.listen('window', 'load', () => {
-    });
+    this.render.listen('window', 'load', () => {});
 
     // Listen for microupdates and adjust them as needed
     // TODO I would like to move to this system as it would reduce the rendering required
     // Instead of rerendering the whole interaction on every change, just rerender the change
-    this.interactionManager.getUpdatedMicro.subscribe((micro: MicroInteraction) => {
-      let currentMicro = this.microComponents.find(m => m.instance.micro.id == micro.id)?.instance;
-      if (currentMicro) {
-        currentMicro.setMicro(micro);
+    this.interactionManager.getUpdatedMicro.subscribe(
+      (micro: MicroInteraction) => {
+        let currentMicro = this.microComponents.find(
+          (m) => m.instance.micro.id == micro.id
+        )?.instance;
+        if (currentMicro) {
+          currentMicro.setMicro(micro);
+        }
       }
-    });
+    );
 
     this.interactionManager.initTransition.subscribe((t: Transition) => {
-      let newTrans = this.container.createComponent(TransitionComponent).instance;
+      let newTrans =
+        this.container.createComponent(TransitionComponent).instance;
       newTrans.setTransition(t);
     });
 
@@ -205,29 +219,38 @@ export class InteractionCanvasComponent implements OnInit {
     });
 
     this.render.listen('window', 'resize', () => {
-      this.position = new Position(this.el.nativeElement.getBoundingClientRect().left, this.el.nativeElement.getBoundingClientRect().top);
+      this.position = new Position(
+        this.el.nativeElement.getBoundingClientRect().left,
+        this.el.nativeElement.getBoundingClientRect().top
+      );
 
       // Set canvas offset in canvasManager OnResize
       this.canvasManager.canvasOffset = this.position;
     });
 
-    this.canvasManager.getModeEmitter.subscribe(_ => this.mode = this.canvasManager.mode);
+    this.canvasManager.getModeEmitter.subscribe(
+      (_) => (this.mode = this.canvasManager.mode)
+    );
 
-    this.canvasManager.clearCanvas.subscribe(_ => {
-      let canvas = document.getElementById("canvas");
+    this.canvasManager.clearCanvas.subscribe((_) => {
+      let canvas = document.getElementById('canvas');
       if (canvas) {
         //canvas.style.transform = "translate(-50%, -50%)";
       }
     });
 
-    this.tutorialImage = this.canvasManager.isDarkMode ? "assets/tutorialDark.png" : "assets/tutorialLight.png";
+    this.tutorialImage = this.canvasManager.isDarkMode
+      ? 'assets/tutorialDark.png'
+      : 'assets/tutorialLight.png';
 
-    this.canvasManager.getIsDarkMode.subscribe(d => {
+    this.canvasManager.getIsDarkMode.subscribe((d) => {
       this.isDarkMode = d;
-      this.tutorialImage = this.isDarkMode ? "assets/tutorialDark.png" : "assets/tutorialLight.png";
+      this.tutorialImage = this.isDarkMode
+        ? 'assets/tutorialDark.png'
+        : 'assets/tutorialLight.png';
     });
 
-    this.canvasManager.getTutorialHiddenEmitter.subscribe(t => {
+    this.canvasManager.getTutorialHiddenEmitter.subscribe((t) => {
       this.tutorialHidden = t;
     });
   }
@@ -237,7 +260,8 @@ export class InteractionCanvasComponent implements OnInit {
   renderCanvas(): void {
     this.interaction.micros.forEach((m: MicroInteraction) => {
       // Create a micro component
-      const microComponent = this.container.createComponent(MicroComponent).instance;
+      const microComponent =
+        this.container.createComponent(MicroComponent).instance;
 
       // Set the component to match the model
       microComponent.setMicro(m);
@@ -245,20 +269,21 @@ export class InteractionCanvasComponent implements OnInit {
 
     this.interaction.transitions.forEach((t: Transition) => {
       // Create a transition component
-      const transitionComponent = this.container.createComponent(TransitionComponent).instance;
+      const transitionComponent =
+        this.container.createComponent(TransitionComponent).instance;
 
       // Set the component to match the model
       transitionComponent.setTransition(t);
     });
 
-    this.contextMenuComponent = this.container.createComponent(ContextMenuComponent).instance;
+    this.contextMenuComponent =
+      this.container.createComponent(ContextMenuComponent).instance;
   }
 
   setMousePos(event: any): void {
     //this.mousePos = new Position(event.clientX, event.clientY);
     this.mousePos = new Position(event.offsetX, event.offsetY);
   }
-  
 
   /* CONTEXT MENU */
 
@@ -266,8 +291,16 @@ export class InteractionCanvasComponent implements OnInit {
     this.contextMenuHidden = false;
 
     if (this.contextMenuComponent) {
-      let newPos: Position = new Position(this.contextMenu.position.x, this.contextMenu.position.y);
-      this.contextMenuComponent.setMenu(this.contextMenu.type, newPos, this.contextMenu.microId, this.contextMenu.transitionId);
+      let newPos: Position = new Position(
+        this.contextMenu.position.x,
+        this.contextMenu.position.y
+      );
+      this.contextMenuComponent.setMenu(
+        this.contextMenu.type,
+        newPos,
+        this.contextMenu.microId,
+        this.contextMenu.transitionId
+      );
     } else {
       console.log("context menu comp doesn't exist");
     }
@@ -285,7 +318,6 @@ export class InteractionCanvasComponent implements OnInit {
     this.parameterManager.updateCurrentMicro(undefined);
   }
 
-
   /* CANVAS OPERATIONS */
 
   selectMain() {
@@ -297,12 +329,11 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   zoomIn() {
-    if (this.zoomLevel < 3)
-      this.zoomLevel += 0.01;
-    
-    const container = document.getElementById("canvas");
+    if (this.zoomLevel < 3) this.zoomLevel += 0.01;
+
+    const container = document.getElementById('canvas');
     if (container != null) {
-      let scale: string = `scale(${this.zoomLevel})`; 
+      let scale: string = `scale(${this.zoomLevel})`;
       let translate: string = `translate(${this.zoomLevel})`;
       container.style.transform = `${scale} ${translate}`;
       this.canvasManager.setZoomLevel(this.zoomLevel);
@@ -310,10 +341,9 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   zoomOut() {
-    if (this.zoomLevel > 0.5)
-      this.zoomLevel -= 0.01;
+    if (this.zoomLevel > 0.5) this.zoomLevel -= 0.01;
 
-    const container = document.getElementById("canvas");
+    const container = document.getElementById('canvas');
     if (container != null) {
       container.style.transform = `scale(${this.zoomLevel})`;
       this.canvasManager.setZoomLevel(this.zoomLevel);
