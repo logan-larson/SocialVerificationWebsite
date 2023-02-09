@@ -1,18 +1,17 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import {Interaction} from 'src/app/models/interaction';
-import {MicroInteraction} from 'src/app/models/microInteraction';
-import {Transition} from 'src/app/models/transition';
-import {InteractionManagerService} from 'src/app/services/interaction-manager.service';
-import {SimulatorService} from 'src/app/services/simulator.service';
-import {VerificationManagerService} from 'src/app/services/verification-manager.service';
+import { Interaction } from 'src/app/models/interaction';
+import { MicroInteraction } from 'src/app/models/microInteraction';
+import { Transition } from 'src/app/models/transition';
+import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
+import { SimulatorService } from 'src/app/services/simulator.service';
+import { VerificationManagerService } from 'src/app/services/verification-manager.service';
 
 @Component({
   selector: 'app-robot-viewer',
   templateUrl: './robot-viewer.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class RobotViewerComponent implements OnInit {
-
   nodes: Node[] = [];
   startingNode: Node | undefined = undefined;
   defaultNode: Node | undefined = undefined;
@@ -42,11 +41,10 @@ export class RobotViewerComponent implements OnInit {
     private interactionManager: InteractionManagerService,
     private verificationManager: VerificationManagerService,
     private simulator: SimulatorService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-
-    this.verificationManager.violationEmitter.subscribe(v => {
+    this.verificationManager.violationEmitter.subscribe((v) => {
       if (v.length == 0) {
         this.setupInteraction(this.interactionManager.interaction);
         this.canPlay = true;
@@ -55,13 +53,15 @@ export class RobotViewerComponent implements OnInit {
       }
     });
 
-    // Listen for 
-    this.interactionManager.getUpdatedInteraction.subscribe((interaction: Interaction) => {
-      this.isPlaying = false;
-      this.canPlay = false;
-      //console.log("init setup, canPlay = false");
-      this.setupInteraction(interaction);
-    });
+    // Listen for
+    this.interactionManager.getUpdatedInteraction.subscribe(
+      (interaction: Interaction) => {
+        this.isPlaying = false;
+        this.canPlay = false;
+        //console.log("init setup, canPlay = false");
+        this.setupInteraction(interaction);
+      }
+    );
 
     this.setupInteraction(this.interactionManager.interaction);
 
@@ -80,7 +80,6 @@ export class RobotViewerComponent implements OnInit {
         this.simulator.updateCurrentMicroId(this.currentNode.id);
       }
     }, 2000);
-
   }
 
   ngOnDestroy(): void {
@@ -88,18 +87,26 @@ export class RobotViewerComponent implements OnInit {
   }
 
   setupInteraction(interaction: Interaction) {
-
     this.nodes = [];
 
     interaction.micros.forEach((m: MicroInteraction) => {
       if (m.type) {
-        let rt: Transition | undefined = interaction.transitions.find(t => t.id == m.readyTransitionId);
-        let nrt: Transition | undefined = interaction.transitions.find(t => t.id == m.notReadyTransitionId);
+        let rt: Transition | undefined = interaction.transitions.find(
+          (t) => t.id == m.readyTransitionId
+        );
+        let nrt: Transition | undefined = interaction.transitions.find(
+          (t) => t.id == m.notReadyTransitionId
+        );
 
         let text: string = m.robotText != null ? m.robotText : '';
         if (rt && nrt) {
-
-          let n: Node = new Node(m.id, m.type, rt.secondMicroId, nrt.secondMicroId, text);
+          let n: Node = new Node(
+            m.id,
+            m.type,
+            rt.secondMicroId,
+            nrt.secondMicroId,
+            text
+          );
           if (n.type == 'Greeter') {
             this.startingNode = n;
           }
@@ -138,11 +145,15 @@ export class RobotViewerComponent implements OnInit {
     }
 
     if (this.humanReady) {
-      this.currentNode = this.nodes.find(n => n.id == this.currentNode?.onReady);
+      this.currentNode = this.nodes.find(
+        (n) => n.id == this.currentNode?.onReady
+      );
       this.needInput();
       //console.log(`ready node: ${JSON.stringify(this.currentNode)}`);
     } else if (this.humanNotReady) {
-      this.currentNode = this.nodes.find(n => n.id == this.currentNode?.onNotReady);
+      this.currentNode = this.nodes.find(
+        (n) => n.id == this.currentNode?.onNotReady
+      );
       this.needInput();
       //console.log(`not ready node: ${JSON.stringify(this.currentNode)}`);
     } else {
@@ -194,7 +205,9 @@ export class RobotViewerComponent implements OnInit {
     console.log(this.humanInput);
     if (this.isRobotAsking && this.needHumanInput) {
       if (this.currentNode) {
-        let action = this.currentNode.actions.find(a => a.value == this.humanInput);
+        let action = this.currentNode.actions.find(
+          (a) => a.value == this.humanInput
+        );
         if (action) {
           if (action.type == 'humanReady') {
             this.humanReady = true;
@@ -204,7 +217,7 @@ export class RobotViewerComponent implements OnInit {
             this.needHumanInput = false;
           }
         } else {
-          alert('Hmm ... I don\'t recognize that.')
+          alert("Hmm ... I don't recognize that.");
         }
       }
     }
@@ -238,7 +251,7 @@ export class RobotViewerComponent implements OnInit {
     if (this.canPlay) {
       this.isPlaying = !this.isPlaying;
     } else {
-      alert("You must first verify the model");
+      alert('You must first verify the model');
     }
 
     if (this.firstPlay) {
@@ -248,7 +261,7 @@ export class RobotViewerComponent implements OnInit {
 
   reset() {
     this.currentNode = undefined;
-      //this.startingNode;
+    //this.startingNode;
     this.isPlaying = false;
     this.needHumanInput = true;
     this.humanReady = false;
@@ -260,7 +273,6 @@ export class RobotViewerComponent implements OnInit {
 
     this.updateBubbleContent();
   }
-
 }
 
 class Node {
@@ -269,7 +281,7 @@ class Node {
   onReady: number = -1;
   onNotReady: number = -1;
   text: string = '';
-  actions: {type: string, value: string}[] = [];
+  actions: { type: string; value: string }[] = [];
 
   constructor(
     id: number,
@@ -277,7 +289,7 @@ class Node {
     onReady: number,
     onNotReady: number,
     text: string = '',
-    actions: {type: string, value: string}[] = []
+    actions: { type: string; value: string }[] = []
   ) {
     this.id = id;
     this.type = type;
