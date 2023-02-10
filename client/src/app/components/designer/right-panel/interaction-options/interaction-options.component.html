@@ -1,5 +1,6 @@
 <div class="bg-secondary dark:bg-dark-secondary">
-  <div class="text-lg text-center border-b-2 border-black text-light-text dark:text-dark-text bg-primary dark:bg-dark-primary">
+  <div
+    class="text-lg text-center border-b-2 border-black text-light-text dark:text-dark-text bg-primary dark:bg-dark-primary">
     Inspector
   </div>
   <div *ngIf="micro">
@@ -7,18 +8,13 @@
       {{ micro.type }}
     </div>
     <div *ngFor="let param of micro.parameters; let idx=index;">
-      <app-parameter-options 
-        [microType]="micro.type" 
-        [param]="param"
-        [name]="'boolParam' + idx"
-        [index]="idx"
-        [result]="paramRes[idx]"
-        (resultEmitter)="setResults(idx, $event)"
-      ></app-parameter-options>
+      <app-parameter-options [microType]="micro.type" [param]="param" [name]="'boolParam' + idx" [index]="idx"
+        [result]="paramRes[idx]" (resultEmitter)="setResults(idx, $event)"></app-parameter-options>
     </div>
-    <div *ngIf="micro.parameters.length == 0; else save" class="p-2">
+    <div *ngIf="micro.parameters.length == 0" class="p-2">
       No options for this micro-interaction
     </div>
+    <!--
     <ng-template #save>
       <div class="flex items-center justify-center w-full">
         <button
@@ -32,5 +28,6 @@
         >Save</button>
       </div>
     </ng-template>
+  -->
   </div>
 </div>
