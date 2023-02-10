@@ -41,7 +41,7 @@ export class RobotViewerComponent implements OnInit {
     private interactionManager: InteractionManagerService,
     private verificationManager: VerificationManagerService,
     private simulator: SimulatorService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.verificationManager.violationEmitter.subscribe((v) => {
@@ -202,7 +202,10 @@ export class RobotViewerComponent implements OnInit {
   }
 
   respond() {
-    console.log(this.humanInput);
+    if (this.humanInput === '') {
+      alert('Please enter a response.');
+      return;
+    }
     if (this.isRobotAsking && this.needHumanInput) {
       if (this.currentNode) {
         let action = this.currentNode.actions.find(
@@ -219,6 +222,7 @@ export class RobotViewerComponent implements OnInit {
         } else {
           alert("Hmm ... I don't recognize that.");
         }
+        this.humanInput = '';
       }
     }
   }

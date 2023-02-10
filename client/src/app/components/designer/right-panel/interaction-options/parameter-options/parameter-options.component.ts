@@ -6,8 +6,8 @@ also a general component that can represent all of the different types of parame
 */
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import {Parameter} from 'src/app/models/parameter';
-import {ParameterResult} from 'src/app/models/parameterResult';
+import { Parameter } from 'src/app/models/parameter';
+import { ParameterResult } from 'src/app/models/parameterResult';
 
 @Component({
   selector: 'app-parameter-options',
@@ -43,7 +43,7 @@ export class ParameterOptionsComponent implements OnInit {
 
   // bool type
   boolVal: boolean | null = null;
-  
+
   constructor() { }
 
   ngOnInit(): void {
@@ -76,7 +76,12 @@ export class ParameterOptionsComponent implements OnInit {
 
   addResponse() {
 
-    this.responses.push({ type: this.humanState, value: this.response});
+    if (this.humanState == '' || this.response == '') {
+      alert('Please fill out both response and human state fields');
+      return;
+    }
+
+    this.responses.push({ type: this.humanState, value: this.response });
 
     this.humanState = '';
     this.response = '';
