@@ -31,6 +31,7 @@ export class RobotViewerComponent implements OnInit {
   icon: string = '';
 
   interval: any;
+  nextStep: EventEmitter<void> = new EventEmitter<void>();
   showAlert: boolean = true;
 
   bubbleContent: string = '';
@@ -67,23 +68,22 @@ export class RobotViewerComponent implements OnInit {
 
     this.setIcon();
 
-    this.interval = setInterval(() => {
-      if (this.isPlaying && !this.needHumanInput) {
-        this.updateInteraction();
-      } else if (!this.isPlaying) {
-        //console.log('paused');
-      } else {
-        //console.log('need input');
-      }
+    var count = 0;
+    this.nextStep.subscribe(() => {
+      console.log('next step' + count);
+      count++;
+      this.updateInteraction();
 
       if (this.currentNode && this.isPlaying) {
         this.simulator.updateCurrentMicroId(this.currentNode.id);
       }
-    }, 2000);
+    });
   }
 
+
+
   ngOnDestroy(): void {
-    clearInterval(this.interval);
+    //clearInterval(this.interval);
   }
 
   setupInteraction(interaction: Interaction) {
@@ -219,6 +219,7 @@ export class RobotViewerComponent implements OnInit {
             this.humanNotReady = true;
             this.needHumanInput = false;
           }
+          if (this.isPlaying) this.nextStep.emit();
         } else {
           alert("Hmm ... I don't recognize that.");
         }
@@ -234,20 +235,22 @@ export class RobotViewerComponent implements OnInit {
   }
 
   ready() {
-    if (this.needHumanInput) {
-      //console.log('ready click');
+    if (this.needHumanInput && this.isPlaying) {
       this.humanReady = true;
       this.humanNotReady = false;
       this.needHumanInput = false;
+
+      this.nextStep.emit();
     }
   }
 
   notReady() {
-    if (this.needHumanInput) {
-      //console.log('not ready click');
+    if (this.needHumanInput && this.isPlaying) {
       this.humanReady = false;
       this.humanNotReady = true;
       this.needHumanInput = false;
+
+      this.nextStep.emit();
     }
   }
 
@@ -256,7 +259,7 @@ export class RobotViewerComponent implements OnInit {
       this.isPlaying = !this.isPlaying;
 
       if (this.firstPlay) {
-        this.updateInteraction();
+        this.nextStep.emit();
       }
     } else {
       alert('You must first verify the model');
