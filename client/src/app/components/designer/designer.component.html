@@ -1,4 +1,5 @@
-<app-actions-bar class="relative z-30 flex p-2 border-b-2 border-black bg-primary dark:bg-dark-primary box-border"></app-actions-bar>
+<app-actions-bar
+  class="relative z-30 flex p-2 border-b-2 border-black bg-red dark:bg-dark-primary box-border"></app-actions-bar>
 
 <div id="main-content" class="flex h-full">
 
@@ -6,18 +7,23 @@
 
     <div class="flex flex-[2]">
       <!-- this used to be resizable, but I haven't found a way to update the canvas offset when resizing (resize-x) -->
-      <app-microinteraction-selector class="relative min-w-[160px] overflow-hidden h-full border-r-2 border-black col-span-1 bg-secondary dark:bg-dark-secondary z-20"></app-microinteraction-selector>
-      <app-interaction-canvas class="relative w-full bg-secondary dark:bg-dark-secondary overflow-hidden"></app-interaction-canvas>
+      <app-microinteraction-selector
+        class="relative min-w-[160px] overflow-hidden h-full border-r-2 border-black col-span-1 bg-secondary dark:bg-dark-secondary z-20"></app-microinteraction-selector>
+      <app-interaction-canvas
+        class="relative w-full bg-primary dark:bg-dark-primary overflow-hidden"></app-interaction-canvas>
     </div>
 
     <app-violation-output class="relative z-10 col-span-9 bg-secondary dark:bg-dark-secondary"></app-violation-output>
 
   </div>
 
-  <div id="right-side" class="relative z-10 flex flex-col w-[25%] border-l-2 border-black bg-secondary dark:bg-dark-secondary">
+  <div id="right-side"
+    class="relative z-10 flex flex-col w-[25%] border-l-2 border-black bg-secondary dark:bg-dark-secondary">
 
-    <app-interaction-options class="flex-1 w-full max-h-[50vh] overflow-x-hidden overflow-y-auto border-b-2 border-black grow-1 bg-secondary dark:bg-dark-secondary"></app-interaction-options>
-    <app-robot-viewer class="flex-1 w-full overflow-hidden grow-1 bg-secondary dark:bg-dark-secondary"></app-robot-viewer>
+    <app-interaction-options
+      class="flex-1 w-full max-h-[50vh] overflow-x-hidden overflow-y-auto border-b-2 border-black grow-1 bg-secondary dark:bg-dark-secondary"></app-interaction-options>
+    <app-robot-viewer
+      class="flex-1 w-full overflow-hidden grow-1 bg-secondary dark:bg-dark-secondary"></app-robot-viewer>
 
   </div>
 

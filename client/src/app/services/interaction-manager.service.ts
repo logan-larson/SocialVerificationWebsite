@@ -45,7 +45,7 @@ export class InteractionManagerService {
     private http: HttpClient,
     private paramManager: ParameterManagerService,
     private canvasManager: CanvasManagerService
-  ) {}
+  ) { }
 
   /* Micro related CRUD functions */
 

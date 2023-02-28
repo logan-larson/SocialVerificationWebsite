@@ -23,6 +23,8 @@ export class CanvasManagerService {
   violatingTransitionIds: number[] = [];
 
   canvasOffset: Position = new Position(0, 0);
+  canvasWidth: number = 0;
+  canvasHeight: number = 0;
   canvasScrollOffset: Position = new Position(0, 0);
 
   // Used when adding a transition for locking onto a micros anchor
@@ -56,7 +58,7 @@ export class CanvasManagerService {
     localStorage.setItem('isDarkMode', this.isDarkMode ? 'true' : 'false');
     this.getIsDarkMode.emit(this.isDarkMode);
   }
-  
+
   changeTheme(): void {
     this.isDarkMode = !this.isDarkMode;
     localStorage.setItem('isDarkMode', this.isDarkMode ? 'true' : 'false');
