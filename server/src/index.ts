@@ -8,7 +8,7 @@ import dotenv from 'dotenv'; // Used to get port from environment
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 /* Link static files */
 app.use(express.static(__dirname + '/public'));
