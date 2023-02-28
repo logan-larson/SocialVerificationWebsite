@@ -22,6 +22,7 @@ import { MicroComponent } from './components/designer/interaction-canvas/micro/m
 import { ParameterOptionsComponent } from './components/designer/right-panel/interaction-options/parameter-options/parameter-options.component';
 import { ViolationComponent } from './components/designer/violation-output/violation/violation.component';
 import { RightPanelComponent } from './components/designer/right-panel/right-panel.component';
+import { CanvasMinimapComponent } from './components/designer/interaction-canvas/canvas-minimap/canvas-minimap.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { RightPanelComponent } from './components/designer/right-panel/right-pan
     ParameterOptionsComponent,
     ViolationComponent,
     RightPanelComponent,
+    CanvasMinimapComponent,
   ],
   imports: [
     BrowserModule,

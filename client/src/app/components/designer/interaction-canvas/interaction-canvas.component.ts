@@ -25,6 +25,7 @@ import { MicroInteraction } from 'src/app/models/microInteraction';
 import { MicroComponent } from './micro/micro.component';
 import { ParameterManagerService } from 'src/app/services/parameter-manager.service';
 import { CdkDragMove, CdkDragStart, CdkDragEnd } from '@angular/cdk/drag-drop';
+import { CanvasMinimapService } from 'src/app/services/canvas-minimap.service';
 
 @Component({
   selector: 'app-interaction-canvas',
@@ -77,6 +78,7 @@ export class InteractionCanvasComponent implements OnInit {
         console.log(scrollPosition);
         this.scrollPosition = new Position(scrollPosition.x, scrollPosition.y);
         canvas.style.transform = `translate(-50%, -50%) translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px)`;
+        this.canvasMinimap.setViewPosition(this.scrollPosition);
       }
     }
 
@@ -144,7 +146,7 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   //@HostListener('mousemove', ['$event'])
-  onDragMove(event: CdkDragMove) {}
+  onDragMove(event: CdkDragMove) { }
 
   //@HostListener('mouseup', ['$event'])
   onDragEnd(event: CdkDragEnd) {
@@ -158,6 +160,7 @@ export class InteractionCanvasComponent implements OnInit {
           new Position(event.distance.x, event.distance.y)
         );
         this.canvasManager.canvasScrollOffset = this.scrollPosition;
+        this.canvasMinimap.setViewPosition(this.scrollPosition);
       }
     }
   }
@@ -166,6 +169,7 @@ export class InteractionCanvasComponent implements OnInit {
     private interactionManager: InteractionManagerService,
     private parameterManager: ParameterManagerService,
     private canvasManager: CanvasManagerService,
+    private canvasMinimap: CanvasMinimapService,
     private contextMenu: ContextMenuService,
     private render: Renderer2,
     private el: ElementRef
@@ -183,7 +187,7 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.render.listen('window', 'load', () => {});
+    this.render.listen('window', 'load', () => { });
 
     // Listen for microupdates and adjust them as needed
     // TODO I would like to move to this system as it would reduce the rendering required
