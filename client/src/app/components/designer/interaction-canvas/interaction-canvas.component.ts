@@ -77,7 +77,7 @@ export class InteractionCanvasComponent implements OnInit {
       if (canvas) {
         console.log(scrollPosition);
         this.scrollPosition = new Position(scrollPosition.x, scrollPosition.y);
-        canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%)`;
+        // canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%)`;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
       }
     }
@@ -258,12 +258,12 @@ export class InteractionCanvasComponent implements OnInit {
     );
 
     this.canvasManager.clearCanvas.subscribe((_) => {
-      this.scrollPosition = new Position(0, 0);
-      this.canvasManager.canvasScrollOffset = this.scrollPosition;
+      // this.scrollPosition = new Position(0, 0);
+      // this.canvasManager.canvasScrollOffset = this.scrollPosition;
 
       let canvas = document.getElementById('canvas');
       if (canvas) {
-        canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%) `;
+        // canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%) `;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
       }
     });
