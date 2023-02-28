@@ -1,7 +1,8 @@
-<div id="canvas" class="absolute h-[3000px] w-[5000px]" style="transform: translate(-50%, -50%);"
-  (mousemove)="setMousePos($event)" (dragover)="allowDrop($event)" (drop)="addMicro($event)" (click)="clickOff()"
-  cdkDrag [cdkDragDisabled]="mode != 'pan'" (cdkDragStarted)="onDragStart($event)" (cdkDragMoved)="onDragMove($event)"
-  (cdkDragEnded)="onDragEnd($event)" [ngClass]="{
+<div id="canvas" class="absolute h-[3000px] w-[5000px] bg-secondary dark:bg-dark-secondary"
+  style="transform: translate(-50%, -50%);" (mousemove)="setMousePos($event)" (dragover)="allowDrop($event)"
+  (drop)="addMicro($event)" (click)="clickOff()" cdkDrag [cdkDragDisabled]="mode != 'pan'"
+  (cdkDragStarted)="onDragStart($event)" (cdkDragMoved)="onDragMove($event)" (cdkDragEnded)="onDragEnd($event)"
+  [ngClass]="{
     'cursor-auto': mode == 'select',
     'cursor-grab': mode == 'pan',
     'cursor-grabbing': isPanning

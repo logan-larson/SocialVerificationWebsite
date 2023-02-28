@@ -237,10 +237,9 @@ export class InteractionCanvasComponent implements OnInit {
     );
 
     this.canvasManager.clearCanvas.subscribe((_) => {
-      let canvas = document.getElementById('canvas');
-      if (canvas) {
-        //canvas.style.transform = "translate(-50%, -50%)";
-      }
+      this.scrollPosition = new Position(0, 0);
+      this.canvasManager.canvasScrollOffset = this.scrollPosition;
+      this.canvasMinimap.setViewPosition(this.scrollPosition);
     });
 
     this.tutorialImage = this.canvasManager.isDarkMode
