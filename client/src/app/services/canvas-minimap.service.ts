@@ -10,6 +10,7 @@ export class CanvasMinimapService {
   viewPosition: Position = new Position(0, 0);
 
   viewPositionChange: EventEmitter<Position> = new EventEmitter<Position>();
+  redrawMinimap: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 

@@ -35,6 +35,10 @@ export class CanvasMinimapComponent implements OnInit, AfterViewInit {
       this.interaction = interaction;
       this.drawMinimap();
     });
+
+    this.canvasMinimap.redrawMinimap.subscribe(() => {
+      this.drawMinimap();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -49,10 +53,12 @@ export class CanvasMinimapComponent implements OnInit, AfterViewInit {
       context.clearRect(0, 0, canvas.width, canvas.height);
 
       const viewPort = this.toViewMinimapPosition(this.viewPosition);
+      const viewPortWidth = this.canvasManager.canvasWidth / 25;
+      const viewPortHeight = this.canvasManager.canvasHeight / 25;
 
       // Draw the view port rectangle
       context.beginPath();
-      context.rect(viewPort.x - 15, viewPort.y - 10, 30, 20);
+      context.rect(viewPort.x, viewPort.y, viewPortWidth, viewPortHeight);
       context.stroke();
       context.closePath();
 
@@ -61,7 +67,7 @@ export class CanvasMinimapComponent implements OnInit, AfterViewInit {
         const pos = this.toMicroMinimapPosition(micro.position);
         context.fillStyle = this.getMicroColor(micro);
         context.beginPath();
-        context.fillRect(pos.x - 5, pos.y - 5, 10, 10);
+        context.fillRect(pos.x - 3, pos.y - 4, 6, 8);
         context.stroke();
         context.closePath();
       });
@@ -69,7 +75,6 @@ export class CanvasMinimapComponent implements OnInit, AfterViewInit {
   }
 
   toViewMinimapPosition(position: Position): Position {
-    console.log(position);
     return new Position((-position.x + 2500) / 25, (-position.y + 1500) / 25);
   }
 
@@ -88,7 +93,10 @@ export class CanvasMinimapComponent implements OnInit, AfterViewInit {
       case 'Instruction':
         return 'rgb(252 211 77)';
       case 'Handoff':
-        return 'rgb(100 116 139)';
+        if (this.canvasManager.isDarkMode)
+          return 'rgb(255 255 255)';
+        else
+          return 'rgb(100 116 139)';
       case 'Answer':
         return 'rgb(168 85 247)';
       case 'Wait':

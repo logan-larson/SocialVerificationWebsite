@@ -77,7 +77,7 @@ export class InteractionCanvasComponent implements OnInit {
       if (canvas) {
         console.log(scrollPosition);
         this.scrollPosition = new Position(scrollPosition.x, scrollPosition.y);
-        canvas.style.transform = `translate(-50%, -50%) translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px)`;
+        canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%)`;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
       }
     }
@@ -87,9 +87,21 @@ export class InteractionCanvasComponent implements OnInit {
       this.el.nativeElement.getBoundingClientRect().top
     );
 
+    this.canvasManager.canvasScrollOffset = this.scrollPosition;
+
     // Set canvas offset in canvasManager OnLoad
     this.canvasManager.canvasOffset = this.position;
-    this.canvasManager.canvasScrollOffset = this.scrollPosition;
+
+    const bottomRight = new Position(
+      this.el.nativeElement.getBoundingClientRect().right,
+      this.el.nativeElement.getBoundingClientRect().bottom
+    );
+
+    // Set canvas width and height in canvasManager OnLoad
+    this.canvasManager.canvasWidth = bottomRight.x - this.position.x;
+    this.canvasManager.canvasHeight = bottomRight.y - this.position.y;
+
+    this.canvasMinimap.redrawMinimap.emit();
   }
 
   // Save JSON to local storage
@@ -161,6 +173,8 @@ export class InteractionCanvasComponent implements OnInit {
         );
         this.canvasManager.canvasScrollOffset = this.scrollPosition;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
+
+        // canvas.style.transform = `translate3d(${event.distance.x}px, ${event.distance.y}px, 0px) translate(-50%, -50%)`;
       }
     }
   }
@@ -228,8 +242,15 @@ export class InteractionCanvasComponent implements OnInit {
         this.el.nativeElement.getBoundingClientRect().top
       );
 
+      const bottomRight = new Position(
+        this.el.nativeElement.getBoundingClientRect().right,
+        this.el.nativeElement.getBoundingClientRect().bottom
+      );
+
       // Set canvas offset in canvasManager OnResize
       this.canvasManager.canvasOffset = this.position;
+      this.canvasManager.canvasWidth = bottomRight.x - this.position.x;
+      this.canvasManager.canvasHeight = bottomRight.y - this.position.y;
     });
 
     this.canvasManager.getModeEmitter.subscribe(
@@ -239,7 +260,12 @@ export class InteractionCanvasComponent implements OnInit {
     this.canvasManager.clearCanvas.subscribe((_) => {
       this.scrollPosition = new Position(0, 0);
       this.canvasManager.canvasScrollOffset = this.scrollPosition;
-      this.canvasMinimap.setViewPosition(this.scrollPosition);
+
+      let canvas = document.getElementById('canvas');
+      if (canvas) {
+        canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%) `;
+        this.canvasMinimap.setViewPosition(this.scrollPosition);
+      }
     });
 
     this.tutorialImage = this.canvasManager.isDarkMode
