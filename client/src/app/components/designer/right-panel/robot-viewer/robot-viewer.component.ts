@@ -179,17 +179,17 @@ export class RobotViewerComponent implements OnInit {
       switch (this.currentNode.type) {
         case 'Greeter':
         case 'Farewell':
-          this.icon = `/assets/robotImages/armRaise.png`;
+          this.icon = `/assets/croppedRobotImages/armRaise.png`;
           break;
         case 'Handoff':
-          this.icon = `/assets/robotImages/handoff.png`;
+          this.icon = `/assets/croppedRobotImages/handoff.png`;
           break;
         default:
-          this.icon = `/assets/robotImages/neutral.png`;
+          this.icon = `/assets/croppedRobotImages/neutral.png`;
           break;
       }
     } else {
-      this.icon = '/assets/robotImages/neutral.png';
+      this.icon = '/assets/croppedRobotImages/neutral.png';
     }
   }
 
@@ -275,7 +275,7 @@ export class RobotViewerComponent implements OnInit {
     this.humanNotReady = false;
     this.firstPlay = true;
 
-    this.icon = '/assets/robotImages/neutral.png';
+    this.icon = '/assets/croppedRobotImages/neutral.png';
     this.isRobotAsking = false;
 
     this.updateBubbleContent();
