@@ -77,7 +77,7 @@ export class InteractionCanvasComponent implements OnInit {
       if (canvas) {
         console.log(scrollPosition);
         this.scrollPosition = new Position(scrollPosition.x, scrollPosition.y);
-        // canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%)`;
+        canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%)`;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
       }
     }
