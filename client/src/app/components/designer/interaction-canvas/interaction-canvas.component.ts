@@ -109,6 +109,7 @@ export class InteractionCanvasComponent implements OnInit {
   beforeUnloadHander() {
     this.interactionManager.saveInteractionToLocal();
     localStorage.setItem('scrollPosition', JSON.stringify(this.scrollPosition));
+    // localStorage.setItem('scrollPosition', JSON.stringify(new Position(0, 0)));
   }
 
   /* Canvas Operations */
@@ -150,15 +151,31 @@ export class InteractionCanvasComponent implements OnInit {
   canvasX: number = 0;
   canvasY: number = 0;
 
+  preDragScrollPosition: Position = new Position();
+
   //@HostListener('mousedown', ['$event'])
   onDragStart(event: CdkDragStart) {
     if (this.canvasManager.mode == 'pan') {
       this.isPanning = true;
+      this.preDragScrollPosition = this.scrollPosition;
     }
   }
 
   //@HostListener('mousemove', ['$event'])
-  onDragMove(event: CdkDragMove) { }
+  onDragMove(event: CdkDragMove) {
+    if (this.canvasManager.mode == 'pan') {
+      if (this.isPanning) {
+        const canvas = document.getElementById('canvas');
+
+        if (canvas) {
+          // this.canvasManager.canvasScrollOffset = this.scrollPosition;
+          this.canvasMinimap.setViewPosition(new Position(this.preDragScrollPosition.x + event.distance.x, this.preDragScrollPosition.y + event.distance.y));
+
+          // canvas.style.transform = `translate3d(${event.distance.x}px, ${event.distance.y}px, 0px) translate(-50%, -50%)`;
+        }
+      }
+    }
+  }
 
   //@HostListener('mouseup', ['$event'])
   onDragEnd(event: CdkDragEnd) {
