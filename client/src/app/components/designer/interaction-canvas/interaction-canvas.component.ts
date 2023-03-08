@@ -169,7 +169,12 @@ export class InteractionCanvasComponent implements OnInit {
 
         if (canvas) {
           // this.canvasManager.canvasScrollOffset = this.scrollPosition;
-          this.canvasMinimap.setViewPosition(new Position(this.preDragScrollPosition.x + event.distance.x, this.preDragScrollPosition.y + event.distance.y));
+          this.canvasMinimap.setViewPosition(
+            new Position(
+              this.preDragScrollPosition.x + event.distance.x,
+              this.preDragScrollPosition.y + event.distance.y
+            )
+          );
 
           // canvas.style.transform = `translate3d(${event.distance.x}px, ${event.distance.y}px, 0px) translate(-50%, -50%)`;
         }
@@ -218,7 +223,7 @@ export class InteractionCanvasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.render.listen('window', 'load', () => { });
+    this.render.listen('window', 'load', () => {});
 
     // Listen for microupdates and adjust them as needed
     // TODO I would like to move to this system as it would reduce the rendering required
@@ -268,6 +273,8 @@ export class InteractionCanvasComponent implements OnInit {
       this.canvasManager.canvasOffset = this.position;
       this.canvasManager.canvasWidth = bottomRight.x - this.position.x;
       this.canvasManager.canvasHeight = bottomRight.y - this.position.y;
+
+      this.canvasMinimap.redrawMinimap.emit();
     });
 
     this.canvasManager.getModeEmitter.subscribe(
