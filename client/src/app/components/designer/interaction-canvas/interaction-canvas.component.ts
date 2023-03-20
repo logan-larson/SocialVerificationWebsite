@@ -52,30 +52,7 @@ export class InteractionCanvasComponent implements OnInit {
 
   mousePos: Position = new Position();
 
-  tutorialImage: string = 'assets/tutorialDark.png';
-
-  darkTutorialImages: string[] = [
-    'assets/darkTutorialImages/D1.png',
-    'assets/darkTutorialImages/D2.png',
-    'assets/darkTutorialImages/D3.png',
-    'assets/darkTutorialImages/D4.png',
-    'assets/darkTutorialImages/D5.png',
-    'assets/darkTutorialImages/D6.png',
-    'assets/darkTutorialImages/D7.png',
-    'assets/darkTutorialImages/D8.png',
-    'assets/darkTutorialImages/D9.png',
-    'assets/darkTutorialImages/D10.png',
-    'assets/darkTutorialImages/D11.png',
-  ];
-
-  lightTutorialImages: string[] = [
-    'assets/lightTutorialImages/1.png',
-    'assets/lightTutorialImages/2.png',
-    'assets/lightTutorialImages/3.png',
-  ];
-
   tutorialHidden: boolean = false;
-  tutorialIndex: number = 0;
 
   selectTooltip: string = 'hidden';
   dragTooltip: string = 'hidden';
@@ -307,17 +284,6 @@ export class InteractionCanvasComponent implements OnInit {
       }
     });
 
-    this.tutorialImage = this.canvasManager.isDarkMode
-      ? this.darkTutorialImages[this.tutorialIndex]
-      : this.lightTutorialImages[this.tutorialIndex];
-
-    this.canvasManager.getIsDarkMode.subscribe((d) => {
-      this.isDarkMode = d;
-      this.tutorialImage = this.canvasManager.isDarkMode
-        ? this.darkTutorialImages[this.tutorialIndex]
-        : this.lightTutorialImages[this.tutorialIndex];
-    });
-
     this.canvasManager.getTutorialHiddenEmitter.subscribe((t) => {
       this.tutorialHidden = t;
     });
@@ -415,24 +381,6 @@ export class InteractionCanvasComponent implements OnInit {
     if (container != null) {
       container.style.transform = `scale(${this.zoomLevel})`;
       this.canvasManager.setZoomLevel(this.zoomLevel);
-    }
-  }
-
-  tutorialBack() {
-    if (this.tutorialIndex > 0) {
-      this.tutorialIndex--;
-      this.tutorialImage = this.canvasManager.isDarkMode
-        ? this.darkTutorialImages[this.tutorialIndex]
-        : this.lightTutorialImages[this.tutorialIndex];
-    }
-  }
-
-  tutorialNext() {
-    if (this.tutorialIndex < this.darkTutorialImages.length - 1) {
-      this.tutorialIndex++;
-      this.tutorialImage = this.canvasManager.isDarkMode
-        ? this.darkTutorialImages[this.tutorialIndex]
-        : this.lightTutorialImages[this.tutorialIndex];
     }
   }
 }
