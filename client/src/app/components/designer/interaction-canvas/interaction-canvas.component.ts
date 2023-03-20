@@ -55,9 +55,17 @@ export class InteractionCanvasComponent implements OnInit {
   tutorialImage: string = 'assets/tutorialDark.png';
 
   darkTutorialImages: string[] = [
-    'assets/darkTutorialImages/1.png',
-    'assets/darkTutorialImages/2.png',
-    'assets/darkTutorialImages/3.png',
+    'assets/darkTutorialImages/D1.png',
+    'assets/darkTutorialImages/D2.png',
+    'assets/darkTutorialImages/D3.png',
+    'assets/darkTutorialImages/D4.png',
+    'assets/darkTutorialImages/D5.png',
+    'assets/darkTutorialImages/D6.png',
+    'assets/darkTutorialImages/D7.png',
+    'assets/darkTutorialImages/D8.png',
+    'assets/darkTutorialImages/D9.png',
+    'assets/darkTutorialImages/D10.png',
+    'assets/darkTutorialImages/D11.png',
   ];
 
   lightTutorialImages: string[] = [
