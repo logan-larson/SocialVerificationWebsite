@@ -23,6 +23,7 @@ import { ParameterOptionsComponent } from './components/designer/right-panel/int
 import { ViolationComponent } from './components/designer/violation-output/violation/violation.component';
 import { RightPanelComponent } from './components/designer/right-panel/right-panel.component';
 import { CanvasMinimapComponent } from './components/designer/interaction-canvas/canvas-minimap/canvas-minimap.component';
+import { TutorialControllerComponent } from './components/designer/interaction-canvas/tutorial-controller/tutorial-controller.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { CanvasMinimapComponent } from './components/designer/interaction-canvas
     ViolationComponent,
     RightPanelComponent,
     CanvasMinimapComponent,
+    TutorialControllerComponent,
   ],
   imports: [
     BrowserModule,

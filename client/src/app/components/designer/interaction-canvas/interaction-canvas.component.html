@@ -7,8 +7,8 @@
     'cursor-grab': mode == 'pan',
     'cursor-grabbing': isPanning
   }">
-  <div #canvas id="container" class="w-full h-full">
-    <img *ngIf="!tutorialHidden" [src]="tutorialImage" />
+  <div #canvas id="container" class="w-full h-full flex justify-center items-center">
+    <!-- <img *ngIf="!tutorialHidden" [src]="tutorialImage" class="absolute t-1/2 l-1/2 " /> -->
   </div>
 </div>
 <div id="canvasOperations"
@@ -66,4 +66,7 @@
 <div id="canvasMinimap"
   class="absolute bottom-0 left-0 flex border-r-2 border-t-2 border-black w-[202px] h-[122px] bg-primary dark:bg-dark-primary">
   <app-canvas-minimap></app-canvas-minimap>
+</div>
+<div *ngIf="!tutorialHidden" class="absolute bottom-0 w-full">
+  <app-tutorial-controller></app-tutorial-controller>
 </div>

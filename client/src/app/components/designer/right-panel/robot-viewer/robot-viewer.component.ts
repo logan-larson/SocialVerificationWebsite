@@ -209,7 +209,7 @@ export class RobotViewerComponent implements OnInit {
     if (this.isRobotAsking && this.needHumanInput) {
       if (this.currentNode) {
         let action = this.currentNode.actions.find(
-          (a) => a.value == this.humanInput
+          (a) => this.lowerAndStripPunct(a.value) == this.lowerAndStripPunct(this.humanInput)
         );
         if (action) {
           if (action.type == 'humanReady') {
@@ -226,6 +226,10 @@ export class RobotViewerComponent implements OnInit {
         this.humanInput = '';
       }
     }
+  }
+
+  lowerAndStripPunct(str: string) {
+    return str.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
   }
 
   needInput() {

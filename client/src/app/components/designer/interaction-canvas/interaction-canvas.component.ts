@@ -52,7 +52,6 @@ export class InteractionCanvasComponent implements OnInit {
 
   mousePos: Position = new Position();
 
-  tutorialImage: string = 'assets/tutorialDark.png';
   tutorialHidden: boolean = false;
 
   selectTooltip: string = 'hidden';
@@ -290,17 +289,6 @@ export class InteractionCanvasComponent implements OnInit {
         // canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%) `;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
       }
-    });
-
-    this.tutorialImage = this.canvasManager.isDarkMode
-      ? 'assets/tutorialDark.png'
-      : 'assets/tutorialLight.png';
-
-    this.canvasManager.getIsDarkMode.subscribe((d) => {
-      this.isDarkMode = d;
-      this.tutorialImage = this.isDarkMode
-        ? 'assets/tutorialDark.png'
-        : 'assets/tutorialLight.png';
     });
 
     this.canvasManager.getTutorialHiddenEmitter.subscribe((t) => {

@@ -1,0 +1,45 @@
+<div id="gif" class="absolute right-0 bottom-[100px]">
+  <img [src]="tutorialNodes[tutorialIndex].image" width="200px" height="200px" class="min-w-[200px] h-[200px]" />
+</div>
+<div id="container"
+  class="flex absolute right-0 bottom-0 w-3/4 bg-primary dark:bg-dark-primary border-l-2 border-black border-t-2 h-[100px]">
+
+  <div id="content" class="p-2 grow overflow-y-auto">
+    <h1 class="text-light-text dark:text-dark-text text-lg mb-1">{{ tutorialIndex + 1 }}. {{
+      tutorialNodes[tutorialIndex].title }}
+    </h1>
+    <p class="text-light-text dark:text-dark-text text-sm">{{ tutorialNodes[tutorialIndex].content }}</p>
+  </div>
+
+  <div id="divider" class="border-black border-l-2"></div>
+
+  <div id="controls" class="flex justify-center items-center p-2 bg-primary dark:bg-dark-primary w-[96px]">
+    <div class="w-[32px] h-[32px] mx-1 items-center justify-center flex rounded
+            bg-primary dark:bg-dark-primary rounded" (click)="tutorialBack()" [ngClass]="{
+              'hover:bg-primary-hover': tutorialIndex > 0,
+              'dark:hover:bg-dark-primary-hover': tutorialIndex > 0,
+              'hover:cursor-pointer': tutorialIndex > 0,
+              'text-light-text': tutorialIndex > 0,
+              'dark:text-dark-text': tutorialIndex > 0,
+              'text-white': tutorialIndex == 0,
+              'dark:text-black': tutorialIndex == 0
+            }">
+      <mat-icon>arrow_back</mat-icon>
+    </div>
+
+    <div class="w-[32px] h-[32px] mx-1 items-center justify-center flex rounded
+            bg-primary dark:bg-dark-primary rounded" (click)="tutorialNext()" [ngClass]="{
+              'hover:bg-primary-hover': tutorialNodes.length - 1 > tutorialIndex,
+              'dark:hover:bg-dark-primary-hover': tutorialNodes.length - 1 > tutorialIndex,
+              'hover:cursor-pointer': tutorialNodes.length - 1 > tutorialIndex,
+              'text-light-text': tutorialNodes.length - 1 > tutorialIndex,
+              'dark:text-dark-text': tutorialNodes.length - 1 > tutorialIndex,
+              'text-white': tutorialNodes.length - 1 == tutorialIndex,
+              'dark:text-black': tutorialNodes.length - 1 == tutorialIndex
+            }">
+      <mat-icon>arrow_forward</mat-icon>
+    </div>
+
+  </div>
+
+</div>
