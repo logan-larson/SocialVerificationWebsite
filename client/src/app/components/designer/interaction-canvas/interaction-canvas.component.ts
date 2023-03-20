@@ -53,7 +53,21 @@ export class InteractionCanvasComponent implements OnInit {
   mousePos: Position = new Position();
 
   tutorialImage: string = 'assets/tutorialDark.png';
+
+  darkTutorialImages: string[] = [
+    'assets/tutorialDark.png',
+    'assets/tutorialDark2.png',
+    'assets/tutorialDark3.png',
+  ];
+
+  lightTutorialImages: string[] = [
+    'assets/tutorialLight.png',
+    'assets/tutorialLight2.png',
+    'assets/tutorialLight3.png',
+  ];
+
   tutorialHidden: boolean = false;
+  tutorialIndex: number = 0;
 
   selectTooltip: string = 'hidden';
   dragTooltip: string = 'hidden';
@@ -286,14 +300,14 @@ export class InteractionCanvasComponent implements OnInit {
     });
 
     this.tutorialImage = this.canvasManager.isDarkMode
-      ? 'assets/tutorialDark.png'
-      : 'assets/tutorialLight.png';
+      ? this.darkTutorialImages[this.tutorialIndex]
+      : this.lightTutorialImages[this.tutorialIndex];
 
     this.canvasManager.getIsDarkMode.subscribe((d) => {
       this.isDarkMode = d;
-      this.tutorialImage = this.isDarkMode
-        ? 'assets/tutorialDark.png'
-        : 'assets/tutorialLight.png';
+      this.tutorialImage = this.canvasManager.isDarkMode
+        ? this.darkTutorialImages[this.tutorialIndex]
+        : this.lightTutorialImages[this.tutorialIndex];
     });
 
     this.canvasManager.getTutorialHiddenEmitter.subscribe((t) => {
@@ -393,6 +407,24 @@ export class InteractionCanvasComponent implements OnInit {
     if (container != null) {
       container.style.transform = `scale(${this.zoomLevel})`;
       this.canvasManager.setZoomLevel(this.zoomLevel);
+    }
+  }
+
+  tutorialBack() {
+    if (this.tutorialIndex > 0) {
+      this.tutorialIndex--;
+      this.tutorialImage = this.canvasManager.isDarkMode
+        ? this.darkTutorialImages[this.tutorialIndex]
+        : this.lightTutorialImages[this.tutorialIndex];
+    }
+  }
+
+  tutorialNext() {
+    if (this.tutorialIndex < this.darkTutorialImages.length - 1) {
+      this.tutorialIndex++;
+      this.tutorialImage = this.canvasManager.isDarkMode
+        ? this.darkTutorialImages[this.tutorialIndex]
+        : this.lightTutorialImages[this.tutorialIndex];
     }
   }
 }
