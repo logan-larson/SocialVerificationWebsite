@@ -7,7 +7,7 @@
     'cursor-grab': mode == 'pan',
     'cursor-grabbing': isPanning
   }">
-  <div #canvas id="container" class="w-full h-full">
+  <div #canvas id="container" class="w-full h-full flex justify-center items-center">
     <img *ngIf="!tutorialHidden" [src]="tutorialImage" />
   </div>
 </div>
