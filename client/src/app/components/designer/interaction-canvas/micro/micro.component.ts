@@ -10,6 +10,7 @@ import { ContextMenuService } from 'src/app/services/context-menu.service';
 import { Position } from 'src/app/models/position';
 import { ParameterManagerService } from 'src/app/services/parameter-manager.service';
 import { CanvasManagerService } from 'src/app/services/canvas-manager.service';
+import { CanvasMinimapService } from 'src/app/services/canvas-minimap.service';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { SimulatorService } from 'src/app/services/simulator.service';
@@ -49,6 +50,7 @@ export class MicroComponent implements OnInit {
   constructor(
     private contextMenu: ContextMenuService,
     private canvasManager: CanvasManagerService,
+    private canvasMinimap: CanvasMinimapService,
     private interactionManager: InteractionManagerService,
     private parameterManager: ParameterManagerService,
     private simulator: SimulatorService
@@ -86,11 +88,6 @@ export class MicroComponent implements OnInit {
     setInterval(() => {
       if (this.isDragging) {
         this.interactionManager.dragDistance.emit(this.dragDistance);
-        /*
-        this.micro.anchorPosition.x = this.microPos.x;
-        this.micro.anchorPosition.y = this.microPos.y;
-        this.interactionManager.updateMicro(this.micro);
-        */
       }
     }, 20);
 

@@ -28,7 +28,7 @@ export class InteractionManagerService {
 
   isAddingTransition: boolean = false;
 
-  currentMicroType: string = '';
+  currentMicroType: string | undefined = undefined;
 
   @Output() getUpdatedInteraction: EventEmitter<Interaction> =
     new EventEmitter<Interaction>();
@@ -45,7 +45,7 @@ export class InteractionManagerService {
     private http: HttpClient,
     private paramManager: ParameterManagerService,
     private canvasManager: CanvasManagerService
-  ) { }
+  ) {}
 
   /* Micro related CRUD functions */
 
@@ -70,6 +70,8 @@ export class InteractionManagerService {
   }
 
   async addMicro(x: number, y: number): Promise<MicroInteraction | null> {
+    if (!this.currentMicroType) return null;
+
     let mt: MicroType | undefined = await this.http
       .get<MicroType>(`/api/microtypes/${this.currentMicroType}`)
       .toPromise();
@@ -112,6 +114,8 @@ export class InteractionManagerService {
     this.paramManager.updateCurrentMicro(m);
 
     this.canvasManager.setCanvasMode('select');
+
+    this.currentMicroType = undefined;
 
     return m;
   }
