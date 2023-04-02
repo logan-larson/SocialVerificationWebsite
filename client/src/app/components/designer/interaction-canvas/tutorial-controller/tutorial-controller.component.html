@@ -1,11 +1,11 @@
 <div id="gif" class="absolute right-0 bottom-[100px]">
-  <img [src]="tutorialNodes[tutorialIndex].image" width="200px" height="200px" class="min-w-[200px] h-[200px]" />
+  <img [src]="tutorialNodes[tutorialIndex].image" class="h-[20vh] aspect-square" />
 </div>
 <div id="container"
   class="flex absolute right-0 bottom-0 w-3/4 bg-primary dark:bg-dark-primary border-l-2 border-black border-t-2 h-[100px]">
 
   <div id="content" class="p-2 grow overflow-y-auto">
-    <h1 class="text-light-text dark:text-dark-text text-lg mb-1">{{ tutorialIndex + 1 }}/{{ tutorialNodes.length }} {{
+    <h1 class="text-light-text dark:text-dark-text text-lg mb-1">{{ tutorialIndex + 1 }}/{{ tutorialNodes.length }}: {{
       tutorialNodes[tutorialIndex].title }}
     </h1>
     <p class="text-light-text dark:text-dark-text text-sm">{{ tutorialNodes[tutorialIndex].content }}</p>
