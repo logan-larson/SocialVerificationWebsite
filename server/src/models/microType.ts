@@ -1,12 +1,17 @@
-import { Parameter } from "./parameter";
+import { Parameter } from './parameter';
 
 export class MicroType {
+  parameters: Parameter[] | [];
+  type: string;
+  description: string;
 
-    parameters: Parameter[] | []; 
-    type: string;
-
-    constructor(type: string = 'Greeter', parameters: Parameter[] | [] = []) {
-        this.type = type;
-        this.parameters = parameters;
-    }
+  constructor(
+    type: string = 'Greeter',
+    parameters: Parameter[] | [] = [],
+    description: string = ''
+  ) {
+    this.type = type;
+    this.parameters = parameters;
+    this.description = description;
+  }
 }

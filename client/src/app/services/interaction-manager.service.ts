@@ -83,6 +83,7 @@ export class InteractionManagerService {
     //let mt: MicroType | undefined = trackedMicroTypes.find((m: MicroType) => m.type === this.currentMicroType);
     let dftParamRes: ParameterResult[] | undefined = undefined;
     let robotText: string | undefined = undefined;
+    let desc: string = '';
 
     if (mt) {
       dftParamRes = await this.http
@@ -92,6 +93,7 @@ export class InteractionManagerService {
       robotText = await this.http
         .get<string>(`/api/robotText/${mt.type}`)
         .toPromise();
+      desc = mt.description;
     }
 
     dftParamRes = dftParamRes == undefined ? [] : dftParamRes;
@@ -104,7 +106,8 @@ export class InteractionManagerService {
       robotText,
       params,
       new Position(x, y),
-      dftParamRes
+      dftParamRes,
+      desc
     );
 
     this.interaction.micros.push(m);

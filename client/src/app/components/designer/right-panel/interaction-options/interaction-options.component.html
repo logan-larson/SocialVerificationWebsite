@@ -7,6 +7,9 @@
     <div class="px-2 border-b-2 border-black text-light-text dark:text-dark-text">
       {{ micro.type }}
     </div>
+    <div class="px-2 border-b-2 border-black text-light-text dark:text-dark-text">
+      {{ micro.description }}}
+    </div>
     <div *ngFor="let param of micro.parameters; let idx=index;">
       <app-parameter-options [microType]="micro.type" [param]="param" [name]="'boolParam' + idx" [index]="idx"
         [result]="paramRes[idx]" (resultEmitter)="setResults(idx, $event)"></app-parameter-options>
