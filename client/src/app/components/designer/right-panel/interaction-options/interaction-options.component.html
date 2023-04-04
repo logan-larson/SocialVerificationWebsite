@@ -4,11 +4,26 @@
     Inspector
   </div>
   <div *ngIf="micro">
-    <div class="px-2 border-b-2 border-black text-light-text dark:text-dark-text">
+    <div class="px-2 flex items-center border-b-2 border-black text-light-text dark:text-dark-text">
       {{ micro.type }}
-    </div>
-    <div class="px-2 border-b-2 border-black text-light-text dark:text-dark-text">
-      {{ micro.description }}
+      <!-- Micro tool tip description -->
+      <div id="tool-tip-button" class="relative mx-1">
+        <div
+          class="w-[32px] h-[32px] items-center justify-center flex rounded hover:cursor-pointer
+                bg-secondary dark:bg-dark-secondary hover:bg-secondary-hover
+                dark:hover:bg-dark-secondary-hover rounded hover:cursor-pointer
+                text-light-text dark:text-dark-text"
+          (mouseenter)="tooltip = 'visible'"
+          (mouseleave)="tooltip = 'hidden'"
+        >
+          <mat-icon class="hover:cursor-pointer" width="20px">info</mat-icon>
+        </div>
+        <div 
+          [style.visibility]="tooltip"
+          class="absolute z-20 bg-black text-white rounded p-2 w-[400px] top-[35px] left-[-25px]">
+          {{ micro.description }}
+        </div>
+      </div>
     </div>
     <div *ngFor="let param of micro.parameters; let idx=index;">
       <app-parameter-options [microType]="micro.type" [param]="param" [name]="'boolParam' + idx" [index]="idx"
