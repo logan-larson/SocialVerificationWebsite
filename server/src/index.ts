@@ -3,6 +3,7 @@ import verification from './routes/verification';
 import microtypes from './routes/microtype';
 import paramres from './routes/paramRes';
 import robotText from './routes/robotText';
+import animations from './routes/animation';
 import dotenv from 'dotenv'; // Used to get port from environment
 
 dotenv.config();
@@ -21,6 +22,7 @@ app.use('/api/verification', verification);
 app.use('/api/microtypes', microtypes);
 app.use('/api/paramres', paramres);
 app.use('/api/robotText', robotText);
+app.use('/api/animations', animations);
 
 /* Serve front-end */
 // The _ indicates the first parameter is not being used, same as Haskell

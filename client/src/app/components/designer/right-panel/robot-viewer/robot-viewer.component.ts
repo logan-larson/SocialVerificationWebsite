@@ -5,6 +5,8 @@ import { Transition } from 'src/app/models/transition';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { SimulatorService } from 'src/app/services/simulator.service';
 import { VerificationManagerService } from 'src/app/services/verification-manager.service';
+import { MicroAnimation } from 'src/app/models/microAnimation';
+import { AnimationService } from 'src/app/services/animation.service';
 
 @Component({
   selector: 'app-robot-viewer',
@@ -41,8 +43,9 @@ export class RobotViewerComponent implements OnInit {
   constructor(
     private interactionManager: InteractionManagerService,
     private verificationManager: VerificationManagerService,
-    private simulator: SimulatorService
-  ) { }
+    private simulator: SimulatorService,
+    private animationService: AnimationService
+  ) {}
 
   ngOnInit(): void {
     this.verificationManager.violationEmitter.subscribe((v) => {
@@ -79,8 +82,6 @@ export class RobotViewerComponent implements OnInit {
       }
     });
   }
-
-
 
   ngOnDestroy(): void {
     //clearInterval(this.interval);
@@ -121,6 +122,11 @@ export class RobotViewerComponent implements OnInit {
               });
             }
           }
+
+          n.animations = this.animationService.getAnimations(m);
+
+          console.log(n.animations);
+
           this.nodes.push(n);
         } else {
           let n: Node = new Node(m.id, m.type, -1, -1, text);
@@ -170,8 +176,22 @@ export class RobotViewerComponent implements OnInit {
       this.isRobotAsking = false;
     }
 
-    this.setIcon();
+    this.animate();
+
+    // this.setIcon();
     this.updateBubbleContent();
+  }
+
+  animate() {
+
+    this.interval = setInterval(() => {
+      if (!this.currentNode) return;
+
+      if (this.currentNode.animations) {
+
+      }
+
+    }, 3000);
   }
 
   setIcon() {
@@ -209,7 +229,9 @@ export class RobotViewerComponent implements OnInit {
     if (this.isRobotAsking && this.needHumanInput) {
       if (this.currentNode) {
         let action = this.currentNode.actions.find(
-          (a) => this.lowerAndStripPunct(a.value) == this.lowerAndStripPunct(this.humanInput)
+          (a) =>
+            this.lowerAndStripPunct(a.value) ==
+            this.lowerAndStripPunct(this.humanInput)
         );
         if (action) {
           if (action.type == 'humanReady') {
@@ -293,6 +315,7 @@ class Node {
   onNotReady: number = -1;
   text: string = '';
   actions: { type: string; value: string }[] = [];
+  animations: MicroAnimation | {} = {};
 
   constructor(
     id: number,
@@ -300,7 +323,8 @@ class Node {
     onReady: number,
     onNotReady: number,
     text: string = '',
-    actions: { type: string; value: string }[] = []
+    actions: { type: string; value: string }[] = [],
+    animations: MicroAnimation | {} = {}
   ) {
     this.id = id;
     this.type = type;
@@ -308,5 +332,6 @@ class Node {
     this.onNotReady = onNotReady;
     this.text = text;
     this.actions = actions;
+    this.animations = animations;
   }
 }
