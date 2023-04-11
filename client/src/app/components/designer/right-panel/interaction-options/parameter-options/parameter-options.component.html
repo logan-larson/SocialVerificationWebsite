@@ -17,9 +17,9 @@
     <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-black rounded-lg top-10 shadow-sm">{{ param.description }}</div>
   </div>
   <div *ngIf="param.type === 'array'" class="relative flex flex-col dark:text-white">
-    <label (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">Responses the robot can recognize</label>
+    <label (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">Human responses the robot can recognize</label>
     <input type="text" class="w-full p-1 border-2 dark:border-white dark:bg-dark-secondary dark:text-white" [(ngModel)]="response" />
-    <label class="mt-1 mr-2">Corresponding human state</label>
+    <label class="mt-1 mr-2">Corresponding human state for the response</label>
     <select class="p-1 mb-2 dark:bg-dark-primary" [(ngModel)]="humanState">
       <option value="humanReady">Human Ready</option>
       <option value="humanNotReady">Human Not Ready</option>

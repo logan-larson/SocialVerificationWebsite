@@ -8,19 +8,19 @@ let microGreeter = new MicroType(
   'Greeter',
   [
     new Parameter(
-      'Wait for Response',
-      'Wait_for_response',
-      'Set whether the robot waits for the human to greet back',
+      'Wait for human response',
+      'wait_for_response',
+      'If true, the robot will wait for the human to respond to its greeting. If false, the robot will go to the next micro based on the human’s state.',
       'bool'
     ),
     new Parameter(
       'Greet with Handshake',
-      'Greet_with_handshake',
-      'Set whether the robot extends its arm for a handshake',
+      'greet_with_handshake',
+      'If true, the robot will wave and then extend their hand for a handshake. If false, the robot will just wave.',
       'bool'
     ),
   ],
-  'Greeter is always the first micro in the interaction. An interaction is only allowed one Greeter micro. The robot will greet the human with a greeting salutation of the designer’s choosing.'
+  `Greeter is always the first micro in the interaction. An interaction is only allowed one Greeter micro. The robot will greet the human with a greeting salutation of the designer’s choosing. Incoming transitions are not allowed on Greeter.`
 );
 microTypes.push(microGreeter);
 
@@ -31,7 +31,7 @@ let microAsk = new MicroType(
     new Parameter(
       'Question',
       'question',
-      'The Specific question the robot will ask',
+      'The question the robot will ask',
       'str'
     ),
     new Parameter(
@@ -40,10 +40,6 @@ let microAsk = new MicroType(
       'The responses expeceted to be said by the human that the robot can recognize',
       'array'
     ),
-    /*
-  new Parameter("Ready Reponse", "responseReady", "The expeceted response of a human in the Ready state", "str"),
-  new Parameter("Not Ready Response", "responseNotReady", "The expected response of a human in the Not Ready state", "str")
-  */
   ],
   'Ask provides a way for the robot to ask the human a question and evaluate the human’s state according to the human’s response.'
 );
@@ -56,19 +52,19 @@ let microRemark = new MicroType(
     new Parameter(
       'Content',
       'content',
-      'What the robot will say to the user',
+      'The comment the robot will say to the human',
       'str'
     ),
     new Parameter(
-      'Use Gesture',
+      'Use gesture',
       'use_gesture',
-      'Should the robot use gestures (this is different from handoff)',
+      'If true, the robot will make a gesture while saying its remark. If false, the robot will just say its remark.',
       'bool'
     ),
     new Parameter(
       'Allow the human to respond',
-      'Allow_human_to_respond',
-      "Whether the robot gives the human any time to respond after the robot's remark before moving on",
+      'allow_human_to_respond',
+      "If true, the robot will wait for the human to respond to its remark. If false, the robot will go to the next micro based on the human's state.",
       'bool'
     ),
   ],
@@ -81,9 +77,9 @@ let microInstruct = new MicroType(
   'Instruction',
   [
     new Parameter(
-      'Instruction',
-      'Instruction',
-      'The instruction that the robot will provide the human',
+      'Content',
+      'content',
+      'The instruction the robot will provide the human',
       'str'
     ),
   ],
@@ -96,9 +92,9 @@ let microHandoff = new MicroType(
   'Handoff',
   [
     new Parameter(
-      'Robot Speaks',
+      'Robot speaks',
       'robot_speaks',
-      'Robot speaks during handoff',
+      'If true, the robot begins microinteraction by saying "I have something to give you". If false, the robot just hands off the object.',
       'bool'
     ),
   ],
@@ -112,8 +108,8 @@ let microAnswer = new MicroType(
   [
     new Parameter(
       'Introduction',
-      'Introduction',
-      'Robot begins microinteraction by saying I can answer your question',
+      'introduction',
+      'If true, the robot begins microinteraction by saying "I can answer your question". If false, the robot just answers question.',
       'bool'
     ),
   ],
@@ -127,14 +123,14 @@ let microWait = new MicroType(
   [
     new Parameter(
       'Wait Time (seconds)',
-      'wait time (seconds)',
-      'Number of seconds for the robot to wait',
+      'wait_time',
+      'The number of seconds the robot will wait before proceeding to the next microinteraction',
       'int'
     ),
     new Parameter(
-      'Allow Speech',
+      'Allow speech',
       'allow_speech',
-      'Allows a human to say something to the robot to override its wait time',
+      'If true the robot will allow the human to say something to override the wait time. If false, the robot will wait for the specified amount of time before proceeding to the next microinteraction.',
       'bool'
     ),
     new Parameter(

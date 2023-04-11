@@ -16,27 +16,26 @@ import { ParameterManagerService } from 'src/app/services/parameter-manager.serv
 @Component({
   selector: 'app-interaction-options',
   templateUrl: './interaction-options.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class InteractionOptionsComponent implements OnInit {
-
   micro: MicroInteraction | undefined;
   paramRes: ParameterResult[] = [];
-
+  tooltip: string = 'hidden';
 
   constructor(
     private parameterManager: ParameterManagerService,
     private interactionManager: InteractionManagerService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.parameterManager.getUpdatedMicro.subscribe((m: MicroInteraction | undefined) => {
-      this.updateMicro(m);
-    });
+    this.parameterManager.getUpdatedMicro.subscribe(
+      (m: MicroInteraction | undefined) => {
+        this.updateMicro(m);
+      }
+    );
 
     this.updateMicro(this.parameterManager.micro);
-
   }
 
   updateMicro(micro: MicroInteraction | undefined) {
@@ -49,8 +48,8 @@ export class InteractionOptionsComponent implements OnInit {
   /* Updates the current microinteraction in the interaction model */
   saveOptions() {
     if (this.micro) {
-      this.paramRes.forEach(p => {
-        if (p.type == "str") {
+      this.paramRes.forEach((p) => {
+        if (p.type == 'str') {
           if (this.micro) {
             this.micro.robotText = p.strResult;
           }
