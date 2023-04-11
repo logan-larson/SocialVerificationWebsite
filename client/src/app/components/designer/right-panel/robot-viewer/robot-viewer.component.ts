@@ -36,6 +36,8 @@ export class RobotViewerComponent implements OnInit {
   nextStep: EventEmitter<void> = new EventEmitter<void>();
   showAlert: boolean = true;
 
+  isAnimating: boolean = false;
+
   bubbleContent: string = '';
 
   @Output() showParams: EventEmitter<void> = new EventEmitter<void>();
@@ -63,7 +65,7 @@ export class RobotViewerComponent implements OnInit {
         this.isPlaying = false;
         this.canPlay = false;
         //console.log("init setup, canPlay = false");
-        this.setupInteraction(interaction);
+        // this.setupInteraction(interaction);
       }
     );
 
@@ -90,7 +92,7 @@ export class RobotViewerComponent implements OnInit {
   setupInteraction(interaction: Interaction) {
     this.nodes = [];
 
-    interaction.micros.forEach((m: MicroInteraction) => {
+    interaction.micros.forEach(async (m: MicroInteraction) => {
       if (m.type) {
         let rt: Transition | undefined = interaction.transitions.find(
           (t) => t.id == m.readyTransitionId
@@ -123,13 +125,14 @@ export class RobotViewerComponent implements OnInit {
             }
           }
 
-          n.animations = this.animationService.getAnimations(m);
-
-          console.log(n.animations);
+          n.animations = await this.animationService.getAnimations(m);
 
           this.nodes.push(n);
         } else {
           let n: Node = new Node(m.id, m.type, -1, -1, text);
+
+          n.animations = await this.animationService.getAnimations(m);
+
           this.nodes.push(n);
         }
       }
@@ -137,14 +140,15 @@ export class RobotViewerComponent implements OnInit {
 
     this.reset();
 
-    //console.log(this.nodes);
+    console.log(this.nodes);
     //console.log(`current node: ${JSON.stringify(this.currentNode)}`);
   }
 
   updateInteraction() {
     if (this.firstPlay) {
       this.currentNode = this.startingNode;
-      this.setIcon();
+      // this.setIcon();
+      this.animate();
       this.updateBubbleContent();
       this.firstPlay = false;
       return;
@@ -176,22 +180,19 @@ export class RobotViewerComponent implements OnInit {
       this.isRobotAsking = false;
     }
 
-    this.animate();
+    this.updateBubbleContent();
 
     // this.setIcon();
-    this.updateBubbleContent();
+    this.animate();
   }
 
-  animate() {
+  async animate() {
+    if (!this.currentNode) return;
 
-    this.interval = setInterval(() => {
-      if (!this.currentNode) return;
-
-      if (this.currentNode.animations) {
-
-      }
-
-    }, 3000);
+    for (let animation of this.currentNode.animations) {
+      this.icon = animation.imageLocation;
+      await new Promise(r => setTimeout(r, 1000));
+    }
   }
 
   setIcon() {
@@ -315,7 +316,7 @@ class Node {
   onNotReady: number = -1;
   text: string = '';
   actions: { type: string; value: string }[] = [];
-  animations: MicroAnimation | {} = {};
+  animations: MicroAnimation[] = [];
 
   constructor(
     id: number,
@@ -324,7 +325,7 @@ class Node {
     onNotReady: number,
     text: string = '',
     actions: { type: string; value: string }[] = [],
-    animations: MicroAnimation | {} = {}
+    animations: MicroAnimation[] = []
   ) {
     this.id = id;
     this.type = type;
