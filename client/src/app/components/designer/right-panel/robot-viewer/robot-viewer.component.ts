@@ -36,8 +36,6 @@ export class RobotViewerComponent implements OnInit {
   nextStep: EventEmitter<void> = new EventEmitter<void>();
   showAlert: boolean = true;
 
-  isAnimating: boolean = false;
-
   bubbleContent: string = '';
 
   @Output() showParams: EventEmitter<void> = new EventEmitter<void>();
@@ -147,7 +145,6 @@ export class RobotViewerComponent implements OnInit {
   updateInteraction() {
     if (this.firstPlay) {
       this.currentNode = this.startingNode;
-      // this.setIcon();
       this.animate();
       this.updateBubbleContent();
       this.firstPlay = false;
@@ -159,18 +156,13 @@ export class RobotViewerComponent implements OnInit {
         (n) => n.id == this.currentNode?.onReady
       );
       this.needInput();
-      //console.log(`ready node: ${JSON.stringify(this.currentNode)}`);
     } else if (this.humanNotReady) {
       this.currentNode = this.nodes.find(
         (n) => n.id == this.currentNode?.onNotReady
       );
       this.needInput();
-      //console.log(`not ready node: ${JSON.stringify(this.currentNode)}`);
     } else {
-      // TODO Check this
-      //this.needHumanInput = true;
       this.needInput();
-      //console.log(`need human input`);
       return;
     }
 
@@ -182,7 +174,6 @@ export class RobotViewerComponent implements OnInit {
 
     this.updateBubbleContent();
 
-    // this.setIcon();
     this.animate();
   }
 
@@ -190,6 +181,8 @@ export class RobotViewerComponent implements OnInit {
     if (!this.currentNode) return;
 
     for (let animation of this.currentNode.animations) {
+      if (animation.name != this.currentNode.type) return;
+
       this.icon = animation.imageLocation;
       await new Promise(r => setTimeout(r, 1000));
     }
