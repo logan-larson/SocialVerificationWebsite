@@ -18,13 +18,31 @@ router.get('/:type', (req, res) => {
 
       switch (mt.type) {
         case 'Greeter':
-          animation = getGreeterAnimation(req.query);
+          animation = getAnimationGreeter(req.query);
+          break;
+        case 'Ask':
+          animation = getAnimationAsk(req.query);
+          break;
+        case 'Remark':
+          animation = getAnimationRemark(req.query);
+          break;
+        case 'Instruction':
+          animation = getAnimationInstruction(req.query);
+          break;
+        case 'Handoff':
+          animation = getAnimationHandoff(req.query);
+          break;
+        case 'Answer':
+          animation = getAnimationAnswer(req.query);
+          break;
+        case 'Wait':
+          animation = getAnimationWait(req.query);
           break;
         case 'Farewell':
-          animation = getFarewellAnimation(req.query);
+          animation = getAnimationFarewell(req.query);
           break;
         default:
-          animation = getIdleAnimation();
+          animation = getAnimationIdle();
           break;
       }
 
@@ -37,20 +55,21 @@ router.get('/:type', (req, res) => {
   }
 });
 
-function getGreeterAnimation(queryParams: any): MicroAnimation[] {
+function getAnimationGreeter(queryParams: any): MicroAnimation[] {
 
   let animation: MicroAnimation[] = [];
+  let index = 0;
 
   animation.push({
     name: 'Greeter',
-    index: 0,
+    index: index++,
     imageLocation: 'assets/robotImages/greeter/armRaise.png'
   });
 
   if (queryParams != undefined && queryParams['handshake'] == 'true') {
     animation.push({
       name: 'Greeter',
-      index: 1,
+      index: index++,
       imageLocation: 'assets/robotImages/greeter/handoff.png'
     });
   }
@@ -58,9 +77,89 @@ function getGreeterAnimation(queryParams: any): MicroAnimation[] {
   return animation;
 }
 
-function getFarewellAnimation(queryParams: any): MicroAnimation[] {
+function getAnimationAsk(queryParams: any): MicroAnimation[] {
 
   let animation: MicroAnimation[] = [];
+  let index = 0;
+
+  animation.push({
+    name: 'Ask',
+    index: index++,
+    imageLocation: 'assets/robotImages/ask/headTiltRight.jpg'
+  });
+
+  return animation;
+}
+
+function getAnimationRemark(queryParams: any): MicroAnimation[] {
+  let animation: MicroAnimation[] = [];
+  let index = 0;
+
+  animation.push({
+    name: 'Remark',
+    index: index++,
+    imageLocation: 'assets/robotImages/remark/temp.png'
+  });
+
+  return animation;
+}
+
+function getAnimationInstruction(queryParams: any): MicroAnimation[] {
+  let animation: MicroAnimation[] = [];
+  let index = 0;
+
+  animation.push({
+    name: 'Instruction',
+    index: index++,
+    imageLocation: 'assets/robotImages/instruction/temp.png'
+  });
+
+  return animation;
+}
+
+function getAnimationHandoff(queryParams: any): MicroAnimation[] {
+  let animation: MicroAnimation[] = [];
+  let index = 0;
+
+  animation.push({
+    name: 'Handoff',
+    index: index++,
+    imageLocation: 'assets/robotImages/handoff/temp.png'
+  });
+
+  return animation;
+}
+
+function getAnimationAnswer(queryParams: any): MicroAnimation[] {
+  let animation: MicroAnimation[] = [];
+  let index = 0;
+
+  animation.push({
+    name: 'Answer',
+    index: index++,
+    imageLocation: 'assets/robotImages/answer/temp.png'
+  });
+
+  return animation;
+}
+
+function getAnimationWait(queryParams: any): MicroAnimation[] {
+  let animation: MicroAnimation[] = [];
+  let index = 0;
+
+  animation.push({
+    name: 'Wait',
+    index: index++,
+    imageLocation: 'assets/robotImages/wait/temp.png'
+  });
+
+  return animation;
+}
+
+function getAnimationFarewell(queryParams: any): MicroAnimation[] {
+
+  let animation: MicroAnimation[] = [];
+  let index = 0;
 
   animation.push({
     name: 'Farewell',
@@ -71,9 +170,10 @@ function getFarewellAnimation(queryParams: any): MicroAnimation[] {
   return animation;
 }
 
-function getIdleAnimation(): MicroAnimation[] {
+function getAnimationIdle(): MicroAnimation[] {
 
   let animation: MicroAnimation[] = [];
+  let index = 0;
 
   animation.push({
     name: 'Idle',
