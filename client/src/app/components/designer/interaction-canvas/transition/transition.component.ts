@@ -93,7 +93,7 @@ export class TransitionComponent implements OnInit {
       if (this.transition.midPos.x === 0 && this.transition.midPos.y === 0) {
         this.setMiddleAnchor(false);
       }
-      this.updatePositionStrings();
+      this.updatePositionStrings(true);
     });
 
     this.interactionManager.resetMidpoint.subscribe((tid: number) => {
@@ -143,24 +143,8 @@ export class TransitionComponent implements OnInit {
         this.setMiddleAnchor(true, this.transition.midPos);
       }
 
-      this.updatePositionStrings();
+      this.updatePositionStrings(true);
     }
-
-    /*
-    if (this.transition) {
-      let firstMicro = this.interactionManager.getMicroById(this.transition.firstMicroId);
-
-      if (firstMicro) {
-        this.setFirstOffset(firstMicro, this.transition.isReady);
-      }
-
-      let secondMicro = this.interactionManager.getMicroById(this.transition.secondMicroId);
-
-      if (secondMicro) {
-        this.setSecondOffset(secondMicro);
-      }
-    }
-    */
   }
 
 
@@ -223,7 +207,7 @@ export class TransitionComponent implements OnInit {
 
       this.setMiddleAnchor(false);
 
-      this.updatePositionStrings();
+      this.updatePositionStrings(true);
     }
   }
 
@@ -250,7 +234,7 @@ export class TransitionComponent implements OnInit {
     let bezierOffset: number = this.firstAnchorPos.x - this.secondAnchorPos.x;
     bezierOffset = bezierOffset > 61 ? bezierOffset : 60;
     bezierOffset = bezierOffset < 400 ? bezierOffset : 401;
-    let midOffset: number = 0;
+    let midOffset: number = 100;
 
     if (this.firstAnchorPos.x < this.secondAnchorPos.x) {
       this.dFirst = `M ${this.firstAnchorPos.x} ${this.firstAnchorPos.y}
