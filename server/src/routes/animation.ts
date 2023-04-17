@@ -192,6 +192,12 @@ function getAnimationWait(queryParams: any): MicroAnimation[] {
     imageLocation: 'assets/headTiltLeft.png'
   });
 
+  animation.push({
+    name: 'Wait',
+    index: index++,
+    imageLocation: 'assets/neutral.png'
+  });
+
   return animation;
 }
 

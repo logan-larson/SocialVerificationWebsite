@@ -180,11 +180,22 @@ export class RobotViewerComponent implements OnInit {
   async animate() {
     if (!this.currentNode) return;
 
-    for (let animation of this.currentNode.animations) {
-      if (animation.name != this.currentNode.type) return;
+    if (this.currentNode.type == 'Wait') {
+      while (this.currentNode.type == 'Wait') {
+        for (let animation of this.currentNode.animations) {
+          if (animation.name != this.currentNode.type) return;
 
-      this.icon = animation.imageLocation;
-      await new Promise(r => setTimeout(r, 1000));
+          this.icon = animation.imageLocation;
+          await new Promise(r => setTimeout(r, 1000));
+        }
+      }
+    } else {
+      for (let animation of this.currentNode.animations) {
+        if (animation.name != this.currentNode.type) return;
+
+        this.icon = animation.imageLocation;
+        await new Promise(r => setTimeout(r, 1000));
+      }
     }
   }
 
