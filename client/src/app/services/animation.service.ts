@@ -21,6 +21,10 @@ export class AnimationService {
       url += `&handshake=${micro.parameterResults[1].boolResult}`;
     }
 
+    if (micro.type == 'Remark') {
+      url += `&gesture=${micro.parameterResults[1].boolResult}`;
+    }
+
     let res = await this.http.get<MicroAnimation[]>(url).toPromise();
 
     if (res != undefined) {
