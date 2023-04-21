@@ -60,6 +60,10 @@ export class InteractionCanvasComponent implements OnInit {
   // Load JSON stored in local storage
   @HostListener('window:load', ['$event'])
   onLoadHander() {
+    this.setupCanvas();
+  }
+
+  setupCanvas() {
     this.interactionManager.loadInteractionFromLocal();
 
     // Set the scroll position from local storage
@@ -122,37 +126,12 @@ export class InteractionCanvasComponent implements OnInit {
   lastElemX: number = 0;
   lastElemY: number = 0;
 
-  /*
-  @HostListener('wheel', ['$event'])
-  zoom(event: WheelEvent) {
-    //event.deltaY < 0 ? this.zoomIn() : this.zoomOut();
-
-    const delta = Math.sign(-event.deltaY);
-    this.zoomLevel *= (Math.pow(this.zoomFactor, delta));
-
-    const canvas = document.getElementById("canvas");
-    if (canvas) {
-
-      const newElemX = (event.offsetX - this.lastMouseX) * (this.zoomFactor - 1) + this.lastElemX;
-      const newElemY = (event.offsetY - this.lastMouseY) * (this.zoomFactor - 1) + this.lastElemY;
-
-      canvas.style.transform = `translate(${newElemX}px, ${newElemY}px) scale(${this.zoomLevel})`;
-
-      this.lastMouseX = event.offsetX;
-      this.lastMouseY = event.offsetY;
-      this.lastElemX = newElemX;
-      this.lastElemY = newElemY;
-    }
-  }
-  */
-
   isPanning: boolean = false;
   canvasX: number = 0;
   canvasY: number = 0;
 
   preDragScrollPosition: Position = new Position();
 
-  //@HostListener('mousedown', ['$event'])
   onDragStart(event: CdkDragStart) {
     if (this.canvasManager.mode == 'pan') {
       this.isPanning = true;
@@ -160,7 +139,6 @@ export class InteractionCanvasComponent implements OnInit {
     }
   }
 
-  //@HostListener('mousemove', ['$event'])
   onDragMove(event: CdkDragMove) {
     if (this.canvasManager.mode == 'pan') {
       if (this.isPanning) {
@@ -181,7 +159,6 @@ export class InteractionCanvasComponent implements OnInit {
     }
   }
 
-  //@HostListener('mouseup', ['$event'])
   onDragEnd(event: CdkDragEnd) {
     if (this.canvasManager.mode == 'pan') {
       this.isPanning = false;
@@ -281,9 +258,6 @@ export class InteractionCanvasComponent implements OnInit {
     );
 
     this.canvasManager.clearCanvas.subscribe((_) => {
-      // this.scrollPosition = new Position(0, 0);
-      // this.canvasManager.canvasScrollOffset = this.scrollPosition;
-
       let canvas = document.getElementById('canvas');
       if (canvas) {
         // canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%) `;
