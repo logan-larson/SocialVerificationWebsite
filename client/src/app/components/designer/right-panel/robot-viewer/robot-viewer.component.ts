@@ -63,7 +63,7 @@ export class RobotViewerComponent implements OnInit {
         this.isPlaying = false;
         this.canPlay = false;
         //console.log("init setup, canPlay = false");
-        this.setupInteraction(interaction);
+        // this.setupInteraction(interaction);
       }
     );
 
@@ -90,7 +90,7 @@ export class RobotViewerComponent implements OnInit {
   setupInteraction(interaction: Interaction) {
     this.nodes = [];
 
-    interaction.micros.forEach((m: MicroInteraction) => {
+    interaction.micros.forEach(async (m: MicroInteraction) => {
       if (m.type) {
         let rt: Transition | undefined = interaction.transitions.find(
           (t) => t.id == m.readyTransitionId
@@ -123,13 +123,14 @@ export class RobotViewerComponent implements OnInit {
             }
           }
 
-          n.animations = this.animationService.getAnimations(m);
-
-          console.log(n.animations);
+          n.animations = await this.animationService.getAnimations(m);
 
           this.nodes.push(n);
         } else {
           let n: Node = new Node(m.id, m.type, -1, -1, text);
+
+          n.animations = await this.animationService.getAnimations(m);
+
           this.nodes.push(n);
         }
       }
@@ -137,14 +138,14 @@ export class RobotViewerComponent implements OnInit {
 
     this.reset();
 
-    //console.log(this.nodes);
+    console.log(this.nodes);
     //console.log(`current node: ${JSON.stringify(this.currentNode)}`);
   }
 
   updateInteraction() {
     if (this.firstPlay) {
       this.currentNode = this.startingNode;
-      this.setIcon();
+      this.animate();
       this.updateBubbleContent();
       this.firstPlay = false;
       return;
@@ -155,18 +156,13 @@ export class RobotViewerComponent implements OnInit {
         (n) => n.id == this.currentNode?.onReady
       );
       this.needInput();
-      //console.log(`ready node: ${JSON.stringify(this.currentNode)}`);
     } else if (this.humanNotReady) {
       this.currentNode = this.nodes.find(
         (n) => n.id == this.currentNode?.onNotReady
       );
       this.needInput();
-      //console.log(`not ready node: ${JSON.stringify(this.currentNode)}`);
     } else {
-      // TODO Check this
-      //this.needHumanInput = true;
       this.needInput();
-      //console.log(`need human input`);
       return;
     }
 
@@ -176,22 +172,31 @@ export class RobotViewerComponent implements OnInit {
       this.isRobotAsking = false;
     }
 
-    this.animate();
-
-    // this.setIcon();
     this.updateBubbleContent();
+
+    this.animate();
   }
 
-  animate() {
+  async animate() {
+    if (!this.currentNode) return;
 
-    this.interval = setInterval(() => {
-      if (!this.currentNode) return;
+    if (this.currentNode.type == 'Wait') {
+      while (this.currentNode.type == 'Wait') {
+        for (let animation of this.currentNode.animations) {
+          if (animation.name != this.currentNode.type) return;
 
-      if (this.currentNode.animations) {
-
+          this.icon = animation.imageLocation;
+          await new Promise(r => setTimeout(r, 1000));
+        }
       }
+    } else {
+      for (let animation of this.currentNode.animations) {
+        if (animation.name != this.currentNode.type) return;
 
-    }, 3000);
+        this.icon = animation.imageLocation;
+        await new Promise(r => setTimeout(r, 1000));
+      }
+    }
   }
 
   setIcon() {
@@ -315,7 +320,7 @@ class Node {
   onNotReady: number = -1;
   text: string = '';
   actions: { type: string; value: string }[] = [];
-  animations: MicroAnimation | {} = {};
+  animations: MicroAnimation[] = [];
 
   constructor(
     id: number,
@@ -324,7 +329,7 @@ class Node {
     onNotReady: number,
     text: string = '',
     actions: { type: string; value: string }[] = [],
-    animations: MicroAnimation | {} = {}
+    animations: MicroAnimation[] = []
   ) {
     this.id = id;
     this.type = type;
