@@ -270,7 +270,7 @@ export class MicroComponent implements OnInit {
   }
 
   setMicroIcon() {
-    this.microIcon = `/assets/${this.micro.type}.png`;
+    this.microIcon = `/assets/microIcons/${this.micro.type}.png`;
   }
 
   /* Reposition micro in canvas */
