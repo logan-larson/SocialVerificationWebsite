@@ -237,13 +237,19 @@ export class TransitionComponent implements OnInit {
     let midOffset: number = 100;
 
     if (this.firstAnchorPos.x < this.secondAnchorPos.x) {
+
+      let midRightOffsetX: number = ((this.firstAnchorPos.x * 0.4) + (this.secondAnchorPos.x * 0.6)) - ((this.firstAnchorPos.x + this.secondAnchorPos.x) / 2);
+      let midRightOffsetY: number = ((this.firstAnchorPos.y * 0.4) + (this.secondAnchorPos.y * 0.6)) - ((this.firstAnchorPos.y + this.secondAnchorPos.y) / 2);
+      let midLeftOffsetX: number = ((this.firstAnchorPos.x * 0.6) + (this.secondAnchorPos.x * 0.4)) - ((this.firstAnchorPos.x + this.secondAnchorPos.x) / 2);
+      let midLeftOffsetY: number = ((this.firstAnchorPos.y * 0.6) + (this.secondAnchorPos.y * 0.4)) - ((this.firstAnchorPos.y + this.secondAnchorPos.y) / 2);
+
       this.dFirst = `M ${this.firstAnchorPos.x} ${this.firstAnchorPos.y}
                      C ${this.firstAnchorPos.x + bezierOffset} ${this.firstAnchorPos.y},
-                       ${this.middleAnchorPos.x - midOffset} ${this.middleAnchorPos.y},
+                       ${this.middleAnchorPos.x + midLeftOffsetX} ${this.middleAnchorPos.y + midLeftOffsetY},
                        ${this.middleAnchorPos.x} ${this.middleAnchorPos.y}`;
 
       this.dSecond = `M ${this.middleAnchorPos.x} ${this.middleAnchorPos.y}
-                      C ${this.middleAnchorPos.x + midOffset} ${this.middleAnchorPos.y},
+                      C ${this.middleAnchorPos.x + midRightOffsetX} ${this.middleAnchorPos.y + midRightOffsetY},
                         ${this.secondAnchorPos.x - bezierOffset} ${this.secondAnchorPos.y},
                         ${this.secondAnchorPos.x} ${this.secondAnchorPos.y}`;
     } else {
