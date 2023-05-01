@@ -54,6 +54,7 @@ export class RobotViewerComponent implements OnInit {
         this.canPlay = true;
       } else {
         this.canPlay = false;
+        this.needHumanInput = false;
       }
     });
 
@@ -62,8 +63,7 @@ export class RobotViewerComponent implements OnInit {
       (interaction: Interaction) => {
         this.isPlaying = false;
         this.canPlay = false;
-        //console.log("init setup, canPlay = false");
-        // this.setupInteraction(interaction);
+        this.needHumanInput = false;
       }
     );
 
