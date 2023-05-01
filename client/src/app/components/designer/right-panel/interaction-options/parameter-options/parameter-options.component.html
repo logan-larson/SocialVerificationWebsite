@@ -1,11 +1,37 @@
 <div class="p-2">
   <div *ngIf="param.type === 'str'" class="relative flex flex-col dark:text-white">
-    <label (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">{{ param.title }}</label>
+    <label class="flex items-center">{{ param.title }}
+      <div class="relative mx-1">
+        <div
+          class="w-[24px] h-[24px] items-center justify-center flex rounded hover:cursor-pointer
+                bg-secondary dark:bg-dark-secondary hover:bg-secondary-hover
+                dark:hover:bg-dark-secondary-hover rounded hover:cursor-pointer
+                text-light-text dark:text-dark-text"
+          (mouseenter)="showToolTip = 'visible'"
+          (mouseleave)="showToolTip = 'hidden'"
+        >
+          <mat-icon class="hover:cursor-pointer mb-[6px] text-primary dark:text-dark-primary text-xl">info</mat-icon>
+        </div>
+      </div>
+    </label>
     <textarea class="p-1 border-2 dark:border-white dark:bg-dark-secondary dark:text-white" (change)="changeStrVal($event)" [value]="strVal" ></textarea>
     <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-black rounded-lg top-10 shadow-sm">{{ param.description }}</div>
   </div>
   <div *ngIf="param.type === 'bool'" class="relative flex flex-col dark:text-white">
-    <label (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">{{ param.title }}</label>
+    <label class="flex items-center">{{ param.title }}
+      <div class="relative mx-1">
+        <div
+          class="w-[24px] h-[24px] items-center justify-center flex rounded hover:cursor-pointer
+                bg-secondary dark:bg-dark-secondary hover:bg-secondary-hover
+                dark:hover:bg-dark-secondary-hover rounded hover:cursor-pointer
+                text-light-text dark:text-dark-text"
+          (mouseenter)="showToolTip = 'visible'"
+          (mouseleave)="showToolTip = 'hidden'"
+        >
+          <mat-icon class="hover:cursor-pointer mb-[6px] text-primary dark:text-dark-primary text-xl">info</mat-icon>
+        </div>
+      </div>
+    </label>
     <div>
       <input type="radio" [name]="name" (change)="changeBoolVal(true)" [checked]="boolVal === true" />
       <label>Yes</label>
@@ -17,7 +43,20 @@
     <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-black rounded-lg top-10 shadow-sm">{{ param.description }}</div>
   </div>
   <div *ngIf="param.type === 'array'" class="relative flex flex-col dark:text-white">
-    <label (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">Human responses the robot can recognize</label>
+    <label class="flex items-center">Human responses the robot can recognize
+      <div class="relative mx-1">
+        <div
+          class="w-[24px] h-[24px] items-center justify-center flex rounded hover:cursor-pointer
+                bg-secondary dark:bg-dark-secondary hover:bg-secondary-hover
+                dark:hover:bg-dark-secondary-hover rounded hover:cursor-pointer
+                text-light-text dark:text-dark-text"
+          (mouseenter)="showToolTip = 'visible'"
+          (mouseleave)="showToolTip = 'hidden'"
+        >
+          <mat-icon class="hover:cursor-pointer mb-[6px] text-primary dark:text-dark-primary text-xl">info</mat-icon>
+        </div>
+      </div>
+    </label>
     <input type="text" class="w-full p-1 border-2 dark:border-white dark:bg-dark-secondary dark:text-white" [(ngModel)]="response" />
     <label class="mt-1 mr-2">Corresponding human state for the response</label>
     <select class="p-1 mb-2 dark:bg-dark-primary" [(ngModel)]="humanState">
@@ -45,7 +84,20 @@
     <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-black rounded-lg top-10 shadow-sm">{{ param.description }}</div>
   </div>
   <div *ngIf="param.type === 'int'" class="relative flex flex-col dark:text-white">
-    <label (mouseenter)="showToolTip = 'visible'" (mouseleave)="showToolTip = 'hidden'">{{ param.title }}</label>
+    <label class="flex items-center">{{ param.title }}
+      <div class="relative mx-1">
+        <div
+          class="w-[24px] h-[24px] items-center justify-center flex rounded hover:cursor-pointer
+                bg-secondary dark:bg-dark-secondary hover:bg-secondary-hover
+                dark:hover:bg-dark-secondary-hover rounded hover:cursor-pointer
+                text-light-text dark:text-dark-text"
+          (mouseenter)="showToolTip = 'visible'"
+          (mouseleave)="showToolTip = 'hidden'"
+        >
+          <mat-icon class="hover:cursor-pointer mb-[6px] text-primary dark:text-dark-primary text-xl">info</mat-icon>
+        </div>
+      </div>
+    </label>
     <input type="number" class="p-1 border-2 dark:border-white dark:bg-dark-secondary dark:text-white" [value]="intVal" (change)="changeIntVal($event)" />
     <div [style.visibility]="showToolTip" class="absolute z-10 inline-block p-2 text-sm text-white bg-black rounded-lg top-10 shadow-sm">{{ param.description }}</div>
   </div>
