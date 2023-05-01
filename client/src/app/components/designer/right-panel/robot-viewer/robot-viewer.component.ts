@@ -122,12 +122,19 @@ export class RobotViewerComponent implements OnInit {
               });
             }
           }
+          if (n.type == 'Wait') {
+            let paramRes = m.parameterResults;
+
+            if (paramRes) {
+              n.waitTime = !paramRes[1].boolResult ? paramRes[0].intResult! : 0;
+            }
+          }
 
           n.animations = await this.animationService.getAnimations(m);
 
           this.nodes.push(n);
         } else {
-          let n: Node = new Node(m.id, m.type, -1, -1, text);
+          let n: Node = new Node(m.id, m.type, -1, -1, text, 0);
 
           n.animations = await this.animationService.getAnimations(m);
 
@@ -155,6 +162,7 @@ export class RobotViewerComponent implements OnInit {
       this.currentNode = this.nodes.find(
         (n) => n.id == this.currentNode?.onReady
       );
+
       this.needInput();
     } else if (this.humanNotReady) {
       this.currentNode = this.nodes.find(
@@ -170,6 +178,10 @@ export class RobotViewerComponent implements OnInit {
       this.isRobotAsking = true;
     } else {
       this.isRobotAsking = false;
+    }
+      
+    if (this.currentNode?.type == 'Wait') {
+      this.waitForTime(this.currentNode?.waitTime);
     }
 
     this.updateBubbleContent();
@@ -197,6 +209,15 @@ export class RobotViewerComponent implements OnInit {
         await new Promise(r => setTimeout(r, 1000));
       }
     }
+  }
+
+  waitForTime(time: number) {
+    this.needHumanInput = false;
+    setTimeout(() => {
+      console.log("Waited");
+      this.needHumanInput = true;
+      // this.nextStep.emit();
+    }, time * 1000);
   }
 
   setIcon() {
@@ -319,6 +340,7 @@ class Node {
   onReady: number = -1;
   onNotReady: number = -1;
   text: string = '';
+  waitTime: number = 0;
   actions: { type: string; value: string }[] = [];
   animations: MicroAnimation[] = [];
 
@@ -328,14 +350,16 @@ class Node {
     onReady: number,
     onNotReady: number,
     text: string = '',
+    waitTime: number = 0,
     actions: { type: string; value: string }[] = [],
-    animations: MicroAnimation[] = []
+    animations: MicroAnimation[] = [],
   ) {
     this.id = id;
     this.type = type;
     this.onReady = onReady;
     this.onNotReady = onNotReady;
     this.text = text;
+    this.waitTime = waitTime;
     this.actions = actions;
     this.animations = animations;
   }
