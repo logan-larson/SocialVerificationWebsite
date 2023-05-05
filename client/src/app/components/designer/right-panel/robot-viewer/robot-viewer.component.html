@@ -59,7 +59,9 @@
         [(ngModel)]="humanInput" />
       <button
         class="h-full items-center px-2 mx-0.5 bg-blue hover:bg-blue-hover justify-center flex rounded hover:cursor-pointer"
-        (click)="respond()">Respond</button>
+        (click)="respond()">
+        Respond
+      </button>
     </div>
 
     <div class="flex">
@@ -71,6 +73,7 @@
         }"
         class="h-full items-center justify-center flex px-2 mx-0.5 rounded hover:cursor-pointer"
         [attr.disabled]="!needHumanInput ? true : null" type="button" (click)="ready()">
+        <mat-icon>done</mat-icon>
         Ready
       </button>
 
@@ -82,6 +85,7 @@
         }"
         class="h-full items-center justify-center flex px-2 mx-0.5 rounded hover:cursor-pointer"
         [attr.disabled]="!needHumanInput ? true : null" type="button" (click)="notReady()">
+        <mat-icon>block</mat-icon>
         Not Ready
       </button>
     </div>
