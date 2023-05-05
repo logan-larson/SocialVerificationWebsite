@@ -5,8 +5,6 @@ normal program.
 */
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {Interaction} from 'src/app/models/interaction';
-import {Violation} from 'src/app/models/violation';
 import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
 import { InteractionManagerService } from 'src/app/services/interaction-manager.service';
 import { ParameterManagerService } from 'src/app/services/parameter-manager.service';
@@ -31,12 +29,6 @@ export class ActionsBarComponent implements OnInit {
   changeTooltip: string = 'hidden';
   tutorialTooltip: string = 'hidden';
 
-  status: string = 'notVerified';
-  notVerifiedTooltip: string = 'hidden';
-  verifiedTooltip: string = 'hidden';
-  errorsTooltip: string = 'hidden';
-
-
   constructor(
     private interactionManager: InteractionManagerService,
     private paramManager: ParameterManagerService,
@@ -45,21 +37,6 @@ export class ActionsBarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.interactionManager.getUpdatedInteraction.subscribe((inter: Interaction) => {
-      this.status = 'notVerified';
-      this.verificationManager.status = this.status;
-    });
-  }
-
-  verifyModel() {
-    this.verificationManager.verifyModel((violations: any) => {
-      if (violations.length > 0) {
-        this.status = 'errors';
-      } else {
-        this.status = 'verified';
-      }
-      this.verificationManager.status = this.status;
-    });
   }
 
   saveToFile() {
@@ -88,8 +65,6 @@ export class ActionsBarComponent implements OnInit {
     this.verificationManager.violations = [];
     this.verificationManager.violationEmitter.emit([]);
     this.canvasManager.setViolatingIds([], []);
-    this.status = 'notVerified';
-    this.verificationManager.status = this.status;
   }
 
   saveInteractionToLocal() {
