@@ -24,9 +24,9 @@ export class TransitionComponent implements OnInit {
   mousePos: Position = new Position();
 
   isReady: boolean = false;
-  isNotReady: boolean = false;
 
   isLine: boolean = true;
+  isViolating: boolean = false;
 
   firstAnchorPos: Position = new Position();
   secondAnchorPos: Position = new Position();
@@ -70,6 +70,12 @@ export class TransitionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.isReady)
+      this.lineColor = "#22C55E";
+    else
+      this.lineColor = '#F59E0B';
+
+    this.isViolating = false;
 
     setInterval(() => {
       if (this.midDragging) {
@@ -181,11 +187,15 @@ export class TransitionComponent implements OnInit {
   }
 
   setHightlightColor() {
-    if (this.canvasManager.violatingTransitionIds.includes(this.transition.id)) {
+    this.isViolating = this.canvasManager.violatingTransitionIds.includes(this.transition.id);
+
+    if (this.isViolating)
       this.lineColor = '#FF0000';
-    } else {
-      this.lineColor = '#000';
-    }
+    else
+      if (this.isReady)
+        this.lineColor = "#22C55E";
+      else
+        this.lineColor = '#F59E0B';
   }
 
   /* New System */
@@ -194,6 +204,8 @@ export class TransitionComponent implements OnInit {
     let yOffset: number = isReady ? 49 : 85;
 
     this.firstAnchorPos = new Position(x + 127, y + yOffset);
+
+    this.isReady = isReady;
   }
 
   setSecondAnchor(x: number, y: number) {
