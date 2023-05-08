@@ -42,18 +42,21 @@
   dark:bg-dark-primary bottom-0 flex justify-between w-full h-[40px] relative">
 
     <!-- Play/Pause Button -->
-    <button id="btn-play-pause" class="h-full items-center px-2 mx-0.5 justify-center flex rounded hover:cursor-pointer"
+    <button id="btn-play-pause" class="h-full items-center px-2 mx-0.5 justify-center flex rounded"
       type="button" [ngClass]="{
-                  'bg-primary': canPlay == false,
+                  'bg-dark-primary': canPlay == false,
+                  'dark:bg-primary': canPlay == false,
                   'bg-blue': canPlay,
-                  'hover:bg-blue-hover': canPlay
+                  'hover:bg-blue-hover': canPlay,
+                  'hover:cursor-pointer': canPlay,
+                  'hover:cursor-default': canPlay == false
       }" (click)="playPause()">
-      <div *ngIf="isPlaying">
+      <div *ngIf="isPlaying" class="flex items-center justify-center">
         <mat-icon>pause</mat-icon>
         Pause
       </div>
-      <div *ngIf="!isPlaying">
-        <mat-icon>play</mat-icon>
+      <div *ngIf="!isPlaying" class="flex items-center justify-center">
+        <mat-icon>play_arrow</mat-icon>
         Play
       </div>
     </button>
@@ -74,9 +77,12 @@
     <div class="flex">
       <button *ngIf="!isRobotAsking" id="btn-ready"
         [ngClass]="{
-                    'bg-primary': needHumanInput == false,
-                    'bg-green': needHumanInput,
-                    'hover:bg-green-hover': needHumanInput
+                    'bg-dark-primary': canPlay == false || needHumanInput == false,
+                    'dark:bg-primary': canPlay == false || needHumanInput == false,
+                    'bg-green': canPlay && needHumanInput,
+                    'hover:bg-green-hover': canPlay && needHumanInput,
+                    'hover:cursor-pointer': canPlay && needHumanInput,
+                    'hover:cursor-default': canPlay == false || needHumanInput == false
         }"
         class="h-full items-center justify-center flex px-2 mx-0.5 rounded hover:cursor-pointer"
         [attr.disabled]="!needHumanInput ? true : null" type="button" (click)="ready()">
@@ -86,9 +92,12 @@
 
       <button *ngIf="!isRobotAsking" id="btn-not-ready"
         [ngClass]="{
-                    'bg-primary': needHumanInput == false,
-                    'bg-amber': needHumanInput,
-                    'hover:bg-amber-hover': needHumanInput
+                    'bg-dark-primary': canPlay == false || needHumanInput == false,
+                    'dark:bg-primary': canPlay == false || needHumanInput == false,
+                    'bg-amber': canPlay && needHumanInput,
+                    'hover:bg-amber-hover': canPlay && needHumanInput,
+                    'hover:cursor-pointer': canPlay && needHumanInput,
+                    'hover:cursor-default': canPlay == false || needHumanInput == false
         }"
         class="h-full items-center justify-center flex px-2 mx-0.5 rounded hover:cursor-pointer"
         [attr.disabled]="!needHumanInput ? true : null" type="button" (click)="notReady()">
@@ -100,7 +109,16 @@
     <!-- Reset Button -->
     <button id="btn-reset"
       class="h-full px-2 mx-0.5 items-center justify-center flex bg-red hover:bg-red-hover rounded hover:cursor-pointer"
-      type="button" (click)="reset()">
+      type="button" (click)="reset()"
+      [ngClass]="{
+                  'bg-dark-primary': canPlay == false,
+                  'dark:bg-primary': canPlay == false,
+                  'bg-red': canPlay,
+                  'hover:bg-red-hover': canPlay,
+                  'hover:cursor-pointer': canPlay,
+                  'hover:cursor-default': canPlay == false
+      }"
+      >
       <mat-icon>restart_alt</mat-icon>
       Reset
     </button>
