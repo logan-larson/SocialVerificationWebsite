@@ -8,8 +8,6 @@ const router = express.Router();
 
 router.get('/:type', (req, res) => {
 
-  console.log('req.query: ' + JSON.stringify(req.query));
-
   try {
     let mt: MicroType | undefined = getMicroType(req.params.type);
 
@@ -18,28 +16,28 @@ router.get('/:type', (req, res) => {
 
       switch (mt.type) {
         case 'Greeter':
-          animation = getAnimationGreeter(req.query);
+          animation = getAnimationGreeter();
           break;
         case 'Ask':
-          animation = getAnimationAsk(req.query);
+          animation = getAnimationAsk();
           break;
         case 'Remark':
-          animation = getAnimationRemark(req.query);
+          animation = getAnimationRemark();
           break;
         case 'Instruction':
-          animation = getAnimationInstruction(req.query);
+          animation = getAnimationInstruction();
           break;
         case 'Handoff':
-          animation = getAnimationHandoff(req.query);
+          animation = getAnimationHandoff();
           break;
         case 'Answer':
-          animation = getAnimationAnswer(req.query);
+          animation = getAnimationAnswer();
           break;
         case 'Wait':
-          animation = getAnimationWait(req.query);
+          animation = getAnimationWait();
           break;
         case 'Farewell':
-          animation = getAnimationFarewell(req.query);
+          animation = getAnimationFarewell();
           break;
         default:
           animation = getAnimationIdle();
@@ -55,7 +53,7 @@ router.get('/:type', (req, res) => {
   }
 });
 
-function getAnimationGreeter(queryParams: any): MicroAnimation[] {
+function getAnimationGreeter(): MicroAnimation[] {
   // Handshake param - arm extended or not
 
   let animation: MicroAnimation[] = [];
@@ -67,18 +65,16 @@ function getAnimationGreeter(queryParams: any): MicroAnimation[] {
     imageLocation: 'assets/armRaise.png'
   });
 
-  if (queryParams != undefined && queryParams['handshake'] == 'true') {
-    animation.push({
-      name: 'Greeter',
-      index: index++,
-      imageLocation: 'assets/handoff.png'
-    });
-  }
+  animation.push({
+    name: 'Greeter',
+    index: index++,
+    imageLocation: 'assets/handoff.png'
+  });
 
   return animation;
 }
 
-function getAnimationAsk(queryParams: any): MicroAnimation[] {
+function getAnimationAsk(): MicroAnimation[] {
   // No params
   // During ask - head tilt right
   // Misunderstand - arms raised in confusion
@@ -95,7 +91,7 @@ function getAnimationAsk(queryParams: any): MicroAnimation[] {
   return animation;
 }
 
-function getAnimationRemark(queryParams: any): MicroAnimation[] {
+function getAnimationRemark(): MicroAnimation[] {
   // Gesture param - arm raised with 'ah-ha' expression
 
   let animation: MicroAnimation[] = [];
@@ -107,19 +103,16 @@ function getAnimationRemark(queryParams: any): MicroAnimation[] {
     imageLocation: 'assets/neutral.png'
   });
 
-  if (queryParams != undefined && queryParams['gesture'] == 'true') {
-    animation.push({
-      name: 'Remark',
-      index: index++,
-      imageLocation: 'assets/armRaise.png'
-    });
-  }
-
+  animation.push({
+    name: 'Remark',
+    index: index++,
+    imageLocation: 'assets/armRaise.png'
+  });
 
   return animation;
 }
 
-function getAnimationInstruction(queryParams: any): MicroAnimation[] {
+function getAnimationInstruction(): MicroAnimation[] {
   // No params
   // During instruction - neutral expression
 
@@ -135,7 +128,7 @@ function getAnimationInstruction(queryParams: any): MicroAnimation[] {
   return animation;
 }
 
-function getAnimationHandoff(queryParams: any): MicroAnimation[] {
+function getAnimationHandoff(): MicroAnimation[] {
   // No params
   // During handoff - both arms extended
 
@@ -151,7 +144,7 @@ function getAnimationHandoff(queryParams: any): MicroAnimation[] {
   return animation;
 }
 
-function getAnimationAnswer(queryParams: any): MicroAnimation[] {
+function getAnimationAnswer(): MicroAnimation[] {
   // No params
   // During answer - neutral expression
 
@@ -167,7 +160,7 @@ function getAnimationAnswer(queryParams: any): MicroAnimation[] {
   return animation;
 }
 
-function getAnimationWait(queryParams: any): MicroAnimation[] {
+function getAnimationWait(): MicroAnimation[] {
   // No params
   // During wait - neutral expression
 
@@ -201,7 +194,7 @@ function getAnimationWait(queryParams: any): MicroAnimation[] {
   return animation;
 }
 
-function getAnimationFarewell(queryParams: any): MicroAnimation[] {
+function getAnimationFarewell(): MicroAnimation[] {
   // No params
   // During farewell - arm raised
 
