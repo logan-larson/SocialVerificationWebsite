@@ -39,7 +39,7 @@
       [style.width]="status == 'notVerified' ? '32px' : '0px'"
     >
       <div
-        class="w-[32px] h-[32px] items-center justify-center flex bg-amber rounded  text-light-text dark:text-dark-text"
+        class="w-[32px] h-[32px] items-center justify-center flex bg-amber rounded dark:text-light-text text-dark-text"
         (mouseenter)="notVerifiedTooltip = 'visible'"
         (mouseleave)="notVerifiedTooltip = 'hidden'"
       >
@@ -59,7 +59,7 @@
       [style.width]="status == 'verified' ? '32px' : '0px'"
     >
       <div
-        class="w-[32px] h-[32px] items-center justify-center flex bg-green rounded text-light-text dark:text-dark-text"
+        class="w-[32px] h-[32px] items-center justify-center flex bg-green rounded dark:text-light-text text-dark-text"
         (mouseenter)="verifiedTooltip = 'visible'"
         (mouseleave)="verifiedTooltip = 'hidden'"
       >
@@ -79,7 +79,7 @@
       [style.width]="status == 'errors' ? '32px' : '0px'"
     >
       <div
-        class="w-[32px] h-[32px] items-center justify-center flex bg-red rounded text-light-text dark:text-dark-text"
+        class="w-[32px] h-[32px] items-center justify-center flex bg-red rounded dark:text-light-text text-dark-text"
         (mouseenter)="errorsTooltip = 'visible'"
         (mouseleave)="errorsTooltip = 'hidden'"
       >
