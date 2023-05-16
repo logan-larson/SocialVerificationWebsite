@@ -12,6 +12,8 @@ export class ViolationComponent implements OnInit {
 
   @Input() violation: Violation = new Violation();
 
+  violationHelp: string = 'hidden';
+
   constructor(
     private canvasManager: CanvasManagerService
   ) { }
@@ -27,4 +29,11 @@ export class ViolationComponent implements OnInit {
     this.canvasManager.setViolatingIds([], []);
   }
 
+  changeViolationHelp() {
+    if (this.violationHelp == 'hidden') {
+      this.violationHelp = 'visible';
+    } else {
+      this.violationHelp = 'hidden';
+    }
+  }
 }
