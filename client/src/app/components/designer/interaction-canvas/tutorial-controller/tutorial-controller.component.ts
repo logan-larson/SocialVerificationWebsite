@@ -39,6 +39,11 @@ export class TutorialControllerComponent implements OnInit {
       'assets/tutorialGifs/6.gif'
     ),
     new TutorialNode(
+      'Ready and Not Ready',
+      "Ready and Not Ready are the states the human can be in after a micro interaction is completed. For example, after the robot says its greeting in the 'Greeter' micro, the human could respond with 'Hello' which would result in the Ready state. Or, the human could respond with 'I'm busy' which would result in the Not Ready state.",
+      'assets/croppedRobotImages/neutral.png'
+    ),
+    new TutorialNode(
       'Adding a transition',
       "Transitions are how the robot gets from one micro to another based on the human's state. For this interaction, when the human is Ready, we want the robot to make a remark. So, click the checkmark on the 'Greeter' micro to create a Ready transition. Then click the circle on the 'Remark' micro to set the transition.",
       'assets/tutorialGifs/7.gif'
