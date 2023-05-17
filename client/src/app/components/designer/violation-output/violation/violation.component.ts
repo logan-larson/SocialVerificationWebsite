@@ -11,6 +11,7 @@ import {CanvasManagerService} from 'src/app/services/canvas-manager.service';
 export class ViolationComponent implements OnInit {
 
   @Input() violation: Violation = new Violation();
+  showHelp: boolean = false;
 
   constructor(
     private canvasManager: CanvasManagerService

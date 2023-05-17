@@ -62,7 +62,7 @@ let microRemark = new MicroType(
       'bool'
     ),
     new Parameter(
-      'Allow the human to respond',
+      'Wait for human response',
       'allow_human_to_respond',
       "If true, the robot will wait for the human to respond to its remark. If false, the robot will go to the next micro based on the human's state.",
       'bool'

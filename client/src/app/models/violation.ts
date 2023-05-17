@@ -4,6 +4,7 @@ export class Violation {
     description: string //--the description of the property being violated
     violatingMicroIds: number[] = []; //  --[groupName]   list of name of the group (or groups) violating this property, will be empty if category is violation
     violatingTransitionIds: number[] = []; //  --[groupName]   list of name of the group (or groups) violating this property, will be empty if category is violation
+    help: string = "This is a demo help message for violations!";
 
     constructor(
       category: string = "",
@@ -11,11 +12,13 @@ export class Violation {
         description: string = "",
         violatingMicroIds: number[] = [],
         violatingTransitionIds: number[] = [],
+        help: string = "",
     ) {
         this.category = category;
         this.type = type;
         this.description = description;
         this.violatingMicroIds = violatingMicroIds;
         this.violatingTransitionIds = violatingTransitionIds;
+        this.help = "This is a demo help message for violations!";
     }
 }

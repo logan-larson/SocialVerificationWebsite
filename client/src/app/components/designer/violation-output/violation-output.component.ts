@@ -24,6 +24,8 @@ export class ViolationOutputComponent implements OnInit {
     private interactionManager: InteractionManagerService
   ) {
     this.verificationManager.violationEmitter.subscribe((vs: Violation[]) => {
+      // vs.forEach(v => v.help = "This is a help message to demonstrate the drop down");
+      
       this.violations = vs;
     });
   }

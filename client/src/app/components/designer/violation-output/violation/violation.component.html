@@ -2,7 +2,11 @@
   class="flex justify-around w-full p-2 shadow bg-primary dark:bg-dark-primary rounded-md hover:bg-primary-hover dark:hover:bg-dark-primary-hover"
   (mouseenter)="showViolations()"
   (mouseleave)="hideViolations()"
+  (click)="showHelp = !showHelp"
 >
   <p>{{ violation.type }}</p>
   <p class="text-center">{{ violation.description }}</p>
+</div>
+<div *ngIf="showHelp" class="w-full shadow bg-tertiary dark:bg-dark-tertiary rounded-md p-2">
+  <p class="text-black dark:text-white text-md ">{{ violation.help }}</p>
 </div>

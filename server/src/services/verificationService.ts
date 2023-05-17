@@ -15,7 +15,10 @@ function verifyModel(interaction: Interaction): Violation[] {
   let startingPointFlubs: boolean = addStartingPointViolations(interaction, violations);
 
   // Greeting expectations -- TODO tweak to reduce repetitive violations
-  let greeterFlubs: boolean = addGreeterViolations(interaction, violations);
+  let greeterFlubs: boolean = false;
+  if (!startingPointFlubs) {
+    greeterFlubs = addGreeterViolations(interaction, violations);
+  }
 
   // Check that an ending point exists
   let endingPointFlubs: boolean = addEndingPointViolations(interaction, violations);
@@ -97,15 +100,15 @@ function addStartingPointViolations(interaction: Interaction, violations: Violat
   });
 
   if (startingMicroIds.length == 0) {
-    violations.push(new Violation("interaction", "Interaction Flub", "The interaction must have a starting micro interaction"));
+    violations.push(new Violation("interaction", "Interaction Flub", "The interaction must have a starting micro interaction", [], [], "Place a 'Greeter' micro interaction onto the canvas."));
     return true;
   } else if (startingMicroIds.length > 1) {
-    violations.push(new Violation("interaction", "Interaction Flub", "The interaction must not have more than one starting micro interaction", startingMicroIds));
+    violations.push(new Violation("interaction", "Interaction Flub", "The interaction must not have more than one starting micro interaction", startingMicroIds, [], "A micro interaction is considered a starting micro if it does not have any incoming transitions. Make sure your interaction only has one micro with zero incoming transitions. Note: self-referential transitions do not count as incoming transitions."));
     return true;
   } else {
     let m: MicroInteraction | undefined = interaction.micros.find(m => m.id === startingMicroIds[0]);
     if (m && m.type != 'Greeter') {
-      violations.push(new Violation("micro", "Greeter Flub", "The interaction must start with the 'Greeter' micro interaction", startingMicroIds));
+      violations.push(new Violation("micro", "Greeter Flub", "The interaction must start with the 'Greeter' micro interaction", startingMicroIds, [], "Place a 'Greeter' micro interaction at the beginning of your interaction and connect it to your current micro interaction."));
       return true;
     }
   }
@@ -122,19 +125,22 @@ function addGreeterViolations(interaction: Interaction, violations: Violation[])
   });
 
   if (greeterIds.length >= 2) {
-    violations.push(new Violation("micro", "Greeter Flub", "More than one 'Greeter' micro interaction exists", greeterIds));
+    violations.push(new Violation("micro", "Greeter Flub", "More than one 'Greeter' micro interaction exists", greeterIds, [], "The interaction can only have one entry point, so remove all but one 'Greeter' micro interaction."));
     return true;
   } else if (greeterIds.length == 0) {
-    violations.push(new Violation("micro", "Greeter Flub", "There must be exactly one 'Greeter' micro interaction to initiate the interaction", greeterIds));
+    violations.push(new Violation("micro", "Greeter Flub", "There must be exactly one 'Greeter' micro interaction to initiate the interaction", greeterIds, [], "A 'Greeter' micro interaction must start the interaction, so drag one onto your canvas."));
     return true;
   }
 
   // Make sure greeter micro initializes the interaction
+  // This one is impossible now that I removed the input anchor on greeter
+  /*
   interaction.transitions.forEach(t => {
     if (t.secondMicroId === greeterIds[0]) {
       violations.push(new Violation("micro", "Greeter Flub", "The robot should never issue a greeting more than once", greeterIds, [t.id]));
     }
   });
+  */
 
   if (violations.length != violationCount) {
     return true;
@@ -162,7 +168,7 @@ function addEndingPointViolations(interaction: Interaction, violations: Violatio
   });
 
   if (endingIds.length == 0) {
-    violations.push(new Violation("interaction", "Interaction Flub", "The interaction should eventually end"));
+    violations.push(new Violation("interaction", "Interaction Flub", "The interaction should eventually end", [], [], "Check that your interaction contains at least one micro interaction with zero outgoing transitions."));
     return true;
   }
   return false;
@@ -182,7 +188,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   });
 
   if (farewellIds.length == 0) {
-    violations.push(new Violation("micro", "Farewell Flub", "The interaction must contain a 'Farewell' micro interaction"));
+    violations.push(new Violation("micro", "Farewell Flub", "The interaction must contain a 'Farewell' micro interaction", [], [], "Drag a 'Farewell' micro interaction onto the canvas and connect it at the end of your interaction."));
     return true;
   }
 
@@ -229,7 +235,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   pathToEnd(nodes, currentPathIds, endingNodeIds, cyclicalNodeIds, terminalNodeIds);
 
   if (cyclicalNodeIds.length != 0) {
-    violations.push(new Violation('interaction', 'Farewell Flub', 'Interaction has the possibility of never ending', cyclicalNodeIds));
+    violations.push(new Violation('interaction', 'Farewell Flub', 'Interaction has the possibility of never ending', cyclicalNodeIds, [], "One of the highlighted micros has a chance of never reaching a 'Farewell' micro to end the interaction. Trace the interaction to make sure there aren't any cycles."));
     return true;
   }
   
@@ -241,7 +247,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   });
 
   if (terminalNonFarewellIds.length != 0) {
-    violations.push(new Violation('interaction', 'Farewell Flub', 'This interaction could end without the robot giving a farewell', terminalNonFarewellIds));
+    violations.push(new Violation('interaction', 'Farewell Flub', 'This interaction could end without the robot giving a farewell', terminalNonFarewellIds, [], "Make sure the final micro interaction (one with zero outgoing transitions) is a 'Farewell' micro."));
     return true;
   }
 
@@ -365,7 +371,7 @@ function addTurnTakingViolations(interaction: Interaction, violations: Violation
             violatingMicroIds.push(m2.id);
             violatingTransitionIds.push(t.id);
             violations.push(
-              new Violation('interaction', 'Turn-taking Flub', "The robot could speak twice in a row while the human isn't ready", violatingMicroIds, violatingTransitionIds)
+              new Violation('interaction', 'Turn-taking Flub', "The robot could speak twice in a row while the human isn't ready", violatingMicroIds, violatingTransitionIds, "If the first micro is 'Greeter' or 'Remark', set the parameter related to waiting for human response to true. Otherwise, you will need to add a 'Wait' micro to allow the human to be in the Ready state before proceeding.")
             );
             // I should probably check that the 'Wait' micros not ready transition points to itself
             // So the wait is being used as intended, to wait for the human to be ready
@@ -385,6 +391,9 @@ function addTurnTakingViolations(interaction: Interaction, violations: Violation
 
   for (let i = 0; i < interaction.transitions.length; i++) {
 
+    violatingTransitionIds = [];
+    violatingMicroIds = [];
+
     let t = interaction.transitions[i];
 
     // For the first micro
@@ -393,7 +402,7 @@ function addTurnTakingViolations(interaction: Interaction, violations: Violation
     // Find the ones where the robot speaks last and continue
     if (m) { 
       // If the first micro prompts the user to speak last ...
-      if ((m.type == 'Greeter' && m.parameterResults[0].boolResult == true) || (m.type == 'Remark' && m.parameterResults[2].boolResult == false) || (m.type == 'Ask')) {
+      if ((m.type == 'Greeter' && m.parameterResults[0].boolResult == true) || (m.type == 'Remark' && m.parameterResults[2].boolResult == true) || (m.type == 'Ask')) {
 
         // We got to make sure micro the second micro doesn't prompt the human to speak first
         // i.e. Answer without intro
@@ -403,7 +412,7 @@ function addTurnTakingViolations(interaction: Interaction, violations: Violation
           violatingMicroIds.push(m2.id);
           violatingTransitionIds.push(t.id);
           violations.push(
-            new Violation('interaction', 'Turn-taking Flub', "The human should never be prompted to speak twice in a row", violatingMicroIds, violatingTransitionIds)
+            new Violation('interaction', 'Turn-taking Flub', "The human should never be prompted to speak twice in a row", violatingMicroIds, violatingTransitionIds, "If the second micro is 'Answer', set the introduction parameter to true.")
           );
         }
       }
