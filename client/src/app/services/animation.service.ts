@@ -28,7 +28,15 @@ export class AnimationService {
     let res = await this.http.get<MicroAnimation[]>(url).toPromise();
 
     if (res != undefined) {
-      console.log(res);
+
+      if (micro.type == 'Greeter' && !micro.parameterResults[1].boolResult) {
+        return res.slice(0, 1);
+      }
+
+      if (micro.type == 'Remark' && !micro.parameterResults[1].boolResult) {
+        return res.slice(0, 1);
+      }
+
       return res;
     } else {
       return [];
