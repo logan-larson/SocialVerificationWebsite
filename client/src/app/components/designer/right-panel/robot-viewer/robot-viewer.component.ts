@@ -129,6 +129,13 @@ export class RobotViewerComponent implements OnInit {
               n.waitTime = !paramRes[1].boolResult ? paramRes[0].intResult! : 0;
             }
           }
+          if (n.type == 'Handoff') {
+            let paramRes = m.parameterResults;
+
+            if (paramRes) {
+              n.text = paramRes[0].boolResult! ? 'Here you go!' : '';
+            }
+          }
 
           n.animations = await this.animationService.getAnimations(m);
 
