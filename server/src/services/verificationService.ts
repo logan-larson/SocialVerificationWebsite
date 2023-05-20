@@ -100,15 +100,15 @@ function addStartingPointViolations(interaction: Interaction, violations: Violat
   });
 
   if (startingMicroIds.length == 0) {
-    violations.push(new Violation("interaction", "Interaction Flub", "The interaction must have a starting micro interaction", [], [], "Place a 'Greeter' micro interaction onto the canvas."));
+    violations.push(new Violation("interaction", "Interaction Flub", "The interaction must have a starting microinteraction", [], [], "Place a 'Greeter' microinteraction onto the canvas."));
     return true;
   } else if (startingMicroIds.length > 1) {
-    violations.push(new Violation("interaction", "Interaction Flub", "The interaction must not have more than one starting micro interaction", startingMicroIds, [], "A micro interaction is considered a starting micro if it does not have any incoming transitions. Make sure your interaction only has one micro with zero incoming transitions. Note: self-referential transitions do not count as incoming transitions."));
+    violations.push(new Violation("interaction", "Interaction Flub", "The interaction must not have more than one starting microinteraction", startingMicroIds, [], "A microinteraction is considered a starting micro if it does not have any incoming transitions. Make sure your interaction only has one micro with zero incoming transitions. Note: self-referential transitions do not count as incoming transitions."));
     return true;
   } else {
     let m: MicroInteraction | undefined = interaction.micros.find(m => m.id === startingMicroIds[0]);
     if (m && m.type != 'Greeter') {
-      violations.push(new Violation("micro", "Greeter Flub", "The interaction must start with the 'Greeter' micro interaction", startingMicroIds, [], "Place a 'Greeter' micro interaction at the beginning of your interaction and connect it to your current micro interaction."));
+      violations.push(new Violation("micro", "Greeter Flub", "The interaction must start with the 'Greeter' microinteraction", startingMicroIds, [], "Place a 'Greeter' microinteraction at the beginning of your interaction and connect it to your current microinteraction."));
       return true;
     }
   }
@@ -125,10 +125,10 @@ function addGreeterViolations(interaction: Interaction, violations: Violation[])
   });
 
   if (greeterIds.length >= 2) {
-    violations.push(new Violation("micro", "Greeter Flub", "More than one 'Greeter' micro interaction exists", greeterIds, [], "The interaction can only have one entry point, so remove all but one 'Greeter' micro interaction."));
+    violations.push(new Violation("micro", "Greeter Flub", "More than one 'Greeter' microinteraction exists", greeterIds, [], "The interaction can only have one entry point, so remove all but one 'Greeter' microinteraction."));
     return true;
   } else if (greeterIds.length == 0) {
-    violations.push(new Violation("micro", "Greeter Flub", "There must be exactly one 'Greeter' micro interaction to initiate the interaction", greeterIds, [], "A 'Greeter' micro interaction must start the interaction, so drag one onto your canvas."));
+    violations.push(new Violation("micro", "Greeter Flub", "There must be exactly one 'Greeter' microinteraction to initiate the interaction", greeterIds, [], "A 'Greeter' microinteraction must start the interaction, so drag one onto your canvas."));
     return true;
   }
 
@@ -168,7 +168,7 @@ function addEndingPointViolations(interaction: Interaction, violations: Violatio
   });
 
   if (endingIds.length == 0) {
-    violations.push(new Violation("interaction", "Interaction Flub", "The interaction should eventually end", [], [], "Check that your interaction contains at least one micro interaction with zero outgoing transitions."));
+    violations.push(new Violation("interaction", "Interaction Flub", "The interaction should eventually end", [], [], "Check that your interaction contains at least one microinteraction with zero outgoing transitions."));
     return true;
   }
   return false;
@@ -188,7 +188,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   });
 
   if (farewellIds.length == 0) {
-    violations.push(new Violation("micro", "Farewell Flub", "The interaction must contain a 'Farewell' micro interaction", [], [], "Drag a 'Farewell' micro interaction onto the canvas and connect it at the end of your interaction."));
+    violations.push(new Violation("micro", "Farewell Flub", "The interaction must contain a 'Farewell' microinteraction", [], [], "Drag a 'Farewell' microinteraction onto the canvas and connect it at the end of your interaction."));
     return true;
   }
 
@@ -247,7 +247,7 @@ function addFarewellViolations(interaction: Interaction, violations: Violation[]
   });
 
   if (terminalNonFarewellIds.length != 0) {
-    violations.push(new Violation('interaction', 'Farewell Flub', 'This interaction could end without the robot giving a farewell', terminalNonFarewellIds, [], "Make sure the final micro interaction (one with zero outgoing transitions) is a 'Farewell' micro."));
+    violations.push(new Violation('interaction', 'Farewell Flub', 'This interaction could end without the robot giving a farewell', terminalNonFarewellIds, [], "Make sure the final microinteraction (one with zero outgoing transitions) is a 'Farewell' micro."));
     return true;
   }
 

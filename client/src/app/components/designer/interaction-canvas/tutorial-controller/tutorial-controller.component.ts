@@ -40,7 +40,7 @@ export class TutorialControllerComponent implements OnInit {
     ),
     new TutorialNode(
       'Ready and Not Ready',
-      "Ready and Not Ready are the states the human can be in after a micro interaction is completed. For example, after the robot says its greeting in the 'Greeter' micro, the human could respond with 'Hello' which would result in the Ready state. Or, the human could respond with 'I'm busy' which would result in the Not Ready state.",
+      "Ready and Not Ready are the states the human can be in after a microinteraction is completed. For example, after the robot says its greeting in the 'Greeter' micro, the human could respond with 'Hello' which would result in the Ready state. Or, the human could respond with 'I'm busy' which would result in the Not Ready state.",
       'assets/croppedRobotImages/neutral.png'
     ),
     new TutorialNode(
