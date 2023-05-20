@@ -1,11 +1,17 @@
 <div
-  class="flex justify-around w-full p-2 shadow bg-primary dark:bg-dark-primary rounded-md hover:bg-primary-hover dark:hover:bg-dark-primary-hover"
+  class="grid grid-cols-12 justify-around w-full p-2 shadow bg-primary dark:bg-dark-primary rounded-md hover:bg-primary-hover dark:hover:bg-dark-primary-hover"
   (mouseenter)="showViolations()"
   (mouseleave)="hideViolations()"
   (click)="showHelp = !showHelp"
 >
-  <p>{{ violation.type }}</p>
-  <p class="text-center">{{ violation.description }}</p>
+  <p class="text-center col-span-4">{{ violation.type }}</p>
+  <p class="text-center col-span-7">{{ violation.description }}</p>
+  <button *ngIf="showHelp" class="col-span-1">
+    <mat-icon class="hover:cursor-pointer">expand_less</mat-icon>
+  </button>
+  <button *ngIf="!showHelp" class="col-span-1">
+    <mat-icon class="hover:cursor-pointer">expand_more</mat-icon>
+  </button>
 </div>
 <div *ngIf="showHelp" class="w-full shadow bg-tertiary dark:bg-dark-tertiary rounded-md p-2">
   <p class="text-black dark:text-white text-md ">{{ violation.help }}</p>
