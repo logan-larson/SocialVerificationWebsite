@@ -6,56 +6,96 @@
     draggable="true"
     (dragstart)="dragStart('Greeter')"
     class="z-10 h-8 p-1 mb-2 text-center text-light-text bg-greeter rounded-xl"
+    (mouseenter)="showTooltip('Greeter')"
+    (mouseleave)="hideTooltip('Greeter')"
   >
     Greeter
+  </div>
+  <div *ngIf="showGreeterTooltip" class="absolute bg-black text-white p-2 rounded top-[90px] left-[155px] max-w-[300px] z-100">
+    Greeter tooltip
   </div>
   <div
     draggable="true"
     (dragstart)="dragStart('Ask')"
     class="z-10 h-8 p-1 mb-2 text-center text-light-text bg-ask rounded-xl"
+    (mouseenter)="showTooltip('Ask')"
+    (mouseleave)="hideTooltip('Ask')"
   >
     Ask
+  </div>
+  <div *ngIf="showAskTooltip" class="absolute bg-black text-white p-2 rounded top-[130px] left-[155px] max-w-[300px] z-100">
+    Ask tooltip
   </div>
   <div
     draggable="true"
     (dragstart)="dragStart('Remark')"
     class="z-10 h-8 p-1 mb-2 text-center text-light-text bg-remark rounded-xl"
+    (mouseenter)="showTooltip('Remark')"
+    (mouseleave)="hideTooltip('Remark')"
   >
     Remark
+  </div>
+  <div *ngIf="showRemarkTooltip" class="absolute bg-black text-white p-2 rounded top-[170px] left-[155px] max-w-[300px] z-100">
+    Remark tooltip
   </div>
   <div
     draggable="true"
     (dragstart)="dragStart('Instruction')"
     class="z-10 h-8 p-1 mb-2 text-center text-light-text bg-instruction rounded-xl"
+    (mouseenter)="showTooltip('Instruction')"
+    (mouseleave)="hideTooltip('Instruction')"
   >
     Instruction
+  </div>
+  <div *ngIf="showInstructionTooltip" class="absolute bg-black text-white p-2 rounded top-[210px] left-[155px] max-w-[300px] z-100">
+    Instruction tooltip
   </div>
   <div
     draggable="true"
     (dragstart)="dragStart('Handoff')"
     class="z-10 h-8 p-1 mb-2 text-center text-light-text bg-handoff dark:bg-handoff-dark rounded-xl"
+    (mouseenter)="showTooltip('Handoff')"
+    (mouseleave)="hideTooltip('Handoff')"
   >
     Handoff
+  </div>
+  <div *ngIf="showHandoffTooltip" class="absolute bg-black text-white p-2 rounded top-[250px] left-[155px] max-w-[300px] z-100">
+    Handoff tooltip
   </div>
   <div
     draggable="true"
     (dragstart)="dragStart('Answer')"
     class="z-10 h-8 p-1 mb-2 text-center text-light-text bg-answer rounded-xl"
+    (mouseenter)="showTooltip('Answer')"
+    (mouseleave)="hideTooltip('Answer')"
   >
     Answer
+  </div>
+  <div *ngIf="showAnswerTooltip" class="absolute bg-black text-white p-2 rounded top-[290px] left-[155px] max-w-[300px] z-100">
+    Answer tooltip
   </div>
   <div
     draggable="true"
     (dragstart)="dragStart('Wait')"
     class="z-10 h-8 p-1 mb-2 text-center text-light-text bg-wait rounded-xl"
+    (mouseenter)="showTooltip('Wait')"
+    (mouseleave)="hideTooltip('Wait')"
   >
     Wait
+  </div>
+  <div *ngIf="showWaitTooltip" class="absolute bg-black text-white p-2 rounded top-[330px] left-[155px] max-w-[300px] z-100">
+    Wait tooltip
   </div>
   <div
     draggable="true"
     (dragstart)="dragStart('Farewell')"
     class="z-10 h-8 p-1 mb-2 text-center text-light-text bg-farewell rounded-xl"
+    (mouseenter)="showTooltip('Farewell')"
+    (mouseleave)="hideTooltip('Farewell')"
   >
     Farewell
+  </div>
+  <div *ngIf="showFarewellTooltip" class="absolute bg-black text-white p-2 rounded top-[370px] left-[155px] max-w-[300px] z-100">
+    Farewell tooltip
   </div>
 </div>
