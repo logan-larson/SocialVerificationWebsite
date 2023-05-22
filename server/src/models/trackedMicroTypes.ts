@@ -20,7 +20,7 @@ let microGreeter = new MicroType(
       'bool'
     ),
   ],
-  `Greeter is always the first micro in the interaction. An interaction is only allowed one Greeter micro. The robot will greet the human with a greeting salutation of the designer’s choosing. Incoming transitions are not allowed on Greeter.`
+  `Greeter is always the first micro in the interaction. An interaction is only allowed one Greeter micro. The robot will greet the human with a greeting salutation of the designer’s choosing.`
 );
 microTypes.push(microGreeter);
 
