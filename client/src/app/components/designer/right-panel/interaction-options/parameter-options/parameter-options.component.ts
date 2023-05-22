@@ -52,10 +52,6 @@ export class ParameterOptionsComponent implements OnInit {
     }
 
     this.setView();
-
-    if (this.param.type == "int") {
-      this.resultEmitter.emit(new ParameterResult(this.index, 'int', null, this.intVal, null, null));
-    }
   }
 
   setView() {
