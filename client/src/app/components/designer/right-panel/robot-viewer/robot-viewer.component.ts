@@ -73,7 +73,6 @@ export class RobotViewerComponent implements OnInit {
 
     var count = 0;
     this.nextStep.subscribe(() => {
-      console.log('next step' + count);
       count++;
       this.updateInteraction();
 
@@ -81,10 +80,6 @@ export class RobotViewerComponent implements OnInit {
         this.simulator.updateCurrentMicroId(this.currentNode.id);
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    //clearInterval(this.interval);
   }
 
   setupInteraction(interaction: Interaction) {
@@ -151,9 +146,6 @@ export class RobotViewerComponent implements OnInit {
     });
 
     this.reset();
-
-    console.log(this.nodes);
-    //console.log(`current node: ${JSON.stringify(this.currentNode)}`);
   }
 
   updateInteraction() {
@@ -221,9 +213,7 @@ export class RobotViewerComponent implements OnInit {
   waitForTime(time: number) {
     this.needHumanInput = false;
     setTimeout(() => {
-      console.log("Waited");
       this.needHumanInput = true;
-      // this.nextStep.emit();
     }, time * 1000);
   }
 

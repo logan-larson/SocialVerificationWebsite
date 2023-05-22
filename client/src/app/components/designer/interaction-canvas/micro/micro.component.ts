@@ -281,11 +281,9 @@ export class MicroComponent implements OnInit {
     let rect = event.source.getRootElement().getBoundingClientRect();
 
     // Set the local position on drag start
+    this.microPos.x = rect.x;
+    this.microPos.y = rect.y;
 
-    this.microPos.x = rect.x; // * (1 / this.canvasManager.zoomLevel);
-    this.microPos.y = rect.y; // * (1 / this.canvasManager.zoomLevel);
-
-    //this.interactionManager.updateMicro(this.micro);
     this.dragDistance = new Position();
     this.interactionManager.currentDragMid = this.micro.id;
     this.isDragging = true;
@@ -295,19 +293,12 @@ export class MicroComponent implements OnInit {
 
   dragMicro(event: CdkDragMove) {
     if (this.mode == 'pan') return;
-    // Update the micro position based on distance traveled
-    //this.microPos.x += event.distance.x;
-    //this.microPos.y += event.distance.y;
-    //this.dragDistance = new Position((event.distance.x * this.canvasManager.zoomLevel), (event.distance.y * this.canvasManager.zoomLevel));
     this.dragDistance = new Position(event.distance.x, event.distance.y);
   }
 
   droppedMicro(event: CdkDragEnd) {
     if (this.mode == 'pan') return;
-    // Set the anchor position on drag start
 
-    //let rect = event.source.getRootElement().getBoundingClientRect();
-    //console.log(`x: ${rect.x}, y: ${rect.y}\nxMod: ${rect.x * (1 / this.canvasManager.zoomLevel)}, yMod: ${rect.y * (1 / this.canvasManager.zoomLevel)}`);
     this.micro.position.x =
       this.microPos.x +
       this.dragDistance.x -
@@ -320,11 +311,6 @@ export class MicroComponent implements OnInit {
       this.canvasManager.canvasOffset.y -
       this.canvasManager.canvasScrollOffset.y +
       1500;
-    //this.micro.position.x = rect.x - this.canvasManager.canvasOffset.x + this.canvasManager.canvasScrollOffset.x;
-    //this.micro.position.y = rect.y - this.canvasManager.canvasOffset.y + this.canvasManager.canvasScrollOffset.y;
-
-    //this.micro.anchorPosition.x = rect.x + this.canvasManager.canvasScrollOffset.x;
-    //this.micro.anchorPosition.y = rect.y + this.canvasManager.canvasScrollOffset.y;
 
     this.dragDistance = new Position();
     this.interactionManager.currentDragMid = -1;

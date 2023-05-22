@@ -78,7 +78,6 @@ export class InteractionCanvasComponent implements OnInit {
 
       let canvas = document.getElementById('canvas');
       if (canvas) {
-        console.log(scrollPosition);
         this.scrollPosition = new Position(scrollPosition.x, scrollPosition.y);
         canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%)`;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
@@ -225,7 +224,6 @@ export class InteractionCanvasComponent implements OnInit {
     this.interactionManager.getUpdatedInteraction.subscribe((interaction) => {
       this.container.clear();
       this.interaction = interaction;
-      //console.log(this.interaction);
       this.renderCanvas();
     });
 
@@ -316,8 +314,6 @@ export class InteractionCanvasComponent implements OnInit {
         this.contextMenu.microId,
         this.contextMenu.transitionId
       );
-    } else {
-      console.log("context menu comp doesn't exist");
     }
   }
 

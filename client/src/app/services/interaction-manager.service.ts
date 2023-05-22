@@ -126,7 +126,7 @@ export class InteractionManagerService {
   removeMicro(microId: number): void {
     let m = this.getMicroById(microId);
     if (m == undefined) {
-      console.log('no such micro');
+      return;
     }
 
     // Remove transitions associated with the microId
