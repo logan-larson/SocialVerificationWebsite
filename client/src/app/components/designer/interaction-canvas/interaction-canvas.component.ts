@@ -1,5 +1,7 @@
 /*
 This component displays the current interaction model on a canvas.
+Ideally this component should be simplified in the future.
+There is probably a lot of dead code in here.
 */
 
 import {
@@ -111,7 +113,6 @@ export class InteractionCanvasComponent implements OnInit {
   beforeUnloadHander() {
     this.interactionManager.saveInteractionToLocal();
     localStorage.setItem('scrollPosition', JSON.stringify(this.scrollPosition));
-    // localStorage.setItem('scrollPosition', JSON.stringify(new Position(0, 0)));
   }
 
   /* Canvas Operations */
@@ -144,15 +145,12 @@ export class InteractionCanvasComponent implements OnInit {
         const canvas = document.getElementById('canvas');
 
         if (canvas) {
-          // this.canvasManager.canvasScrollOffset = this.scrollPosition;
           this.canvasMinimap.setViewPosition(
             new Position(
               this.preDragScrollPosition.x + event.distance.x,
               this.preDragScrollPosition.y + event.distance.y
             )
           );
-
-          // canvas.style.transform = `translate3d(${event.distance.x}px, ${event.distance.y}px, 0px) translate(-50%, -50%)`;
         }
       }
     }
@@ -170,8 +168,6 @@ export class InteractionCanvasComponent implements OnInit {
         );
         this.canvasManager.canvasScrollOffset = this.scrollPosition;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
-
-        // canvas.style.transform = `translate3d(${event.distance.x}px, ${event.distance.y}px, 0px) translate(-50%, -50%)`;
       }
     }
   }
@@ -258,7 +254,6 @@ export class InteractionCanvasComponent implements OnInit {
     this.canvasManager.clearCanvas.subscribe((_) => {
       let canvas = document.getElementById('canvas');
       if (canvas) {
-        // canvas.style.transform = `translate3d(${this.scrollPosition.x}px, ${this.scrollPosition.y}px, 0px) translate(-50%, -50%) `;
         this.canvasMinimap.setViewPosition(this.scrollPosition);
       }
     });

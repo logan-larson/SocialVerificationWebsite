@@ -1,3 +1,9 @@
+/*
+This is the simulator component. It is responsible for managing the simulation of the designed interaction.
+It is also responsible for managing the robot's animations and the robot's speech bubble.
+It is fairly complex, but it is mostly just a state machine.
+*/
+
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Interaction } from 'src/app/models/interaction';
 import { MicroInteraction } from 'src/app/models/microInteraction';
@@ -58,7 +64,6 @@ export class RobotViewerComponent implements OnInit {
       }
     });
 
-    // Listen for
     this.interactionManager.getUpdatedInteraction.subscribe(
       (interaction: Interaction) => {
         this.isPlaying = false;

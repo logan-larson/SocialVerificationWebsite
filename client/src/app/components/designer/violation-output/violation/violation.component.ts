@@ -1,3 +1,8 @@
+/*
+This component is used to display a single violation in the violation output component.
+Each violation has a help message that can be toggled on and off.
+*/
+
 import { Component, OnInit, Input } from '@angular/core';
 import {Violation} from 'src/app/models/violation';
 import {CanvasManagerService} from 'src/app/services/canvas-manager.service';

@@ -33,6 +33,7 @@ export class ContextMenuComponent implements OnInit {
   removeTransitionHidden: boolean = true;
   removeMicroHidden: boolean = true;
 
+  // Hide the context menu when the user clicks off of it
   @HostListener('document:click', ['$event'])
   clickOff(event: any) {
     if(!this.el.nativeElement.contains(event.target)) {
@@ -56,6 +57,7 @@ export class ContextMenuComponent implements OnInit {
     });
   }
 
+  // Set the context menu to be visible and set its position
   setMenu(type: string, position: Position, microId: number = -1, transitionId: number = -1): void {
     this.menuHidden = false;
 
@@ -68,6 +70,8 @@ export class ContextMenuComponent implements OnInit {
     this.x = position.x + 'px';
     this.y = position.y + 'px';
   }
+
+  /* Actions the context menu can perform */
 
   resetMidpoint() {
     this.interactionManager.resetMidpoint.emit(this.transitionId);

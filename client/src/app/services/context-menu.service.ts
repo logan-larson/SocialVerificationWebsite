@@ -1,3 +1,7 @@
+/*
+This service is used to display the context menu. 
+*/
+
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import {Position} from '../models/position';
 

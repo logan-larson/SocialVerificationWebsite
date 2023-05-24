@@ -1,3 +1,7 @@
+/*
+This service updates the current micro being displayed in the simulator.
+*/
+
 import { EventEmitter, Injectable, Output } from '@angular/core';
 
 @Injectable({

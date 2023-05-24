@@ -1,3 +1,6 @@
+/*
+This services manages the minimap in the designer.
+*/
 
 import { EventEmitter, Injectable } from '@angular/core';
 import { Position } from '../models/position';

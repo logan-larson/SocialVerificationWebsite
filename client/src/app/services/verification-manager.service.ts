@@ -1,3 +1,8 @@
+/*
+This service is used to verify the model. It makes a POST request to the server and
+returns a list of violations.
+*/
+
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import {Violation} from '../models/violation';

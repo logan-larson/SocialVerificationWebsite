@@ -30,7 +30,6 @@ export class ParameterOptionsComponent implements OnInit {
 
   // array type
   responses: { type: string, value: string }[] = [];
-  //responses: Map<string, string> = new Map();
 
   humanState: string = '';
   response: string = '';
@@ -88,7 +87,6 @@ export class ParameterOptionsComponent implements OnInit {
 
   removeResponse(value: string) {
     this.responses = this.responses.filter(r => r.value != value);
-    //this.responses.delete(key);
 
     this.paramRes = new ParameterResult(this.index, 'array', null, null, null, this.responses);
     this.resultEmitter.emit(this.paramRes);

@@ -1,3 +1,8 @@
+/*
+This component houses the whole application.
+Initially I thought there would be more components besides the designer, such as authentication, but I didn't get around to it.
+*/
+
 import { Component, OnInit, } from '@angular/core';
 
 @Component({

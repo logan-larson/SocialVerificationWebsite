@@ -20,7 +20,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MicroComponent } from './components/designer/interaction-canvas/micro/micro.component';
 import { ParameterOptionsComponent } from './components/designer/right-panel/interaction-options/parameter-options/parameter-options.component';
 import { ViolationComponent } from './components/designer/violation-output/violation/violation.component';
-import { RightPanelComponent } from './components/designer/right-panel/right-panel.component';
 import { CanvasMinimapComponent } from './components/designer/interaction-canvas/canvas-minimap/canvas-minimap.component';
 import { TutorialControllerComponent } from './components/designer/interaction-canvas/tutorial-controller/tutorial-controller.component';
 
@@ -39,7 +38,6 @@ import { TutorialControllerComponent } from './components/designer/interaction-c
     MicroComponent,
     ParameterOptionsComponent,
     ViolationComponent,
-    RightPanelComponent,
     CanvasMinimapComponent,
     TutorialControllerComponent,
   ],

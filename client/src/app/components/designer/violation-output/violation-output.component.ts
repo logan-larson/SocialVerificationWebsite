@@ -1,3 +1,9 @@
+/*
+This component is responsible for displaying the violations of the model.
+When the model is verified, the violations are displayed in this component.
+It also has a button to verify the model and a status indicator.
+*/
+
 import { Component, OnInit } from '@angular/core';
 import {Violation} from 'src/app/models/violation';
 import {Interaction} from 'src/app/models/interaction';

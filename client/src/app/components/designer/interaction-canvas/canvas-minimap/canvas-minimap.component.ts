@@ -1,3 +1,7 @@
+/*
+Manages the minimap. The minimap is a small version of the canvas that shows the entire canvas, the micros, and the current view port.
+*/
+
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Interaction } from 'src/app/models/interaction';
 import { MicroInteraction } from 'src/app/models/microInteraction';
@@ -45,6 +49,8 @@ export class CanvasMinimapComponent implements OnInit, AfterViewInit {
     this.drawMinimap();
   }
 
+  // Draw the minimap
+  // Called when the view position changes or the interaction is updated
   drawMinimap(): void {
     const canvas = this.minimap?.nativeElement;
     const context = canvas.getContext('2d');
@@ -74,10 +80,12 @@ export class CanvasMinimapComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // Convert the view position to the minimap position
   toViewMinimapPosition(position: Position): Position {
     return new Position((-position.x + 2500) / 25, (-position.y + 1500) / 25);
   }
 
+  // Convert the micro position to the minimap position
   toMicroMinimapPosition(position: Position): Position {
     return new Position(position.x / 25, position.y / 25);
   }

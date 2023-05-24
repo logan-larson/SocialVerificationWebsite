@@ -1,7 +1,6 @@
 /*
-This component is placed on a group to add
-meaning to a group. It is actions that are performed by
-the robot when the group is executed.
+Micros are the building blocks of interactions. They are connected to each other via transitions. 
+They are draggable and can be selected to show their parameters in the interaction options pane. 
 */
 
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
@@ -79,8 +78,6 @@ export class MicroComponent implements OnInit {
         this.isSelected = false;
       }
     });
-
-    // While adding a transition if cursor is on a micro, set
   }
 
   ngOnInit(): void {
@@ -96,6 +93,7 @@ export class MicroComponent implements OnInit {
     });
   }
 
+  /* Called by external component to set the microinteraction when it is updated */
   setMicro(m: MicroInteraction) {
     this.x = m.position.x + 'px';
     this.y = m.position.y + 'px';
@@ -202,6 +200,7 @@ export class MicroComponent implements OnInit {
     }
   }
 
+  // If in process of adding transition, set the second anchor
   clickSecondAnchor(event: any) {
     event.preventDefault();
     event.stopPropagation();
