@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DesignerComponent } from './components/designer/designer.component';
-import { AuthComponent } from './components/auth/auth.component';
 import { ActionsBarComponent } from './components/designer/actions-bar/actions-bar.component';
 import { MicrointeractionSelectorComponent } from './components/designer/microinteraction-selector/microinteraction-selector.component';
 import { InteractionCanvasComponent } from './components/designer/interaction-canvas/interaction-canvas.component';
@@ -29,7 +28,6 @@ import { TutorialControllerComponent } from './components/designer/interaction-c
   declarations: [
     AppComponent,
     DesignerComponent,
-    AuthComponent,
     ActionsBarComponent,
     MicrointeractionSelectorComponent,
     InteractionCanvasComponent,
